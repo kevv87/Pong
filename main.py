@@ -197,8 +197,3 @@ class Tablero:
     def pause(self):
         pass
 
-
-a = Tablero(10,10,1,0,0,'up',False)
-
-while True:
-    pass
