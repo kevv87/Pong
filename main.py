@@ -22,6 +22,8 @@ class Tablero:
         self.ball_y = B_Y
         self.pc = PC
         self.paleta_length = self.level*9 # Cambiar
+        self.score_f()
+        self.score_e()
         self.screen()
 
 
@@ -49,55 +51,128 @@ class Tablero:
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix[n])):
                 if self.game_matrix[n][m]:
-                    pygame.draw.rect(self.gameDisplay,white,[m*20, n*24, self.block_width, self.block_height])
+                    pygame.draw.rect(self.gameDisplay,white,[m*self.block_width, n*self.block_height,
+                                                             self.block_width, self.block_height])
 
         pygame.display.update()
 
-    def score(self):
+    def score_f(self):
         if self.friend_score == 0:
-            pass
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix)):
+                    if (m == 15 and 2 <= n <= 6) or (n == 2 and 13 <= m <= 15) or (m == 13 and 2 <= n <= 5) or (n == 6 and 13 <= m <= 15):
+                        self.game_matrix[n][m] = True
         elif self.friend_score == 1:
-            pass
-        elif self.friend_score == 0:
-            pass
-        elif self.friend_score == 1:
-            pass
-        elif self.friend_score == 0:
-            pass
-        elif self.friend_score == 1:
-            pass
-        elif self.friend_score == 0:
-            pass
-        elif self.friend_score == 1:
-            pass
-        elif self.friend_score == 0:
-            pass
-        elif self.friend_score == 1:
-            pass
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix)):
+                    if (m == 15 and 2 <= n <= 6):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 2:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 3) or (m == 13 and n == 5) :
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 3:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 5) or (m == 15 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 4:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 5:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 5) or (m == 13 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 6:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 23 and n == 5)or (m == 25 and n == 5) or (m == 23 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 7:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 15 and 2 <= n <= 6) or ((m == 14 or m == 13) and n == 2):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 8:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or ((m == 15 or m == 13) and (n == 3 or n == 5)):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 9:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4) or (m == 14 and n == 2):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 10:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix)):
+                    if (m == 11 and 2 <= n <= 6) or (m == 15 and 2 <= n <= 6) or (n == 2 and 13 <= m <= 15) or (m == 13 and 2 <= n <= 5) or (n == 6 and 13 <= m <= 15):
+                        self.game_matrix[n][m] = True
 
+
+    def score_e(self):
         if self.enemy_score == 0:
-            pass
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 23 and 2 <= n <= 6) or (n == 2 and 23 <= m <= 25) or (m == 25 and 2 <= n <= 6) or (n == 6 and 23 <= m <= 25):
+                        self.game_matrix[n][m] = True
         elif self.enemy_score == 1:
-            pass
-        elif self.enemy_score == 0:
-            pass
-        elif self.enemy_score == 1:
-            pass
-        elif self.enemy_score == 0:
-            pass
-        elif self.enemy_score == 1:
-            pass
-        elif self.enemy_score == 0:
-            pass
-        elif self.enemy_score == 1:
-            pass
-        elif self.enemy_score == 0:
-            pass
-        elif self.enemy_score == 1:
-            pass
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 23 and 2 <= n <= 6):
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 2:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 25 and n == 3) or (m == 23 and n == 5) :
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 3:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 25 and n == 5) or (m == 25 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 4:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 25 and 2 <= n <= 6) or (m == 23 and 2 <= n <= 4) or (m == 24 and n == 4):
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 5:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 25 and n == 5) or (m == 23 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 6:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 23 and n == 5)or (m == 25 and n == 5) or (m == 23 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 7:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 25 and 2 <= n <= 6) or ((m == 24 or m == 23) and n == 2):
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 8:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or ((m == 25 or m == 23) and (n == 3 or n == 5)):
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 9:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 25 and 2 <= n <= 6) or (m == 23 and 2 <= n <= 4) or (m == 24 and n == 4) or (m == 24 and n == 2):
+                        self.game_matrix[n][m] = True
+        elif self.enemy_score == 10:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 23 and 2 <= n <= 6) or (m == 25 and 2 <= n <= 6) or (n == 2 and 25 <= m <= 27) or (m == 27 and 2 <= n <= 6) or (n == 6 and 25 <= m <= 27):
+                        self.game_matrix[n][m] = True
 
 
-a = Tablero(0,0,1,0,0,False)
+a = Tablero(10,10,1,0,0,False)
 
 while True:
     pass
