@@ -1,4 +1,7 @@
 import pygame
+from tkinter import *  #Importa todo de tkinter
+
+W,H= 800,600 #Width y height
 
 pygame.init()
 
@@ -7,8 +10,8 @@ white = (255,255,255)
 class Tablero:
     def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, PC):
         # Atributos
-        self.width = 800
-        self.height = 600
+        self.width = W
+        self.height = H
         self.gameDisplay = pygame.display.set_mode((self.width, self.height))
         self.game_matrix = [[]]
         self.matrix_constructor()
