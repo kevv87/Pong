@@ -5,7 +5,8 @@ pygame.init()
 white = (255,255,255)
 
 class Tablero:
-    def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, PC):
+    def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, PC):
+        # Atributos
         self.width = 800
         self.height = 600
         self.gameDisplay = pygame.display.set_mode((self.width, self.height))
@@ -20,13 +21,16 @@ class Tablero:
         self.ball_velocity = self.level*1 # Cambiar
         self.ball_x = B_X
         self.ball_y = B_Y
+        self.ball_direction = B_DIRECTION
         self.pc = PC
-        self.paleta_length = self.level*9 # Cambiar
+        self.paleta_length = 9 - 3*(self.level-1) # Cambiar
+
+        # Ejecutando metodos
         self.score_f()
         self.score_e()
         self.screen()
 
-
+    # Metodos
     def matrix_constructor(self):
         for n in range(25):
             self.game_matrix.append([])
@@ -171,8 +175,30 @@ class Tablero:
                     if (m == 23 and 2 <= n <= 6) or (m == 25 and 2 <= n <= 6) or (n == 2 and 25 <= m <= 27) or (m == 27 and 2 <= n <= 6) or (n == 6 and 25 <= m <= 27):
                         self.game_matrix[n][m] = True
 
+    def move_ball(self):
+        if self.ball_direction == 'up':
+            self.ball_y -= 1
+        else:
+            self.ball_y += 1
 
-a = Tablero(10,10,1,0,0,False)
+        if self.ball_velocity > 0:
+            self.ball_x += 1
+        elif self.ball_velocity < 0:
+            self.ball_x -= 1
+
+        ball = Ball(self.ball_x, self.ball_y)
+
+    def lose(self):
+        pass
+
+    def win(self):
+        pass
+
+    def pause(self):
+        pass
+
+
+a = Tablero(10,10,1,0,0,'up',False)
 
 while True:
     pass
