@@ -308,8 +308,7 @@ def gameloop(singles, doubles):
     ball_x = 19
     ball_y = 12
 
-    if game_field.pc:
-        player2_1y = ball_y-int(game_field.paleta_length/2)
+
 
     while singles:
         for event in pygame.event.get():
@@ -488,6 +487,48 @@ def gameloop(singles, doubles):
         if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
             game_field.ball_direction *= -1
 
+        if game_field.pc and game_field.ball_velocity > 0:
+            nxt_move = 0
+            found = False
+            if ball_x < len(game_field.game_matrix[0]) - 11:
+                if ball_x == 1 or ball_x == 20 or ball_x == 12:
+                    y_hit = simulacion_2nd(ball_x, ball_y, game_field.ball_direction) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                    while not 0 <= y_hit < 24:
+                        y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
+                            -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+
+                while not found:
+                    nxt_move = random.choice([1, -1])
+                    if len(game_field.game_matrix[0])-1-ball_x > abs(
+                            y_hit-((player2_1y+int(game_field.paleta_length/2)+random.randint(-1,1)) + nxt_move)) and (
+                            player2_1y + game_field.paleta_length +nxt_move <= len(game_field.game_matrix)+1) and (
+                            player2_1y + nxt_move > 0):
+                        found = True
+                    else:
+                        print(y_hit)
+            else:
+                found = False
+                if ball_x == 1 or ball_x == 20:
+                    y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
+                        -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
+                    while not 0 <= y_hit < 24:
+                        y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
+                            -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+
+                while not found:
+                    nxt_move = random.choice([1, -1])
+                    if len(game_field.game_matrix[0]) - 1 - ball_x > abs(
+                            y_hit - ((player2_1y + int(game_field.paleta_length / 2) + random.randint(-1,
+                                                                                                      1)) + nxt_move)) and (
+                            player2_1y + game_field.paleta_length + nxt_move <= len(game_field.game_matrix) + 1) and (
+                            player2_1y + nxt_move > 0):
+                        found = True
+                    else:
+                        print(y_hit)
+
+            player2_1y += nxt_move
+            player2_2y -= nxt_move
+
         game_field.clean_matrix()
         ball_x += 1 * game_field.ball_velocity
         ball_y += 1 * game_field.ball_direction
@@ -503,7 +544,6 @@ def gameloop(singles, doubles):
 
 
 def simulacion(pos_x, pos_y, direction):
-    print(direction)
     if direction == 0:
         return pos_y
     elif pos_x == 39:
@@ -517,4 +557,18 @@ def simulacion(pos_x, pos_y, direction):
     elif direction == -1:
         return simulacion(pos_x+1, pos_y-1, direction)
 
-gameloop(True, False)
+def simulacion_2nd(pos_x, pos_y, direction):
+    if direction == 0:
+        return pos_y
+    elif pos_x == len(game_field.game_matrix[0]) - 11:
+        return pos_y
+    elif pos_y == 1:
+        return simulacion(pos_x, pos_y+1, direction*-1)
+    elif pos_y == 23:
+        return simulacion(pos_x, pos_y-1, direction*-1)
+    elif direction == 1:
+        return simulacion(pos_x+1, pos_y+1, direction)
+    elif direction == -1:
+        return simulacion(pos_x+1, pos_y-1, direction)
+
+gameloop(False, True)
