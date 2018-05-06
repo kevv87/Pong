@@ -95,7 +95,7 @@ class Tablero:
         elif self.friend_score == 6:
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
-                    if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 23 and n == 5)or (m == 25 and n == 5) or (m == 23 and n == 3):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 13 and n == 5)or (m == 15 and n == 5) or (m == 13 and n == 3):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 7:
             for n in range(len(self.game_matrix)):
@@ -346,10 +346,11 @@ def gameloop():
                 game_field.ball_velocity < 0 and ball_x - 1 == 0 and player1_y <= ball_y <= player1_y + game_field.paleta_length):
             game_field.ball_velocity *= -1
         elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
-            print('P2 LOSER BITCH')
+            game_field.enemy_score += 1
+            ball_x = 19
         elif game_field.ball_velocity < 0 and ball_x - 1 == 0:
-            print('P1 LOSER BITCH')
-
+            game_field.friend_score += 1
+            ball_x = 19
         if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
             game_field.ball_direction *= -1
 
