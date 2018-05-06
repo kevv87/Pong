@@ -493,7 +493,7 @@ def gameloop(singles, doubles):
             if ball_x < len(game_field.game_matrix[0]) - 11:
                 if ball_x == 1 or ball_x == 20 or ball_x == 12:
                     y_hit = simulacion_2nd(ball_x, ball_y, game_field.ball_direction) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
-                    while not 0 <= y_hit < 24:
+                    while not 2 <= y_hit < 24:
                         y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
                             -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
@@ -511,7 +511,7 @@ def gameloop(singles, doubles):
                 if ball_x == 1 or ball_x == 20:
                     y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
                         -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
-                    while not 0 <= y_hit < 24:
+                    while not 2 <= y_hit < 24:
                         y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
                             -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
