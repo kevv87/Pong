@@ -323,8 +323,12 @@ def gameloop():
     game = True
     player1_x = 0
     player1_y = 1
+    player2_x = len(game_field.game_matrix[0])-1
+    player2_y = 1
     player1_down_y = False
     player1_up_y = False
+    player2_up_y = False
+    player2_down_y = False
 
     while game:
         for event in pygame.event.get():
@@ -335,19 +339,33 @@ def gameloop():
                     player1_up_y = True
                 elif event.key == pygame.K_DOWN:
                     player1_down_y = True
+                elif event.key == pygame.K_w:
+                    player2_up_y = True
+                elif event.key == pygame.K_s:
+                    player2_down_y = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
                     player1_up_y = False
                 elif event.key == pygame.K_DOWN:
                     player1_down_y = False
+                elif event.key == pygame.K_w:
+                    player2_up_y = False
+                elif event.key == pygame.K_s:
+                    player2_down_y = False
 
         if player1_down_y and player1_y + game_field.paleta_length + 1 < len(game_field.game_matrix):
             player1_y += 1
         elif player1_up_y and player1_y+1 > 2:
             player1_y -= 1
 
+        if player2_down_y and player2_y + game_field.paleta_length + 1 < len(game_field.game_matrix):
+            player2_y += 1
+        elif player2_up_y and player2_y+1 > 2:
+            player2_y -= 1
+
         game_field.clean_matrix()
         player1 = Paleta(player1_x, player1_y, block_width, block_height)
+        player2 = Paleta(player2_x, player2_y, block_width, block_height)
         game_field.screen()
         pygame.display.update()
 
