@@ -2,18 +2,18 @@ import pygame
 
 pygame.init()
 
-white = (255,255,255)
+white = (255, 255, 255)
 
 class Tablero:
-    def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, PC):
+    def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, PC, block_width, block_height):
         # Atributos
         self.width = 800
         self.height = 600
         self.gameDisplay = pygame.display.set_mode((self.width, self.height))
         self.game_matrix = [[]]
         self.matrix_constructor()
-        self.block_width = 20
-        self.block_height = 24
+        self.block_width = block_width
+        self.block_height = block_height
         self.FPS = 30
         self.friend_score = F_SCORE
         self.enemy_score = E_SCORE
@@ -24,11 +24,6 @@ class Tablero:
         self.ball_direction = B_DIRECTION
         self.pc = PC
         self.paleta_length = 9 - 3*(self.level-1) # Cambiar
-
-        # Ejecutando metodos
-        self.score_f()
-        self.score_e()
-        self.screen()
 
     # Metodos
     def matrix_constructor(self):
@@ -186,7 +181,7 @@ class Tablero:
         elif self.ball_velocity < 0:
             self.ball_x -= 1
 
-        ball = Ball(self.ball_x, self.ball_y)
+        self.ball = Ball(self.ball_x, self.ball_y)
 
     def lose(self):
         pass
@@ -197,3 +192,73 @@ class Tablero:
     def pause(self):
         pass
 
+
+class Singles(Tablero):
+    def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, PC, P1_Y, P2_Y):
+        Tablero.__init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, PC)
+        self.player1_x = 0
+        self.player1_y = P1_Y
+        self.player2_x = len(self.game_matrix[0])-1
+        self.player2_y = P2_Y
+
+        # Ejecutando metodos
+        self.score_f()
+        self.score_e()
+        self.screen()
+
+    def move_player1(self, direction):
+        if direction == 'down' and self.player1_y + self.paleta_length + 1 != len(self.game_matrix)-1:
+            self.player1_y += 1
+        elif direction == 'up' and self.player1_y - 1 != 0:
+            self.player1_y -= 1
+
+        self.player1 = Paleta(self.player1_x, self.player1_y)
+
+    def move_player2(self, direction):
+        if direction == 'down' and self.player2_y + self.paleta_length + 1 != len(self.game_matrix)-1:
+            self.player2_y += 1
+        elif direction == 'up' and self.player2_y - 1 != 0:
+            self.player2_y -= 1
+
+        self.player2 = Paleta(self.player2_x, self.player2_y)
+
+game_field = Singles(0,0,1,0,0,'str',False,1,1)
+
+class Bola:
+    def __init__(self, pos_x, pos_y, block_width, block_height):
+        self.width = block_width
+        self.height = block_height
+        self.x = pos_x
+        self.y = pos_y
+
+
+    def mod_matrix(self):
+        matrix = game_field.get_matrix()
+        for n in range(len(matrix)):
+            for m in range(len(matrix[0])):
+                if m == self.x and n == self.y:
+                    matrix[n][m] = True
+        game_field.set_matrix(matrix)
+
+
+class Paleta:
+    def __init__(self, pos_x, pos_y, block_widht, block_height):
+        self.width = block_widht
+        self.height = block_height
+        self.x = pos_x
+        self.y = pos_y
+
+
+    def mod_matrix(self):
+        matrix = game_field.get_matrix()
+        for n in range(len(matrix)):
+            for m in range(len(matrix[0])):
+                if m == self.x and n == self.y:
+                    matrix[n][m] = True
+        game_field.set_matrix(matrix)
+
+
+a = Singles(0, 0, 1, 0, 0, 'str', False, 1, 1)
+
+while True:
+    pass
