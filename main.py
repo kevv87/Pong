@@ -7,6 +7,10 @@ pygame.init()
 white = (255, 255, 255)
 black = (0, 0, 0)
 
+smallfont = pygame.font.SysFont('couriernew', 25)
+mediumfont = pygame.font.SysFont('couriernew',50)
+largefont = pygame.font.SysFont('couriernew', 80)
+
 block_height = 20
 block_width = 24
 
@@ -237,11 +241,29 @@ class Tablero:
 
     def pause(self):
         pause = True
+        for n in range(len(self.game_matrix)):
+            for m in range(len(self.game_matrix)):
+                if n % 2  == 0 and m == 19 and n != 0 and n != 24:
+                    self.game_matrix[n][m] = False
+            self.screen()
+            pygame.display.update()
+
         while pause:
+            message_to_screen('Juego pausado', white, size='large')
+
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_p:
                         pause = False
+                elif event.type == pygame.QUIT:
+                    quit()
+
+            pygame.display.update()
+
+        for n in range(len(self.game_matrix)):
+            for m in range(len(self.game_matrix)):
+                if n % 2  == 0:
+                    self.game_matrix[n][m] = True
 
 
 class Singles(Tablero):
@@ -584,5 +606,21 @@ def simulacion_2nd(pos_x, pos_y, direction):
         return simulacion(pos_x+1, pos_y+1, direction)
     elif direction == -1:
         return simulacion(pos_x+1, pos_y-1, direction)
+
+
+def text_objects(text, color, size):
+    if size == 'small':
+        textSurface = smallfont.render(text, True, color)
+    if size == 'medium':
+        textSurface = mediumfont.render(text, True, color)
+    elif size == 'large':
+        textSurface = largefont.render(text, True, color)
+    return textSurface, textSurface.get_rect()
+
+
+def message_to_screen(msg, color, y_displace=0, size='small'):
+    textSurf, textRect = text_objects(msg, color, size)
+    textRect.center = (game_field.width/2), (game_field.height/2) + y_displace
+    game_field.gameDisplay.blit(textSurf, textRect)
 
 gameloop(False, True)
