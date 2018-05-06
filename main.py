@@ -264,6 +264,23 @@ class Tablero:
                 if n % 2  == 0:
                     self.game_matrix[n][m] = True
 
+    def new_player(self):
+        for n in range(len(self.game_matrix)):
+            for m in range(len(self.game_matrix)):
+                if n % 2  == 0 and m == 19 and n != 0 and n != 24:
+                    self.game_matrix[n][m] = False
+            self.screen()
+            pygame.display.update()
+        for i in range(0,6):
+            self.gameDisplay.fill(black)
+            self.screen()
+            clock.tick(1)
+            if i%2 == 0:
+                message_to_screen('A new challenger', white, size='medium')
+                message_to_screen('has arrived', white, size='medium', y_displace=40)
+            pygame.display.update()
+
+
 
 class Singles(Tablero):
     def __init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_height, block_width):
@@ -402,11 +419,11 @@ def gameloop(singles, doubles):
                         game_field.ball_direction = 1
                         game_field.FPS = 30
             elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
-                game_field.enemy_score += 1
+                game_field.friend_score += 1
                 ball_x = 19
                 ball_y = 12
             elif game_field.ball_velocity < 0 and ball_x - 1 == 0:
-                game_field.friend_score += 1
+                game_field.enemy_score += 1
                 ball_x = 19
                 ball_y = 12
             if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
@@ -460,6 +477,7 @@ def gameloop(singles, doubles):
                         player2_1up_y = True
                     elif event.key == pygame.K_w:
                         game_field.pc = False
+                        game_field.new_player()
                     elif event.key == pygame.K_s and not game_field.pc:
                         player2_1down_y = True
                     elif event.key == pygame.K_p:
@@ -517,11 +535,11 @@ def gameloop(singles, doubles):
                         game_field.ball_direction = 1
                         game_field.FPS = 30
             elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
-                game_field.enemy_score += 1
+                game_field.friend_score += 1
                 ball_x = 19
                 ball_y = 12
             elif game_field.ball_velocity < 0 and ball_x - 1 == 0:
-                game_field.friend_score += 1
+                game_field.enemy_score += 1
                 ball_x = 19
                 ball_y = 12
 
