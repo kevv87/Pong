@@ -1,4 +1,6 @@
 import pygame
+import random
+import math
 
 pygame.init()
 
@@ -28,7 +30,7 @@ class Tablero:
         self.FPS = 30*self.level
         self.ball_direction = B_DIRECTION
         self.pc = PC
-        self.paleta_length = 9 - 3*(self.level-1) # Cambiar
+        self.paleta_length = 9 - 3*self.level# Cambiar
 
     # Metodos
     def matrix_constructor(self):
@@ -242,7 +244,7 @@ class Singles(Tablero):
         Tablero.__init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_height, block_width)
 
 
-game_field = Singles(1, 0, 1, False, block_height, block_width)
+game_field = Singles(1, 0, -1, True, block_height, block_width)
 
 
 class Bola:
@@ -278,7 +280,8 @@ class Paleta:
             for m in range(len(matrix[0])):
                 if m == self.x and n == self.y:
                     for i in range(game_field.paleta_length):
-                        matrix[n+i][m] = True
+                        if n+i <=len(game_field.game_matrix)-1:
+                            matrix[n+i][m] = True
         game_field.set_matrix(matrix)
 
 
@@ -305,6 +308,9 @@ def gameloop(singles, doubles):
     ball_x = 19
     ball_y = 12
 
+    if game_field.pc:
+        player2_1y = ball_y-int(game_field.paleta_length/2)
+
     while singles:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -314,9 +320,9 @@ def gameloop(singles, doubles):
                     player1_1up_y = True
                 elif event.key == pygame.K_DOWN:
                     player1_1down_y = True
-                elif event.key == pygame.K_w:
+                elif event.key == pygame.K_w and not game_field.pc:
                     player2_1up_y = True
-                elif event.key == pygame.K_s:
+                elif event.key == pygame.K_s and not game_field.pc:
                     player2_1down_y = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
@@ -338,15 +344,14 @@ def gameloop(singles, doubles):
         elif player2_1up_y and player2_1y+1 > 2:
             player2_1y -= 1
 
-        if (game_field.ball_velocity > 0 and ball_x + 1 == len(
-                game_field.game_matrix[0])-1 and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
+        if (game_field.ball_velocity > 0 and ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
                 game_field.ball_velocity < 0 and ball_x - 1 == 0 and player1_1y <= ball_y <= player1_1y + game_field.paleta_length):
             game_field.ball_velocity *= -1
             if game_field.ball_velocity < 0:
                 if player2_1y <= ball_y <= player2_1y+game_field.paleta_length/3:
                     game_field.ball_direction = -1
                     game_field.FPS = 30
-                elif player2_1y+game_field.paleta_length/3 <= ball_y <= player2_1y+ (2*game_field.paleta_length)/3:
+                elif player2_1y+game_field.paleta_length/3 < ball_y < player2_1y+ (2*game_field.paleta_length)/3:
                     game_field.ball_direction = 0
                     game_field.FPS = 40
                 elif player2_1y+(2*game_field.paleta_length/3) <= ball_y <= player2_1y+ (3*game_field.paleta_length)/3:
@@ -356,7 +361,7 @@ def gameloop(singles, doubles):
                 if player1_1y <= ball_y <= player1_1y+game_field.paleta_length/3:
                     game_field.ball_direction = -1
                     game_field.FPS = 30
-                elif player1_1y+game_field.paleta_length/3 <= ball_y <= player1_1y+ (2*game_field.paleta_length)/3:
+                elif player1_1y+game_field.paleta_length/3 < ball_y < player1_1y+ (2*game_field.paleta_length)/3:
                     game_field.ball_direction = 0
                     game_field.FPS = 40
                 elif player1_1y+(2*game_field.paleta_length/3) <= ball_y <= player1_1y+ (3*game_field.paleta_length)/3:
@@ -372,6 +377,29 @@ def gameloop(singles, doubles):
             ball_y = 12
         if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
             game_field.ball_direction *= -1
+
+        if game_field.pc and game_field.ball_velocity > 0:
+            found = False
+            if ball_x == 1 or ball_x == 20:
+                y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                while not 0 <= y_hit < 24:
+                    y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
+                        -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+
+            while not found:
+                nxt_move = random.choice([1, -1])
+                if len(game_field.game_matrix[0])-1-ball_x > abs(
+                        y_hit-((player2_1y+int(game_field.paleta_length/2)+random.randint(-1,1)) + nxt_move)) and (
+                        player2_1y + game_field.paleta_length +nxt_move <= len(game_field.game_matrix)+1) and (
+                        player2_1y + nxt_move > 0):
+                    found = True
+                else:
+                    print(y_hit)
+            player2_1y += nxt_move
+
+
+
+
 
         game_field.clean_matrix()
         ball_x += 1 * game_field.ball_velocity
@@ -474,4 +502,19 @@ def gameloop(singles, doubles):
         clock.tick(game_field.FPS)
 
 
-gameloop(False, True)
+def simulacion(pos_x, pos_y, direction):
+    print(direction)
+    if direction == 0:
+        return pos_y
+    elif pos_x == 39:
+        return pos_y
+    elif pos_y == 1:
+        return simulacion(pos_x, pos_y+1, direction*-1)
+    elif pos_y == 23:
+        return simulacion(pos_x, pos_y-1, direction*-1)
+    elif direction == 1:
+        return simulacion(pos_x+1, pos_y+1, direction)
+    elif direction == -1:
+        return simulacion(pos_x+1, pos_y-1, direction)
+
+gameloop(True, False)
