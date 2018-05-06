@@ -11,24 +11,20 @@ block_width = 24
 clock = pygame.time.Clock()
 
 class Tablero:
-    def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, B_VELOCITY, PC, block_width, block_height):
+    def __init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_width, block_height):
         # Atributos
         self.width = 800
         self.height = 600
         self.gameDisplay = pygame.display.set_mode((self.width, self.height))
         self.game_matrix = [[]]
         self.matrix_constructor()
-        self.enemy_score = E_SCORE
-        self.friend_score = F_SCORE
+        self.enemy_score = 0
+        self.friend_score = 0
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.friend_score = F_SCORE
-        self.enemy_score = E_SCORE
         self.level = LEVEL
         self.ball_velocity = B_VELOCITY # Cambiar
-        self.ball_x = B_X
-        self.ball_y = B_Y
         self.FPS = 30*self.level
         self.ball_direction = B_DIRECTION
         self.pc = PC
@@ -242,16 +238,11 @@ class Tablero:
 
 
 class Singles(Tablero):
-    def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, B_VELOCITY, PC, P1_Y, P2_Y, block_height, block_width):
-        Tablero.__init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, B_VELOCITY, PC, block_height, block_width)
-        self.player1_x = 0
-        self.player1_y = P1_Y
-        self.player2_x = len(self.game_matrix[0])-1
-        self.player2_y = P2_Y
+    def __init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_height, block_width):
+        Tablero.__init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_height, block_width)
 
 
-
-game_field = Singles(0, 0, 1, 19, 12, 1, 1, False, 1, 1, block_height, block_width)
+game_field = Singles(1, 0, 1, False, block_height, block_width)
 
 
 class Bola:
@@ -292,24 +283,112 @@ class Paleta:
 
 
 
-def gameloop():
-    game = True
-    player1_x = 0
-    player1_y = 1
-    player2_x = len(game_field.game_matrix[0])-1
-    player2_y = 1
-    player1_down_y = False
-    player1_up_y = False
-    player2_up_y = False
-    player2_down_y = False
+def gameloop(singles, doubles):
+    player1_1x = 0
+    player1_1y = 1
+    player2_1x = len(game_field.game_matrix[0])-1
+    player2_1y = 1
+    player1_1down_y = False
+    player1_1up_y = False
+    player2_1up_y = False
+    player2_1down_y = False
+
+    player1_2x = 11
+    player1_2y = len(game_field.game_matrix)-2
+    player2_2x = len(game_field.game_matrix[0]) - 11
+    player2_2y = len(game_field.game_matrix)-2
+    player1_2down_y = False
+    player1_2up_y = False
+    player2_2up_y = False
+    player2_2down_y = False
 
     ball_x = 19
     ball_y = 12
 
-    while game:
+    while singles:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game = False
+                singles = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    player1_1up_y = True
+                elif event.key == pygame.K_DOWN:
+                    player1_1down_y = True
+                elif event.key == pygame.K_w:
+                    player2_1up_y = True
+                elif event.key == pygame.K_s:
+                    player2_1down_y = True
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_UP:
+                    player1_1up_y = False
+                elif event.key == pygame.K_DOWN:
+                    player1_1down_y = False
+                elif event.key == pygame.K_w:
+                    player2_1up_y = False
+                elif event.key == pygame.K_s:
+                    player2_1down_y = False
+
+        if player1_1down_y and player1_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
+            player1_1y += 1
+        elif player1_1up_y and player1_1y+1 > 2:
+            player1_1y -= 1
+
+        if player2_1down_y and player2_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
+            player2_1y += 1
+        elif player2_1up_y and player2_1y+1 > 2:
+            player2_1y -= 1
+
+        if (game_field.ball_velocity > 0 and ball_x + 1 == len(
+                game_field.game_matrix[0])-1 and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
+                game_field.ball_velocity < 0 and ball_x - 1 == 0 and player1_1y <= ball_y <= player1_1y + game_field.paleta_length):
+            game_field.ball_velocity *= -1
+            if game_field.ball_velocity < 0:
+                if player2_1y <= ball_y <= player2_1y+game_field.paleta_length/3:
+                    game_field.ball_direction = -1
+                    game_field.FPS = 30
+                elif player2_1y+game_field.paleta_length/3 <= ball_y <= player2_1y+ (2*game_field.paleta_length)/3:
+                    game_field.ball_direction = 0
+                    game_field.FPS = 40
+                elif player2_1y+(2*game_field.paleta_length/3) <= ball_y <= player2_1y+ (3*game_field.paleta_length)/3:
+                    game_field.ball_direction = 1
+                    game_field.FPS = 30
+            elif game_field.ball_velocity > 0:
+                if player1_1y <= ball_y <= player1_1y+game_field.paleta_length/3:
+                    game_field.ball_direction = -1
+                    game_field.FPS = 30
+                elif player1_1y+game_field.paleta_length/3 <= ball_y <= player1_1y+ (2*game_field.paleta_length)/3:
+                    game_field.ball_direction = 0
+                    game_field.FPS = 40
+                elif player1_1y+(2*game_field.paleta_length/3) <= ball_y <= player1_1y+ (3*game_field.paleta_length)/3:
+                    game_field.ball_direction = 1
+                    game_field.FPS = 30
+        elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
+            game_field.enemy_score += 1
+            ball_x = 19
+            ball_y = 12
+        elif game_field.ball_velocity < 0 and ball_x - 1 == 0:
+            game_field.friend_score += 1
+            ball_x = 19
+            ball_y = 12
+        if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
+            game_field.ball_direction *= -1
+
+        game_field.clean_matrix()
+        ball_x += 1 * game_field.ball_velocity
+        ball_y += 1 * game_field.ball_direction
+        bola = Bola(ball_x, ball_y, block_width, block_height)
+        player1 = Paleta(player1_1x, player1_1y, block_width, block_height)
+        player2 = Paleta(player2_1x, player2_1y, block_width, block_height)
+        game_field.screen()
+        pygame.display.update()
+
+        clock.tick(game_field.FPS)
+
+
+    while doubles:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                doubles = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     player1_up_y = True
@@ -378,12 +457,14 @@ def gameloop():
         ball_x += 1 * game_field.ball_velocity
         ball_y += 1 * game_field.ball_direction
         bola = Bola(ball_x, ball_y, block_width, block_height)
-        player1 = Paleta(player1_x, player1_y, block_width, block_height)
-        player2 = Paleta(player2_x, player2_y, block_width, block_height)
+        player1_1 = Paleta(player1_x, player1_y, block_width, block_height)
+        player2_1 = Paleta(player2_x, player2_y, block_width, block_height)
+        player1_2 = Paleta()
+        player1_2 = Paleta()
         game_field.screen()
         pygame.display.update()
 
         clock.tick(game_field.FPS)
 
 
-gameloop()
+gameloop(True, False)
