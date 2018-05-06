@@ -4,6 +4,12 @@ pygame.init()
 
 white = (255,255,255)
 
+smallfont = pygame.font.SysFont('comicsansms', 25)
+mediumfont = pygame.font.SysFont('comicsansms',50)
+largefont = pygame.font.SysFont('comicsansms', 80)
+
+
+
 class Tablero:
     def __init__(self, E_SCORE, F_SCORE, LEVEL, B_X, B_Y, B_DIRECTION, PC):
         # Atributos
@@ -196,4 +202,5 @@ class Tablero:
 
     def pause(self):
         pass
+
 
