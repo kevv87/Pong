@@ -1,6 +1,5 @@
 import pygame
 import random
-import math
 
 pygame.init()
 
@@ -353,6 +352,8 @@ def gameloop(singles, doubles):
                         player1_1down_y = True
                     elif event.key == pygame.K_w and not game_field.pc:
                         player2_1up_y = True
+                    elif event.key == pygame.K_w:
+                        game_field.pc = False
                     elif event.key == pygame.K_s and not game_field.pc:
                         player2_1down_y = True
                     elif event.key == pygame.K_p:
@@ -439,6 +440,8 @@ def gameloop(singles, doubles):
             player1 = Paleta(player1_1x, player1_1y, block_width, block_height)
             player2 = Paleta(player2_1x, player2_1y, block_width, block_height)
             game_field.screen()
+            if game_field.pc:
+                message_to_screen('Press w to add a new player', white, 200, 250)
             pygame.display.update()
 
             clock.tick(game_field.FPS)
@@ -455,6 +458,8 @@ def gameloop(singles, doubles):
                         player1_1down_y = True
                     elif event.key == pygame.K_w and not game_field.pc:
                         player2_1up_y = True
+                    elif event.key == pygame.K_w:
+                        game_field.pc = False
                     elif event.key == pygame.K_s and not game_field.pc:
                         player2_1down_y = True
                     elif event.key == pygame.K_p:
@@ -562,8 +567,10 @@ def gameloop(singles, doubles):
                         else:
                             print(y_hit)
 
+
                 player2_1y += nxt_move
                 player2_2y -= nxt_move
+
 
             game_field.clean_matrix()
             ball_x += 1 * game_field.ball_velocity
@@ -574,6 +581,8 @@ def gameloop(singles, doubles):
             player1_2 = Paleta(player1_2x, player1_2y, block_width, block_height)
             player1_2 = Paleta(player2_2x, player2_2y, block_width, block_height)
             game_field.screen()
+            if game_field.pc:
+                message_to_screen('Press w to add a new player', white, 200, 250)
             pygame.display.update()
 
             clock.tick(game_field.FPS)
@@ -618,9 +627,9 @@ def text_objects(text, color, size):
     return textSurface, textSurface.get_rect()
 
 
-def message_to_screen(msg, color, y_displace=0, size='small'):
+def message_to_screen(msg, color,x_displace=0, y_displace=0, size='small'):
     textSurf, textRect = text_objects(msg, color, size)
-    textRect.center = (game_field.width/2), (game_field.height/2) + y_displace
+    textRect.center = (game_field.width/2) + x_displace, (game_field.height/2) + y_displace
     game_field.gameDisplay.blit(textSurf, textRect)
 
 gameloop(False, True)
