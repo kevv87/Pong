@@ -16,7 +16,7 @@ block_width = 24
 clock = pygame.time.Clock()
 
 class Tablero:
-    def __init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_width, block_height):
+    def __init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_width, block_height, SINGLES, DOUBLES):
         # Atributos
         self.width = 800
         self.height = 600
@@ -34,6 +34,8 @@ class Tablero:
         self.ball_direction = B_DIRECTION
         self.pc = PC
         self.paleta_length = 9 - 3*self.level# Cambiar
+        self.singles = SINGLES
+        self.doubles = DOUBLES
 
     # Metodos
     def matrix_constructor(self):
@@ -282,12 +284,7 @@ class Tablero:
 
 
 
-class Singles(Tablero):
-    def __init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_height, block_width):
-        Tablero.__init__(self, LEVEL, B_DIRECTION, B_VELOCITY, PC, block_height, block_width)
-
-
-game_field = Singles(1, 0, -1, True, block_height, block_width)
+game_field = Tablero(1, 0, -1, True, block_height, block_width, True, False)
 
 
 class Bola:
@@ -373,6 +370,7 @@ def gameloop(singles, doubles):
                         game_field.pc = False
                     elif event.key == pygame.K_s and not game_field.pc:
                         player2_1down_y = True
+                        game_field.new_player()
                     elif event.key == pygame.K_p:
                         game_field.pause()
                 if event.type == pygame.KEYUP:
@@ -650,4 +648,4 @@ def message_to_screen(msg, color,x_displace=0, y_displace=0, size='small'):
     textRect.center = (game_field.width/2) + x_displace, (game_field.height/2) + y_displace
     game_field.gameDisplay.blit(textSurf, textRect)
 
-gameloop(False, True)
+gameloop(game_field.singles, game_field.doubles)
