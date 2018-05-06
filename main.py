@@ -236,7 +236,12 @@ class Tablero:
         pass
 
     def pause(self):
-        pass
+        pause = True
+        while pause:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        pause = False
 
 
 class Singles(Tablero):
@@ -286,6 +291,7 @@ class Paleta:
 
 
 
+
 def gameloop(singles, doubles):
     player1_1x = 0
     player1_1y = 1
@@ -308,192 +314,86 @@ def gameloop(singles, doubles):
     ball_x = 19
     ball_y = 12
 
+    game = True
+    pause = False
 
 
-    while singles:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                singles = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    player1_1up_y = True
-                elif event.key == pygame.K_DOWN:
-                    player1_1down_y = True
-                elif event.key == pygame.K_w and not game_field.pc:
-                    player2_1up_y = True
-                elif event.key == pygame.K_s and not game_field.pc:
-                    player2_1down_y = True
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP:
-                    player1_1up_y = False
-                elif event.key == pygame.K_DOWN:
-                    player1_1down_y = False
-                elif event.key == pygame.K_w:
-                    player2_1up_y = False
-                elif event.key == pygame.K_s:
-                    player2_1down_y = False
+    while game:
+        while singles:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    singles = False
+                    game = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        player1_1up_y = True
+                    elif event.key == pygame.K_DOWN:
+                        player1_1down_y = True
+                    elif event.key == pygame.K_w and not game_field.pc:
+                        player2_1up_y = True
+                    elif event.key == pygame.K_s and not game_field.pc:
+                        player2_1down_y = True
+                    elif event.key == pygame.K_p:
+                        game_field.pause()
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_UP:
+                        player1_1up_y = False
+                    elif event.key == pygame.K_DOWN:
+                        player1_1down_y = False
+                    elif event.key == pygame.K_w:
+                        player2_1up_y = False
+                    elif event.key == pygame.K_s:
+                        player2_1down_y = False
 
-        if player1_1down_y and player1_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
-            player1_1y += 1
-        elif player1_1up_y and player1_1y+1 > 2:
-            player1_1y -= 1
+            if player1_1down_y and player1_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
+                player1_1y += 1
+            elif player1_1up_y and player1_1y+1 > 2:
+                player1_1y -= 1
 
-        if player2_1down_y and player2_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
-            player2_1y += 1
-        elif player2_1up_y and player2_1y+1 > 2:
-            player2_1y -= 1
+            if player2_1down_y and player2_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
+                player2_1y += 1
+            elif player2_1up_y and player2_1y+1 > 2:
+                player2_1y -= 1
 
-        if (game_field.ball_velocity > 0 and ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
-                game_field.ball_velocity < 0 and ball_x - 1 == 0 and player1_1y <= ball_y <= player1_1y + game_field.paleta_length):
-            game_field.ball_velocity *= -1
-            if game_field.ball_velocity < 0:
-                if player2_1y <= ball_y <= player2_1y+game_field.paleta_length/3:
-                    game_field.ball_direction = -1
-                    game_field.FPS = 30
-                elif player2_1y+game_field.paleta_length/3 < ball_y < player2_1y+ (2*game_field.paleta_length)/3:
-                    game_field.ball_direction = 0
-                    game_field.FPS = 40
-                elif player2_1y+(2*game_field.paleta_length/3) <= ball_y <= player2_1y+ (3*game_field.paleta_length)/3:
-                    game_field.ball_direction = 1
-                    game_field.FPS = 30
-            elif game_field.ball_velocity > 0:
-                if player1_1y <= ball_y <= player1_1y+game_field.paleta_length/3:
-                    game_field.ball_direction = -1
-                    game_field.FPS = 30
-                elif player1_1y+game_field.paleta_length/3 < ball_y < player1_1y+ (2*game_field.paleta_length)/3:
-                    game_field.ball_direction = 0
-                    game_field.FPS = 40
-                elif player1_1y+(2*game_field.paleta_length/3) <= ball_y <= player1_1y+ (3*game_field.paleta_length)/3:
-                    game_field.ball_direction = 1
-                    game_field.FPS = 30
-        elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
-            game_field.enemy_score += 1
-            ball_x = 19
-            ball_y = 12
-        elif game_field.ball_velocity < 0 and ball_x - 1 == 0:
-            game_field.friend_score += 1
-            ball_x = 19
-            ball_y = 12
-        if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
-            game_field.ball_direction *= -1
+            if (game_field.ball_velocity > 0 and ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
+                    game_field.ball_velocity < 0 and ball_x - 1 == 0 and player1_1y <= ball_y <= player1_1y + game_field.paleta_length):
+                game_field.ball_velocity *= -1
+                if game_field.ball_velocity < 0:
+                    if player2_1y <= ball_y <= player2_1y+game_field.paleta_length/3:
+                        game_field.ball_direction = -1
+                        game_field.FPS = 30
+                    elif player2_1y+game_field.paleta_length/3 < ball_y < player2_1y+ (2*game_field.paleta_length)/3:
+                        game_field.ball_direction = 0
+                        game_field.FPS = 40
+                    elif player2_1y+(2*game_field.paleta_length/3) <= ball_y <= player2_1y+ (3*game_field.paleta_length)/3:
+                        game_field.ball_direction = 1
+                        game_field.FPS = 30
+                elif game_field.ball_velocity > 0:
+                    if player1_1y <= ball_y <= player1_1y+game_field.paleta_length/3:
+                        game_field.ball_direction = -1
+                        game_field.FPS = 30
+                    elif player1_1y+game_field.paleta_length/3 < ball_y < player1_1y+ (2*game_field.paleta_length)/3:
+                        game_field.ball_direction = 0
+                        game_field.FPS = 40
+                    elif player1_1y+(2*game_field.paleta_length/3) <= ball_y <= player1_1y+ (3*game_field.paleta_length)/3:
+                        game_field.ball_direction = 1
+                        game_field.FPS = 30
+            elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
+                game_field.enemy_score += 1
+                ball_x = 19
+                ball_y = 12
+            elif game_field.ball_velocity < 0 and ball_x - 1 == 0:
+                game_field.friend_score += 1
+                ball_x = 19
+                ball_y = 12
+            if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
+                game_field.ball_direction *= -1
 
-        if game_field.pc and game_field.ball_velocity > 0:
-            found = False
-            if ball_x == 1 or ball_x == 20:
-                y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
-                while not 0 <= y_hit < 24:
-                    y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
-                        -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
-
-            while not found:
-                nxt_move = random.choice([1, -1])
-                if len(game_field.game_matrix[0])-1-ball_x > abs(
-                        y_hit-((player2_1y+int(game_field.paleta_length/2)+random.randint(-1,1)) + nxt_move)) and (
-                        player2_1y + game_field.paleta_length +nxt_move <= len(game_field.game_matrix)+1) and (
-                        player2_1y + nxt_move > 0):
-                    found = True
-                else:
-                    print(y_hit)
-            player2_1y += nxt_move
-
-
-
-
-
-        game_field.clean_matrix()
-        ball_x += 1 * game_field.ball_velocity
-        ball_y += 1 * game_field.ball_direction
-        bola = Bola(ball_x, ball_y, block_width, block_height)
-        player1 = Paleta(player1_1x, player1_1y, block_width, block_height)
-        player2 = Paleta(player2_1x, player2_1y, block_width, block_height)
-        game_field.screen()
-        pygame.display.update()
-
-        clock.tick(game_field.FPS)
-
-    while doubles:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                doubles = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    player1_1up_y = True
-                elif event.key == pygame.K_DOWN:
-                    player1_1down_y = True
-                elif event.key == pygame.K_w and not game_field.pc:
-                    player2_1up_y = True
-                elif event.key == pygame.K_s and not game_field.pc:
-                    player2_1down_y = True
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP:
-                    player1_1up_y = False
-                elif event.key == pygame.K_DOWN:
-                    player1_1down_y = False
-                elif event.key == pygame.K_w:
-                    player2_1up_y = False
-                elif event.key == pygame.K_s:
-                    player2_1down_y = False
-
-        if player1_1down_y and player1_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
-            player1_1y += 1
-            player1_2y -= 1
-        elif player1_1up_y and player1_1y+1 > 2:
-            player1_1y -= 1
-            player1_2y += 1
-
-        if player2_1down_y and player2_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
-            player2_1y += 1
-            player2_2y -= 1
-        elif player2_1up_y and player2_1y+1 > 2:
-            player2_1y -= 1
-            player2_2y += 1
-
-        if (game_field.ball_velocity > 0 and (
-                (ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
-                 ball_x+1 == player2_2x and player2_2y <= ball_y <= player2_2y+game_field.paleta_length))) or (
-                game_field.ball_velocity < 0 and (
-                ball_x - 1 == player1_1x and player1_1y <= ball_y <= player1_1y + game_field.paleta_length or(
-                ball_x - 1 == player1_2x and player1_2y <= ball_y <= player1_2y + game_field.paleta_length))):
-            game_field.ball_velocity *= -1
-            if game_field.ball_velocity < 0:
-                if player2_1y <= ball_y <= player2_1y+game_field.paleta_length/3:
-                    game_field.ball_direction = -1
-                    game_field.FPS = 30
-                elif player2_1y+game_field.paleta_length/3 <= ball_y <= player2_1y+ (2*game_field.paleta_length)/3:
-                    game_field.ball_direction = 0
-                    game_field.FPS = 40
-                elif player2_1y+(2*game_field.paleta_length/3) <= ball_y <= player2_1y+ (3*game_field.paleta_length)/3:
-                    game_field.ball_direction = 1
-                    game_field.FPS = 30
-            elif game_field.ball_velocity > 0:
-                if player1_1y <= ball_y <= player1_1y+game_field.paleta_length/3:
-                    game_field.ball_direction = -1
-                    game_field.FPS = 30
-                elif player1_1y+game_field.paleta_length/3 <= ball_y <= player1_1y+ (2*game_field.paleta_length)/3:
-                    game_field.ball_direction = 0
-                    game_field.FPS = 40
-                elif player1_1y+(2*game_field.paleta_length/3) <= ball_y <= player1_1y+ (3*game_field.paleta_length)/3:
-                    game_field.ball_direction = 1
-                    game_field.FPS = 30
-        elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
-            game_field.enemy_score += 1
-            ball_x = 19
-            ball_y = 12
-        elif game_field.ball_velocity < 0 and ball_x - 1 == 0:
-            game_field.friend_score += 1
-            ball_x = 19
-            ball_y = 12
-
-        if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
-            game_field.ball_direction *= -1
-
-        if game_field.pc and game_field.ball_velocity > 0:
-            nxt_move = 0
-            found = False
-            if ball_x < len(game_field.game_matrix[0]) - 11:
-                if ball_x == 1 or ball_x == 20 or ball_x == 12:
-                    y_hit = simulacion_2nd(ball_x, ball_y, game_field.ball_direction) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
-                    while not 2 <= y_hit < 24:
+            if game_field.pc and game_field.ball_velocity > 0:
+                found = False
+                if ball_x == 1 or ball_x == 20:
+                    y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                    while not 0 <= y_hit < 24:
                         y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
                             -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
@@ -504,43 +404,157 @@ def gameloop(singles, doubles):
                             player2_1y + game_field.paleta_length +nxt_move <= len(game_field.game_matrix)+1) and (
                             player2_1y + nxt_move > 0):
                         found = True
-                    else:
-                        print(y_hit)
-            else:
+                player2_1y += nxt_move
+
+
+
+
+
+            game_field.clean_matrix()
+            ball_x += 1 * game_field.ball_velocity
+            ball_y += 1 * game_field.ball_direction
+            bola = Bola(ball_x, ball_y, block_width, block_height)
+            player1 = Paleta(player1_1x, player1_1y, block_width, block_height)
+            player2 = Paleta(player2_1x, player2_1y, block_width, block_height)
+            game_field.screen()
+            pygame.display.update()
+
+            clock.tick(game_field.FPS)
+
+        while doubles:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    doubles = False
+                    game = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        player1_1up_y = True
+                    elif event.key == pygame.K_DOWN:
+                        player1_1down_y = True
+                    elif event.key == pygame.K_w and not game_field.pc:
+                        player2_1up_y = True
+                    elif event.key == pygame.K_s and not game_field.pc:
+                        player2_1down_y = True
+                    elif event.key == pygame.K_p:
+                        game_field.pause()
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_UP:
+                        player1_1up_y = False
+                    elif event.key == pygame.K_DOWN:
+                        player1_1down_y = False
+                    elif event.key == pygame.K_w:
+                        player2_1up_y = False
+                    elif event.key == pygame.K_s:
+                        player2_1down_y = False
+
+
+            if player1_1down_y and player1_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
+                player1_1y += 1
+                player1_2y -= 1
+            elif player1_1up_y and player1_1y+1 > 2:
+                player1_1y -= 1
+                player1_2y += 1
+
+            if player2_1down_y and player2_1y + game_field.paleta_length + 1 < len(game_field.game_matrix):
+                player2_1y += 1
+                player2_2y -= 1
+            elif player2_1up_y and player2_1y+1 > 2:
+                player2_1y -= 1
+                player2_2y += 1
+
+            if (game_field.ball_velocity > 0 and (
+                    (ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
+                     ball_x+1 == player2_2x and player2_2y <= ball_y <= player2_2y+game_field.paleta_length))) or (
+                    game_field.ball_velocity < 0 and (
+                    ball_x - 1 == player1_1x and player1_1y <= ball_y <= player1_1y + game_field.paleta_length or(
+                    ball_x - 1 == player1_2x and player1_2y <= ball_y <= player1_2y + game_field.paleta_length))):
+                game_field.ball_velocity *= -1
+                if game_field.ball_velocity < 0:
+                    if player2_1y <= ball_y <= player2_1y+game_field.paleta_length/3:
+                        game_field.ball_direction = -1
+                        game_field.FPS = 30
+                    elif player2_1y+game_field.paleta_length/3 <= ball_y <= player2_1y+ (2*game_field.paleta_length)/3:
+                        game_field.ball_direction = 0
+                        game_field.FPS = 40
+                    elif player2_1y+(2*game_field.paleta_length/3) <= ball_y <= player2_1y+ (3*game_field.paleta_length)/3:
+                        game_field.ball_direction = 1
+                        game_field.FPS = 30
+                elif game_field.ball_velocity > 0:
+                    if player1_1y <= ball_y <= player1_1y+game_field.paleta_length/3:
+                        game_field.ball_direction = -1
+                        game_field.FPS = 30
+                    elif player1_1y+game_field.paleta_length/3 <= ball_y <= player1_1y+ (2*game_field.paleta_length)/3:
+                        game_field.ball_direction = 0
+                        game_field.FPS = 40
+                    elif player1_1y+(2*game_field.paleta_length/3) <= ball_y <= player1_1y+ (3*game_field.paleta_length)/3:
+                        game_field.ball_direction = 1
+                        game_field.FPS = 30
+            elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
+                game_field.enemy_score += 1
+                ball_x = 19
+                ball_y = 12
+            elif game_field.ball_velocity < 0 and ball_x - 1 == 0:
+                game_field.friend_score += 1
+                ball_x = 19
+                ball_y = 12
+
+            if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
+                game_field.ball_direction *= -1
+
+            if game_field.pc and game_field.ball_velocity > 0:
+                nxt_move = 0
                 found = False
-                if ball_x == 1 or ball_x == 20:
-                    y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
-                        -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
-                    while not 2 <= y_hit < 24:
+                if ball_x < len(game_field.game_matrix[0]) - 11:
+                    if ball_x == 1 or ball_x == 20 or ball_x == 12:
+                        y_hit = simulacion_2nd(ball_x, ball_y, game_field.ball_direction) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                        while not 2 <= y_hit < 24:
+                            y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
+                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+
+                    while not found:
+                        nxt_move = random.choice([1, -1])
+                        if len(game_field.game_matrix[0])-1-ball_x > abs(
+                                y_hit-((player2_1y+int(game_field.paleta_length/2)+random.randint(-1,1)) + nxt_move)) and (
+                                player2_1y + game_field.paleta_length +nxt_move <= len(game_field.game_matrix)+1) and (
+                                player2_1y + nxt_move > 0):
+                            found = True
+                        else:
+                            print(y_hit)
+                else:
+                    found = False
+                    if ball_x == 1 or ball_x == 20:
                         y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
-                            -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
+                        while not 2 <= y_hit < 24:
+                            y_hit = simulacion(ball_x, ball_y, game_field.ball_direction) + random.randint(
+                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
-                while not found:
-                    nxt_move = random.choice([1, -1])
-                    if len(game_field.game_matrix[0]) - 1 - ball_x > abs(
-                            y_hit - ((player2_1y + int(game_field.paleta_length / 2) + random.randint(-1,
-                                                                                                      1)) + nxt_move)) and (
-                            player2_1y + game_field.paleta_length + nxt_move <= len(game_field.game_matrix) + 1) and (
-                            player2_1y + nxt_move > 0):
-                        found = True
-                    else:
-                        print(y_hit)
+                    while not found:
+                        nxt_move = random.choice([1, -1])
+                        if len(game_field.game_matrix[0]) - 1 - ball_x > abs(
+                                y_hit - ((player2_1y + int(game_field.paleta_length / 2) + random.randint(-1,
+                                                                                                          1)) + nxt_move)) and (
+                                player2_1y + game_field.paleta_length + nxt_move <= len(game_field.game_matrix) + 1) and (
+                                player2_1y + nxt_move > 0):
+                            found = True
+                        else:
+                            print(y_hit)
 
-            player2_1y += nxt_move
-            player2_2y -= nxt_move
+                player2_1y += nxt_move
+                player2_2y -= nxt_move
 
-        game_field.clean_matrix()
-        ball_x += 1 * game_field.ball_velocity
-        ball_y += 1 * game_field.ball_direction
-        bola = Bola(ball_x, ball_y, block_width, block_height)
-        player1_1 = Paleta(player1_1x, player1_1y, block_width, block_height)
-        player2_1 = Paleta(player2_1x, player2_1y, block_width, block_height)
-        player1_2 = Paleta(player1_2x, player1_2y, block_width, block_height)
-        player1_2 = Paleta(player2_2x, player2_2y, block_width, block_height)
-        game_field.screen()
-        pygame.display.update()
+            game_field.clean_matrix()
+            ball_x += 1 * game_field.ball_velocity
+            ball_y += 1 * game_field.ball_direction
+            bola = Bola(ball_x, ball_y, block_width, block_height)
+            player1_1 = Paleta(player1_1x, player1_1y, block_width, block_height)
+            player2_1 = Paleta(player2_1x, player2_1y, block_width, block_height)
+            player1_2 = Paleta(player1_2x, player1_2y, block_width, block_height)
+            player1_2 = Paleta(player2_2x, player2_2y, block_width, block_height)
+            game_field.screen()
+            pygame.display.update()
 
-        clock.tick(game_field.FPS)
+            clock.tick(game_field.FPS)
 
 
 def simulacion(pos_x, pos_y, direction):
