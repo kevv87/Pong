@@ -333,7 +333,7 @@ class Tablero:
         self.screen()
 
 
-game_field = Tablero(True, block_height, block_width, False, True)
+game_field = Tablero(True, block_height, block_width, True, False)
 
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
@@ -461,9 +461,10 @@ def gameloop(singles, doubles):
             elif player2_1up_y and player2_1y+1 > 2:
                 player2_1y -= 1
 
-            # Encargada del rebote de la pelota
+            # Rebote de la pelota
             ball_x, ball_y = ball_bounce_singles(ball_x,ball_y,player1_1x,player1_1y,player2_1x,player2_1y)
 
+            # Inteligencia artificial cuando la pc esta habilitada
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
                 found = False
                 if ball_x == 1 or ball_x == 20:
@@ -481,10 +482,7 @@ def gameloop(singles, doubles):
                         found = True
                 player2_1y += nxt_move
 
-
-
-
-
+            # Se realizan los movimientos y se modifica la pantalla
             game_field.clean_matrix()
             ball_x += 1 * game_field.get_ball_direction()[0]
             ball_y += 1 * game_field.get_ball_direction()[1]
@@ -496,9 +494,13 @@ def gameloop(singles, doubles):
                 message_to_screen('Press w to add a new player', white, 200, 250)
             pygame.display.update()
 
+            # Controla la velocidad
             clock.tick(game_field.get_ball_velocity())
 
+        # Modo doubles
         while doubles:
+
+            # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     doubles = False
@@ -528,7 +530,7 @@ def gameloop(singles, doubles):
                     elif event.key == pygame.K_s:
                         player2_1down_y = False
 
-
+            # Movimiento de las paletas del primer jugador
             if player1_1down_y and player1_1y + game_field.paleta_length + 1 < len(game_field.get_matrix()):
                 player1_1y += 1
                 player1_2y -= 1
@@ -536,6 +538,7 @@ def gameloop(singles, doubles):
                 player1_1y -= 1
                 player1_2y += 1
 
+            # Movimiento de las paletas del segundo jugador
             if player2_1down_y and player2_1y + game_field.paleta_length + 1 < len(game_field.get_matrix()):
                 player2_1y += 1
                 player2_2y -= 1
@@ -543,9 +546,11 @@ def gameloop(singles, doubles):
                 player2_1y -= 1
                 player2_2y += 1
 
+            # Movimiento de la bola
             ball_x, ball_y = ball_bounce_doubles(ball_x,ball_y,player1_1x, player1_2x, player1_1y, player1_2y, player2_1x, player2_2x,
                                                  player2_1y, player2_2y)
 
+            # Inteligencia artificial
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
                 nxt_move = 0
                 found = False
@@ -587,7 +592,7 @@ def gameloop(singles, doubles):
                 player2_1y += nxt_move
                 player2_2y -= nxt_move
 
-
+            # Se realizan los movimientos y se modifica la pantalla
             game_field.clean_matrix()
             ball_x += 1 * game_field.get_ball_direction()[0]
             ball_y += 1 * game_field.get_ball_direction()[1]
@@ -601,9 +606,12 @@ def gameloop(singles, doubles):
                 message_to_screen('Press w to add a new player', white, 200, 250)
             pygame.display.update()
 
+            # Se controla la velocidad
             clock.tick(game_field.get_ball_velocity())
 
-
+# Funcion recursiva encargada de simular el movimiento de la bola dadas una pos inicial en x y y y una direccion hacia
+# donde se mueve la misma. Retorna la posicion en y donde va a pegar la bola al lado derecho. Se utiliza para la inteligencia
+# artificial. Version singles.
 def simulacion(pos_x, pos_y, direction):
     if direction == 0:
         return pos_y
@@ -618,6 +626,9 @@ def simulacion(pos_x, pos_y, direction):
     elif direction == -1:
         return simulacion(pos_x+1, pos_y-1, direction)
 
+# Funcion recursiva encargada de simular el movimiento de la bola dadas una pos inicial en x y y y una direccion hacia
+# donde se mueve la misma. Retorna la posicion en y donde va a pegar la bola al lado derecho. Se utiliza para la inteligencia
+# artificial. Version doubles.
 def simulacion_2nd(pos_x, pos_y, direction):
     if direction == 0:
         return pos_y
@@ -632,7 +643,8 @@ def simulacion_2nd(pos_x, pos_y, direction):
     elif direction == -1:
         return simulacion(pos_x+1, pos_y-1, direction)
 
-
+# Funcion encargada de renderizar el texto a poner en la pantalla, recibe un texto, un color y un tamanno y retorna
+# el texto renderizado asi como el punto central del mismo.
 def text_objects(text, color, size):
     if size == 'small':
         textSurface = smallfont.render(text, True, color)
@@ -643,12 +655,18 @@ def text_objects(text, color, size):
     return textSurface, textSurface.get_rect()
 
 
+# Dado un mensaje, un color, un desplazamiento del centro de la pantalla en x, un desplazamiento del centor de la pantalla
+# en y y un tamanno de los ya predeterminados, este funcion muestra un texto en la pantalla.
 def message_to_screen(msg, color,x_displace=0, y_displace=0, size='small'):
     textSurf, textRect = text_objects(msg, color, size)
     textRect.center = (game_field.width/2) + x_displace, (game_field.height/2) + y_displace
     game_field.gameDisplay.blit(textSurf, textRect)
 
-
+# Funcion encargada del rebote de la bola en bordes o en paletas. Version single
+# E: posicion de la bola en x, posicion de la bola en y, posicion de la paleta del jugador 1 en x y y, posicion de la paleta
+# del jugador 2 en x y y.
+# S: Nueva posicion de la bola en x y y
+# R: -
 def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, player2_1y):
     if (game_field.get_ball_direction()[
             0] > 0 and ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y + game_field.paleta_length) or (
@@ -693,7 +711,11 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
 
     return ball_x, ball_y
 
-
+# Funcion encargada del rebote de la bola en bordes o en paletas. Version doubles
+# E: posicion de la bola en x, posicion de la bola en y, posicion de las paletas del jugador 1 en x y y, posicion de las paletas
+# del jugador 2 en x y y.
+# S: Nueva posicion de la bola en x y y.
+# R: -
 def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, player1_2y, player2_1x, player2_2x, player2_1y, player2_2y):
     if (game_field.get_ball_direction()[0] > 0 and (
             (ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y + game_field.paleta_length) or (
@@ -762,9 +784,11 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
             game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
         game_field.set_ball_direction((game_field.get_ball_direction()[0], game_field.get_ball_direction()[1] * -1))
 
-
-
     return ball_x, ball_y
 
 
 gameloop(game_field.singles, game_field.doubles)
+
+# Finalizacion del juego
+pygame.quit()
+quit()
