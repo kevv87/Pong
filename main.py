@@ -23,13 +23,13 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.FPS = 30
         self.friend_score = F_SCORE
         self.enemy_score = E_SCORE
         self.level = LEVEL
         self.ball_velocity = B_VELOCITY # Cambiar
         self.ball_x = B_X
         self.ball_y = B_Y
+        self.FPS = 30*self.level
         self.ball_direction = B_DIRECTION
         self.pc = PC
         self.paleta_length = 9 - 3*(self.level-1) # Cambiar
@@ -346,17 +346,23 @@ def gameloop():
             if game_field.ball_velocity < 0:
                 if player2_y <= ball_y <= player2_y+game_field.paleta_length/3:
                     game_field.ball_direction = -1
+                    game_field.FPS = 30
                 elif player2_y+game_field.paleta_length/3 <= ball_y <= player2_y+ (2*game_field.paleta_length)/3:
                     game_field.ball_direction = 0
+                    game_field.FPS = 40
                 elif player2_y+(2*game_field.paleta_length/3) <= ball_y <= player2_y+ (3*game_field.paleta_length)/3:
                     game_field.ball_direction = 1
+                    game_field.FPS = 30
             elif game_field.ball_velocity > 0:
                 if player1_y <= ball_y <= player1_y+game_field.paleta_length/3:
                     game_field.ball_direction = -1
+                    game_field.FPS = 30
                 elif player1_y+game_field.paleta_length/3 <= ball_y <= player1_y+ (2*game_field.paleta_length)/3:
                     game_field.ball_direction = 0
+                    game_field.FPS = 40
                 elif player1_y+(2*game_field.paleta_length/3) <= ball_y <= player1_y+ (3*game_field.paleta_length)/3:
                     game_field.ball_direction = 1
+                    game_field.FPS = 30
         elif game_field.ball_velocity > 0 and ball_x + 1 == len(game_field.game_matrix[0]):
             game_field.enemy_score += 1
             ball_x = 19
@@ -377,7 +383,7 @@ def gameloop():
         game_field.screen()
         pygame.display.update()
 
-        clock.tick(30)
+        clock.tick(game_field.FPS)
 
 
 gameloop()
