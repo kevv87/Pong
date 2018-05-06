@@ -384,7 +384,6 @@ def gameloop(singles, doubles):
 
         clock.tick(game_field.FPS)
 
-
     while doubles:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -394,9 +393,9 @@ def gameloop(singles, doubles):
                     player1_1up_y = True
                 elif event.key == pygame.K_DOWN:
                     player1_1down_y = True
-                elif event.key == pygame.K_w:
+                elif event.key == pygame.K_w and not game_field.pc:
                     player2_1up_y = True
-                elif event.key == pygame.K_s:
+                elif event.key == pygame.K_s and not game_field.pc:
                     player2_1down_y = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
@@ -422,9 +421,12 @@ def gameloop(singles, doubles):
             player2_1y -= 1
             player2_2y += 1
 
-        if (game_field.ball_velocity > 0 and ball_x + 1 == len(
-                game_field.game_matrix[0])-1 and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
-                game_field.ball_velocity < 0 and ball_x - 1 == 0 and player1_1y <= ball_y <= player1_1y + game_field.paleta_length):
+        if (game_field.ball_velocity > 0 and (
+                (ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y+game_field.paleta_length) or (
+                 ball_x+1 == player2_2x and player2_2y <= ball_y <= player2_2y+game_field.paleta_length))) or (
+                game_field.ball_velocity < 0 and (
+                ball_x - 1 == player1_1x and player1_1y <= ball_y <= player1_1y + game_field.paleta_length or(
+                ball_x - 1 == player1_2x and player1_2y <= ball_y <= player1_2y + game_field.paleta_length))):
             game_field.ball_velocity *= -1
             if game_field.ball_velocity < 0:
                 if player2_1y <= ball_y <= player2_1y+game_field.paleta_length/3:
@@ -454,6 +456,7 @@ def gameloop(singles, doubles):
             game_field.friend_score += 1
             ball_x = 19
             ball_y = 12
+
         if (game_field.ball_direction > 0 and ball_y + 1 == len(game_field.game_matrix)-1) or (game_field.ball_direction < 0 and ball_y - 1 == 1):
             game_field.ball_direction *= -1
 
