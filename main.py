@@ -5,13 +5,7 @@ from tkinter import *  #Importa todo de tkinter
 
 pygame.init()
 
-class Ventana:
-    def __init__(self, BG, WN):
-        #Atributos
-        self.width = 800
-        self.height = 600
-        self.bg_color = BG
-        window_name = WN
+
 
 
 
