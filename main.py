@@ -41,7 +41,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 3
+        self.level = 1
         self.ball_velocity = 30*self.level
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -338,7 +338,7 @@ class Tablero:
         self.screen()
 
 
-game_field = Tablero(True, block_height, block_width, True, False)
+game_field = Tablero(True, block_height, block_width, False, True)
 
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
@@ -506,7 +506,6 @@ def gameloop(singles, doubles):
                         nxt_move = 0
                     else:
                         nxt_move = 0
-                print(player2_1y)
 
                 player2_1y += nxt_move
 
@@ -581,39 +580,82 @@ def gameloop(singles, doubles):
             # Inteligencia artificial
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
                 nxt_move = 0
-                found = False
                 if ball_x < len(game_field.get_matrix()[0]) - 11:
                     if ball_x == 1 or ball_x == 20 or ball_x == 12:
+                        choice_hit = random.choice([-1, 0, 1])
                         y_hit = simulacion_2nd(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
                         while not 2 <= y_hit < 24:
                             y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
                                 -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
-                    while not found:
-                        nxt_move = random.choice([1, -1])
-                        if len(game_field.get_matrix()[0])-1-ball_x > abs(
-                                y_hit-((player2_1y+int(game_field.paleta_length/2)+random.randint(-1,1)) + nxt_move)) and (
-                                player2_1y + game_field.paleta_length +nxt_move <= len(game_field.get_matrix())+1) and (
-                                player2_1y + nxt_move > 0):
-                            found = True
+                    if choice_hit == -1:
+                        if y_hit < player2_1y and player2_1y - 1 >= 1:
+                            nxt_move = -1
+                        elif y_hit > player2_1y and player2_1y + int(game_field.paleta_length + 1) + 1 < 24:
+                            nxt_move = 1
+                        elif y_hit == player2_1y:
+                            nxt_move = 0
+                        else:
+                            nxt_move = 0
+                    elif choice_hit == 0:
+                        if y_hit < player2_1y + int(game_field.paleta_length + 1) / 2 - 1 and player2_1y - 1 >= 1:
+                            nxt_move = -1
+                        elif y_hit > player2_1y + int(game_field.paleta_length + 1) / 2 - 1 and player2_1y + int(
+                                game_field.paleta_length + 1) <= 24:
+                            nxt_move = 1
+                        elif y_hit == player2_1y + int(game_field.paleta_length + 1) / 2 - 1:
+                            nxt_move = 0
+                        else:
+                            nxt_move = 0
+                    elif choice_hit == 1:
+                        if y_hit < player2_1y + int(game_field.paleta_length) - 1 and player2_1y - 1 >= 1:
+                            nxt_move = -1
+                        elif y_hit > player2_1y + int(game_field.paleta_length) - 1 and player2_1y + int(
+                                game_field.paleta_length + 1) <= 24:
+                            nxt_move = 1
+                        elif y_hit == player2_1y + int(game_field.paleta_length) - 1:
+                            nxt_move = 0
+                        else:
+                            nxt_move = 0
 
                 else:
-                    found = False
                     if ball_x == 1 or ball_x == 20:
+                        choice_hit = random.choice([-1, 0, 1])
                         y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
                             -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
                         while not 2 <= y_hit < 24:
                             y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
                                 -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
-                    while not found:
-                        nxt_move = random.choice([1, -1])
-                        if len(game_field.get_matrix()[0]) - 1 - ball_x > abs(
-                                y_hit - ((player2_1y + int(game_field.paleta_length / 2) + random.randint(-1,
-                                                                                                          1)) + nxt_move)) and (
-                                player2_1y + game_field.paleta_length + nxt_move <= len(game_field.get_matrix()) + 1) and (
-                                player2_1y + nxt_move > 0):
-                            found = True
+                    if choice_hit == -1:
+                        if y_hit < player2_2y and player2_1y + int(game_field.paleta_length + 1) + 1 <= 24:
+                            nxt_move = 1
+                        elif y_hit > player2_2y and player2_1y - 1 >= 1:
+                            nxt_move = -1
+                        elif y_hit == player2_2y:
+                            nxt_move = 0
+                        else:
+                            nxt_move = 0
+                    elif choice_hit == 0:
+                        if y_hit < player2_2y + int(game_field.paleta_length + 1) / 2 - 1 and player2_1y + int(
+                                game_field.paleta_length + 1) <= 24:
+                            nxt_move = 1
+                        elif y_hit > player2_2y + int(game_field.paleta_length + 1) / 2 - 1 and  player2_1y - 1 >= 1:
+                            nxt_move = -1
+                        elif y_hit == player2_2y + int(game_field.paleta_length + 1) / 2 - 1:
+                            nxt_move = 0
+                        else:
+                            nxt_move = 0
+                    elif choice_hit == 1:
+                        if y_hit < player2_2y + int(game_field.paleta_length) - 1 and player2_1y + int(
+                                game_field.paleta_length + 1) + 1 <= 24:
+                            nxt_move = 1
+                        elif y_hit > player2_2y + int(game_field.paleta_length) - 1 and player2_1y - 1 >= 1 :
+                            nxt_move = -1
+                        elif y_hit == player2_2y + int(game_field.paleta_length) - 1:
+                            nxt_move = 0
+                        else:
+                            nxt_move = 0
 
 
 
