@@ -41,7 +41,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 1
+        self.level = 3
         self.ball_velocity = 30*self.level
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -475,8 +475,8 @@ def gameloop(singles, doubles):
                     choice_hit = random.choice([-1, 0, 1])
                     y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
                     while not 0 <= y_hit < 24:
-                        y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
-                            #-int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                        y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
+                            -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
 
                 if choice_hit == -1:
@@ -489,20 +489,20 @@ def gameloop(singles, doubles):
                     else:
                         nxt_move = 0
                 elif choice_hit == 0:
-                    if y_hit < player2_1y + int(game_field.paleta_length+1)/2 and player2_1y-1 >= 1:
+                    if y_hit < player2_1y + int(game_field.paleta_length+1)/2 -1 and player2_1y-1 >= 1:
                         nxt_move = -1
-                    elif y_hit > player2_1y + int(game_field.paleta_length+1)/2 and player2_1y + int(game_field.paleta_length+1) <= 24:
+                    elif y_hit > player2_1y + int(game_field.paleta_length+1)/2 -1 and player2_1y + int(game_field.paleta_length+1) <= 24:
                         nxt_move = 1
-                    elif y_hit == player2_1y + int(game_field.paleta_length+1)/2:
+                    elif y_hit == player2_1y + int(game_field.paleta_length+1)/2 -1:
                         nxt_move = 0
                     else:
                         nxt_move = 0
                 elif choice_hit == 1:
-                    if y_hit < player2_1y + int(game_field.paleta_length + 1) -1 and player2_1y-1 >= 1:
+                    if y_hit < player2_1y + int(game_field.paleta_length) -1 and player2_1y-1 >= 1:
                         nxt_move = -1
-                    elif y_hit > player2_1y + int(game_field.paleta_length + 1) -1 and player2_1y + int(game_field.paleta_length+1) <= 24:
+                    elif y_hit > player2_1y + int(game_field.paleta_length) -1 and player2_1y + int(game_field.paleta_length+1) <= 24:
                         nxt_move = 1
-                    elif y_hit == player2_1y + int(game_field.paleta_length + 1) -1:
+                    elif y_hit == player2_1y + int(game_field.paleta_length) -1:
                         nxt_move = 0
                     else:
                         nxt_move = 0
@@ -697,9 +697,14 @@ def message_to_screen(msg, color,x_displace=0, y_displace=0, size='small'):
 # R: -
 def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, player2_1y):
     if (game_field.get_ball_direction()[
-            0] > 0 and ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y + game_field.paleta_length) or (
+            0] > 0 and ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + game_field.paleta_length or (
+            game_field.get_ball_direction()[1] > 0 and player2_1y <= ball_y+1 <= player2_1y + game_field.paleta_length) or (
+            game_field.get_ball_direction()[1] < 0 and player2_1y <= ball_y-1 <= player2_1y + game_field.paleta_length))) or (
             game_field.get_ball_direction()[
-                0] < 0 and ball_x - 1 == 0 and player1_1y <= ball_y <= player1_1y + game_field.paleta_length):
+                0] < 0 and ball_x - 1 == 0 and (player1_1y <= ball_y <= player1_1y + game_field.paleta_length or (
+            game_field.get_ball_direction()[1] > 0 and player1_1y <= ball_y+1 <= player1_1y + game_field.paleta_length) or (
+            game_field.get_ball_direction()[1] > 0 and player1_1y <= ball_y+1 <= player1_1y + game_field.paleta_length)
+    )):
 
         game_field.set_ball_direction((game_field.get_ball_direction()[0] * -1, game_field.get_ball_direction()[1]))
 
@@ -729,11 +734,11 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
                 game_field.set_ball_velocity(30)
             # Ping
             ping_sound.play()
-    elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0]):
+    elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+2:
         game_field.set_friend_score(game_field.get_friend_score() + 1)
         ball_x = 19
         ball_y = 12
-    elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == 0:
+    elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
         game_field.set_enemy_score(game_field.get_enemy_score() + 1)
         ball_x = 19
         ball_y = 12
@@ -743,18 +748,28 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
 
     return ball_x, ball_y
 
+
 # Funcion encargada del rebote de la bola en bordes o en paletas. Version doubles
-# E: posicion de la bola en x, posicion de la bola en y, posicion de las paletas del jugador 1 en x y y, posicion de las paletas
+# E: posicion de la bola en x, posicion de la bola en y, posicion de las paletas del jugador 1 en x y y,
+# posicion de las paletas
 # del jugador 2 en x y y.
 # S: Nueva posicion de la bola en x y y.
 # R: -
 def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, player1_2y, player2_1x, player2_2x, player2_1y, player2_2y):
     if (game_field.get_ball_direction()[0] > 0 and (
-            (ball_x + 1 == player2_1x and player2_1y <= ball_y <= player2_1y + game_field.paleta_length) or (
-            ball_x + 1 == player2_2x and player2_2y <= ball_y <= player2_2y + game_field.paleta_length))) or (
+            (ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + game_field.paleta_length or (
+            game_field.get_ball_direction()[1] > 0 and player2_1y <= ball_y+1 <= player2_1y) or (
+            game_field.get_ball_direction()[1] < 0 and player2_1y <= ball_y - 1 <= player2_1y))) or (
+            ball_x + 1 == player2_2x and (player2_2y <= ball_y <= player2_2y + game_field.paleta_length or (
+            game_field.get_ball_direction()[1] > 0 and player2_2y <= ball_y+1 <= player2_2y) or (
+            game_field.get_ball_direction()[1] < 0 and player2_2y <= ball_y - 1 <= player2_2y))))) or (
             game_field.get_ball_direction()[0] < 0 and (
-            ball_x - 1 == player1_1x and player1_1y <= ball_y <= player1_1y + game_field.paleta_length or (
-            ball_x - 1 == player1_2x and player1_2y <= ball_y <= player1_2y + game_field.paleta_length))):
+            ball_x - 1 == player1_1x and (player1_1y <= ball_y <= player1_1y + game_field.paleta_length or (
+            game_field.get_ball_direction()[1] > 0 and player1_1y <= ball_y+1 <= player1_1y) or (
+            game_field.get_ball_direction()[1] > 0 and player1_1y <= ball_y+1 <= player1_2y)) or (
+            ball_x - 1 == player1_2x and (player1_2y <= ball_y <= player1_2y + game_field.paleta_length or (
+            game_field.get_ball_direction()[1] > 0 and player1_2y <= ball_y+1 <= player2_1y) or (
+            game_field.get_ball_direction()[1] > 0 and player1_2y <= ball_y+1 <= player2_1y))))):
         game_field.set_ball_direction((game_field.get_ball_direction()[0] * -1, game_field.get_ball_direction()[1]))
         if game_field.get_ball_direction()[0] < 0 and ball_x > len(game_field.get_matrix()[0]) - 10:
             if player2_1y <= ball_y < player2_1y + (game_field.paleta_length / 3)-1:
@@ -807,11 +822,11 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
 
-    elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0]):
+    elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+1:
         game_field.set_friend_score(game_field.get_friend_score() + 1)
         ball_x = 19
         ball_y = 12
-    elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == 0:
+    elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
         game_field.set_enemy_score(game_field.get_enemy_score() + 1)
         ball_x = 19
         ball_y = 12
