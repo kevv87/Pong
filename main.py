@@ -2,11 +2,16 @@ import pygame
 import random
 
 # Inicializacion de pygame
+pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
+
+# Sonidos
+pong_sound = pygame.mixer.Sound('sounds/pong.wav')
+ping_sound = pygame.mixer.Sound('sounds/ping.wav')
 
 # Fuentes predeterminadas
 smallfont = pygame.font.SysFont('couriernew', 25)
@@ -466,20 +471,43 @@ def gameloop(singles, doubles):
 
             # Inteligencia artificial cuando la pc esta habilitada
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
-                found = False
                 if ball_x == 1 or ball_x == 20:
+                    choice_hit = random.choice([-1, 0, 1])
                     y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
                     while not 0 <= y_hit < 24:
-                        y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                            -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                        y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
+                            #-int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
-                while not found:
-                    nxt_move = random.choice([1, -1])
-                    if len(game_field.get_matrix()[0])-1-ball_x > abs(
-                            y_hit-((player2_1y+int(game_field.paleta_length/2)+random.randint(-1,1)) + nxt_move)) and (
-                            player2_1y + game_field.paleta_length +nxt_move <= len(game_field.get_matrix())+1) and (
-                            player2_1y + nxt_move > 0):
-                        found = True
+
+                if choice_hit == -1:
+                    if y_hit < player2_1y and player2_1y-1 >= 1:
+                       nxt_move = -1
+                    elif y_hit > player2_1y and player2_1y + int(game_field.paleta_length+1) <= 24:
+                        nxt_move = 1
+                    elif y_hit == player2_1y:
+                        nxt_move = 0
+                    else:
+                        nxt_move = 0
+                elif choice_hit == 0:
+                    if y_hit < player2_1y + int(game_field.paleta_length+1)/2 and player2_1y-1 >= 1:
+                        nxt_move = -1
+                    elif y_hit > player2_1y + int(game_field.paleta_length+1)/2 and player2_1y + int(game_field.paleta_length+1) <= 24:
+                        nxt_move = 1
+                    elif y_hit == player2_1y + int(game_field.paleta_length+1)/2:
+                        nxt_move = 0
+                    else:
+                        nxt_move = 0
+                elif choice_hit == 1:
+                    if y_hit < player2_1y + int(game_field.paleta_length + 1) -1 and player2_1y-1 >= 1:
+                        nxt_move = -1
+                    elif y_hit > player2_1y + int(game_field.paleta_length + 1) -1 and player2_1y + int(game_field.paleta_length+1) <= 24:
+                        nxt_move = 1
+                    elif y_hit == player2_1y + int(game_field.paleta_length + 1) -1:
+                        nxt_move = 0
+                    else:
+                        nxt_move = 0
+                print(player2_1y)
+
                 player2_1y += nxt_move
 
             # Se realizan los movimientos y se modifica la pantalla
@@ -686,6 +714,8 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
                     3 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
+            # Pong
+            pong_sound.play()
         elif game_field.get_ball_direction()[0] > 0:
             if player1_1y <= ball_y < player1_1y + game_field.paleta_length / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
@@ -697,6 +727,8 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
                     3 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
+            # Ping
+            ping_sound.play()
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0]):
         game_field.set_friend_score(game_field.get_friend_score() + 1)
         ball_x = 19
@@ -736,6 +768,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                     3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
+            # Pong
+            pong_sound.play()
         elif game_field.get_ball_direction()[0] < 0:
             if player2_2y <= ball_y < player2_2y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
@@ -748,6 +782,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                     3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
+            # Ping
+            ping_sound.play()
         elif game_field.get_ball_direction()[0] > 0 and ball_x < 11:
             if player1_1y <= ball_y <= player1_1y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
