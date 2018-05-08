@@ -47,7 +47,7 @@ class Tablero:
         self.block_width = block_width
         self.block_height = block_height
         self.level = 1
-        self.ball_velocity = 30*self.level
+        self.ball_velocity = 30
         self.ball_direction = (-1, 0)
         self.pc = PC
         self.paleta_length = 9 - 3*(self.level-1)
@@ -284,7 +284,6 @@ class Tablero:
                         self.game_matrix[n][m] = False
         self.scores()
 
-
     def lose(self):
         pass
 
@@ -341,6 +340,42 @@ class Tablero:
         self.enemy_score = 0
         self.friend_score = 0
         self.screen()
+
+    # Se encarga de la animacion en la transicion de nivel
+    def levelup_animation(self):
+        self.reset_scores()
+        for n in range(len(self.game_matrix)):
+            for m in range(len(self.game_matrix)):
+                if n % 2  == 0 and m == 19 and n != 0 and n != 24:
+                    self.game_matrix[n][m] = False
+            self.screen()
+            pygame.display.update()
+        if self.level != 3:
+            self.level += 1
+            self.update_paleta()
+            self.update_velocity()
+        else:
+            pygame.quit()
+            quit()
+        message_to_screen('Level Up!!', white, size = 'large')
+
+    # Metodos de actualizacion
+    def update_paleta(self):
+        self.paleta_length = 9 - 3*(self.level-1)
+
+    def update_velocity(self):
+        self.ball_velocity = 30 + 3*self.level
+
+    def reset_level(self):
+        self.level = 1
+        for n in range(len(self.game_matrix)):
+            for m in range(len(self.game_matrix)):
+                if n % 2  == 0 and m == 19 and n != 0 and n != 24:
+                    self.game_matrix[n][m] = False
+        self.update_paleta()
+        self.screen()
+        pygame.display.update()
+        self.update_velocity()
 
 
 game_field = Tablero(True, block_height, block_width, False, True)
@@ -443,6 +478,7 @@ def gameloop(singles, doubles):
                         player2_1up_y = True
                     elif event.key == pygame.K_w:
                         game_field.pc = False
+                        game_field.reset_level()
                         game_field.new_player()
                         game_field.reset_scores()
                     elif event.key == pygame.K_s and not game_field.pc:
@@ -546,8 +582,10 @@ def gameloop(singles, doubles):
                         player2_1up_y = True
                     elif event.key == pygame.K_w:
                         game_field.pc = False
+                        game_field.reset_level()
                         game_field.new_player()
                         game_field.reset_scores()
+
                     elif event.key == pygame.K_s and not game_field.pc:
                         player2_1down_y = True
                     elif event.key == pygame.K_p:
@@ -758,37 +796,49 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
         if game_field.get_ball_direction()[0] < 0:
             if player2_1y <= ball_y <= player2_1y + game_field.paleta_length / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
-                game_field.set_ball_velocity(30)
+                game_field.set_ball_velocity(game_field.ball_velocity)
             elif player2_1y + game_field.paleta_length / 3 < ball_y < player2_1y + (2 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                game_field.set_ball_velocity(40)
+                game_field.set_ball_velocity(game_field.ball_velocity + 10)
             elif player2_1y + (2 * game_field.paleta_length / 3) <= ball_y <= player2_1y + (
                     3 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
-                game_field.set_ball_velocity(30)
+                game_field.set_ball_velocity(game_field.ball_velocity)
             # Pong
             pong_sound.play()
         elif game_field.get_ball_direction()[0] > 0:
             if player1_1y <= ball_y < player1_1y + game_field.paleta_length / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
-                game_field.set_ball_velocity(30)
+                game_field.set_ball_velocity(game_field.ball_velocity)
             elif player1_1y + game_field.paleta_length / 3 < ball_y < player1_1y + (2 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                game_field.set_ball_velocity(40)
+                game_field.set_ball_velocity(game_field.ball_velocity + 10)
             elif player1_1y + (2 * game_field.paleta_length / 3) < ball_y <= player1_1y + (
                     3 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
-                game_field.set_ball_velocity(30)
+                game_field.set_ball_velocity(game_field.ball_velocity)
             # Ping
             ping_sound.play()
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+2:
-        game_field.set_friend_score(game_field.get_friend_score() + 1)
-        ball_x = 19
-        ball_y = 12
+        if game_field.get_friend_score() < 10:
+            game_field.set_friend_score(game_field.get_friend_score() + 1)
+            ball_x = 19
+            ball_y = 12
+        else:
+            game_field.levelup_animation()
+            clock.tick(3)
+            ball_x = 19
+            ball_y = 12
     elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
-        game_field.set_enemy_score(game_field.get_enemy_score() + 1)
-        ball_x = 19
-        ball_y = 12
+        if game_field.get_enemy_score() < 10:
+            game_field.set_enemy_score(game_field.get_enemy_score() + 1)
+            ball_x = 19
+            ball_y = 12
+        else:
+            game_field.levelup_animation()
+            clock.tick(3)
+            ball_x = 19
+            ball_y = 12
     if (game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(game_field.get_matrix()) - 1) or (
             game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
         game_field.set_ball_direction((game_field.get_ball_direction()[0], game_field.get_ball_direction()[1] * -1))
@@ -870,13 +920,25 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                 game_field.set_ball_velocity(30)
 
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+1:
-        game_field.set_friend_score(game_field.get_friend_score() + 1)
-        ball_x = 19
-        ball_y = 12
+        if game_field.get_friend_score() < 10:
+            game_field.set_friend_score(game_field.get_friend_score() + 1)
+            ball_x = 19
+            ball_y = 12
+        else:
+            game_field.levelup_animation()
+            clock.tick(3)
+            ball_x = 19
+            ball_y = 12
     elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
-        game_field.set_enemy_score(game_field.get_enemy_score() + 1)
-        ball_x = 19
-        ball_y = 12
+        if game_field.get_enemy_score() < 10:
+            game_field.set_enemy_score(game_field.get_enemy_score() + 1)
+            ball_x = 19
+            ball_y = 12
+        else:
+            game_field.levelup_animation()
+            clock.tick(3)
+            ball_x = 19
+            ball_y = 12
 
     if (game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(game_field.get_matrix()) - 1) or (
             game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
