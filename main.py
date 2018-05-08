@@ -377,7 +377,7 @@ class Tablero:
         pygame.display.update()
         self.update_velocity()
 
-
+# Instancia del Tablero
 game_field = Tablero(True, block_height, block_width, False, True)
 
 
