@@ -949,10 +949,7 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
 
 gameloop(game_field.singles, game_field.doubles)
 
-<<<<<<< HEAD
-
-=======
 # Finalizacion del juego
 pygame.quit()
 quit()
->>>>>>> 89e3e9d0d000cca9ac9d8d2889f2bf1618d94dc7
+
