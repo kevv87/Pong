@@ -9,14 +9,10 @@ pygame.init()
 white = (255, 255, 255)
 black = (0, 0, 0)
 
-<<<<<<< HEAD
 smallfont = pygame.font.SysFont('comicsansms', 25)
 mediumfont = pygame.font.SysFont('comicsansms',50)
 largefont = pygame.font.SysFont('comicsansms', 80)
 
-
-
-=======
 # Sonidos
 pong_sound = pygame.mixer.Sound('sounds/pong.wav')
 ping_sound = pygame.mixer.Sound('sounds/ping.wav')
@@ -36,7 +32,7 @@ clock = pygame.time.Clock()
 
 # Clase tablero, encargada de guardar algunas variables importantes para el desarrollo de cualquier modalidad del juego
 # asi como metodos que se usan en todas las modalidades del juego.
->>>>>>> 89e3e9d0d000cca9ac9d8d2889f2bf1618d94dc7
+
 class Tablero:
     def __init__(self, PC, block_width, block_height, SINGLES, DOUBLES):
         # Atributos
