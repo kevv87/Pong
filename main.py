@@ -373,7 +373,7 @@ class Tablero:
         self.update_velocity()
 
 
-game_field = Tablero(True, block_height, block_width, True, False)
+game_field = Tablero(True, block_height, block_width, False, True)
 
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
@@ -915,13 +915,25 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                 game_field.set_ball_velocity(30)
 
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+1:
-        game_field.set_friend_score(game_field.get_friend_score() + 1)
-        ball_x = 19
-        ball_y = 12
+        if game_field.get_friend_score() < 10:
+            game_field.set_friend_score(game_field.get_friend_score() + 1)
+            ball_x = 19
+            ball_y = 12
+        else:
+            game_field.levelup_animation()
+            clock.tick(3)
+            ball_x = 19
+            ball_y = 12
     elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
-        game_field.set_enemy_score(game_field.get_enemy_score() + 1)
-        ball_x = 19
-        ball_y = 12
+        if game_field.get_enemy_score() < 10:
+            game_field.set_enemy_score(game_field.get_enemy_score() + 1)
+            ball_x = 19
+            ball_y = 12
+        else:
+            game_field.levelup_animation()
+            clock.tick(3)
+            ball_x = 19
+            ball_y = 12
 
     if (game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(game_field.get_matrix()) - 1) or (
             game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
