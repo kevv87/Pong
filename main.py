@@ -43,7 +43,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 1
+        self.level = 3
         self.ball_velocity = 30
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -443,6 +443,7 @@ class Paleta:
 
 # Gameloop, recibe el modo de juego que se esta llevando a cabo.
 def gameloop(singles, doubles):
+    global choosed
     # Posiciones iniciales de los jugadores
 
     # Primeras paletas
@@ -479,7 +480,7 @@ def gameloop(singles, doubles):
 
 
     while game:
-
+        choosed = False
         # Modo singles
         while singles:
 
@@ -642,20 +643,29 @@ def gameloop(singles, doubles):
             # Inteligencia artificial
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
                 nxt_move = 0
-                choosed = False
+                print(choosed)
                 if ball_x == 1:
                     paleta_choose = random.choice([1, 2])
+                    choosed = True
                 elif ball_x == 12 and not choosed:
                     paleta_choose = random.choice([1, 2])
+                    choosed = True
                 elif ball_x == 20 and not choosed:
+                    paleta_choose = random.choice([1, 2])
+                    choosed = True
+                elif ball_x == 27:
+                    print('no hay de otra')
                     paleta_choose = 1
+                    choosed = True
+
+                print(paleta_choose)
                 if paleta_choose == 1:
                     if ball_x == 1 or ball_x == 20 or ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
-                        y_hit = simulacion_2nd(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                        y_hit = simulacion_2nd(ball_x, ball_y, game_field.get_ball_direction()[1]) #+ random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
                         while not 2 <= y_hit < 24:
-                            y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
+                                #-int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
                     if choice_hit == -1:
                         if y_hit < player2_1y and player2_1y - 1 >= 1:
@@ -690,11 +700,11 @@ def gameloop(singles, doubles):
                 else:
                     if ball_x == 1 or ball_x == 20:
                         choice_hit = random.choice([-1, 0, 1])
-                        y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                            -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
+                        y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
+                           # -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
                         while not 2 <= y_hit < 24:
-                            y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1])# + random.randint(
+                                #-int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
                     if choice_hit == -1:
                         if y_hit < player2_2y and player2_1y + int(game_field.paleta_length + 1) + 1 <= 24:
@@ -879,6 +889,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
 # S: Nueva posicion de la bola en x y y.
 # R: -
 def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, player1_2y, player2_1x, player2_2x, player2_1y, player2_2y):
+    global choosed
     if (game_field.get_ball_direction()[0] > 0 and (
             (ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + game_field.paleta_length or (
             game_field.get_ball_direction()[1] > 0 and player2_1y <= ball_y+1 <= player2_1y) or (
@@ -908,6 +919,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                 game_field.set_ball_velocity(30)
             # Pong
             pong_sound.play()
+            if game_field.pc:
+                choosed = False
         elif game_field.get_ball_direction()[0] < 0:
             if player2_2y <= ball_y < player2_2y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
@@ -922,6 +935,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                 game_field.set_ball_velocity(30)
             # Pong
             pong_sound.play()
+            if game_field.pc:
+                choosed = False
         elif game_field.get_ball_direction()[0] > 0 and ball_x < 11:
             if player1_1y <= ball_y <= player1_1y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
@@ -954,6 +969,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
             game_field.set_friend_score(game_field.get_friend_score() + 1)
             ball_x = 19
             ball_y = 12
+            if game_field.pc:
+                choosed = False
         else:
             game_field.levelup_animation()
             clock.tick(3)
