@@ -299,7 +299,8 @@ class Tablero:
         self.scores()
 
     def lose(self):
-        pass
+        pygame.quit()
+        quit()
 
     def win(self):
         pass
@@ -853,7 +854,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
             ball_x = 19
             ball_y = 12
         else:
-            game_field.levelup_animation()
+            game_field.lose()
             clock.tick(3)
             ball_x = 19
             ball_y = 12
