@@ -397,7 +397,7 @@ class Tablero:
         self.lvl_music()
 
 # Instancia del Tablero
-game_field = Tablero(True, block_height, block_width, True, False)
+game_field = Tablero(True, block_height, block_width, False, True)
 
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
@@ -913,8 +913,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                     3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
-            # Ping
-            ping_sound.play()
+            # Pong
+            pong_sound.play()
         elif game_field.get_ball_direction()[0] > 0 and ball_x < 11:
             if player1_1y <= ball_y <= player1_1y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
@@ -926,6 +926,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                     (3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
+            # Ping
+            ping_sound.play()
         elif game_field.get_ball_direction()[0] > 0:
             if player1_2y <= ball_y <= player1_2y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
@@ -937,6 +939,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                     (3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
+            # Ping
+            ping_sound.play()
 
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+1:
         if game_field.get_friend_score() < 10:
