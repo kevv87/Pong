@@ -656,7 +656,14 @@ def gameloop(singles, doubles):
             # Inteligencia artificial
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
                 nxt_move = 0
-                if ball_x < len(game_field.get_matrix()[0]) - 11:
+                choosed = False
+                if ball_x == 1:
+                    paleta_choose = random.choice([1, 2])
+                elif ball_x == 12 and not choosed:
+                    paleta_choose = random.choice([1, 2])
+                elif ball_x == 20 and not choosed:
+                    paleta_choose = 1
+                if paleta_choose == 1:
                     if ball_x == 1 or ball_x == 20 or ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
                         y_hit = simulacion_2nd(ball_x, ball_y, game_field.get_ball_direction()[1])# + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
@@ -934,8 +941,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                     3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
-            # Ping
-            ping_sound.play()
+            # Pong
+            pong_sound.play()
         elif game_field.get_ball_direction()[0] > 0 and ball_x < 11:
             if player1_1y <= ball_y <= player1_1y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
@@ -947,6 +954,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                     (3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
+            # Ping
+            ping_sound.play()
         elif game_field.get_ball_direction()[0] > 0:
             if player1_2y <= ball_y <= player1_2y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
@@ -958,6 +967,8 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
                     (3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
+            # Ping
+            ping_sound.play()
 
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+1:
         if game_field.get_friend_score() < 10:
