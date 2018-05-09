@@ -642,7 +642,14 @@ def gameloop(singles, doubles):
             # Inteligencia artificial
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
                 nxt_move = 0
-                if ball_x < len(game_field.get_matrix()[0]) - 11:
+                choosed = False
+                if ball_x == 1:
+                    paleta_choose = random.choice([1, 2])
+                elif ball_x == 12 and not choosed:
+                    paleta_choose = random.choice([1, 2])
+                elif ball_x == 20 and not choosed:
+                    paleta_choose = 1
+                if paleta_choose == 1:
                     if ball_x == 1 or ball_x == 20 or ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
                         y_hit = simulacion_2nd(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
