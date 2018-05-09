@@ -643,7 +643,6 @@ def gameloop(singles, doubles):
             # Inteligencia artificial
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
                 nxt_move = 0
-                print(choosed)
                 if ball_x == 1:
                     paleta_choose = random.choice([1, 2])
                     choosed = True
