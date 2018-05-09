@@ -1,6 +1,7 @@
 import pygame
 import random
 import mutagen.oggvorbis
+import time
 
 # Inicializacion de pygame
 
@@ -442,6 +443,7 @@ class Paleta:
 
 # Gameloop, recibe el modo de juego que se esta llevando a cabo.
 def gameloop(singles, doubles):
+    global start_boring_timer
     # Posiciones iniciales de los jugadores
 
     # Primeras paletas
@@ -478,7 +480,7 @@ def gameloop(singles, doubles):
 
 
     while game:
-
+        start_boring_timer = time.time()
         # Modo singles
         while singles:
 
@@ -499,6 +501,7 @@ def gameloop(singles, doubles):
                         game_field.reset_level()
                         game_field.new_player()
                         game_field.reset_scores()
+                        start_boring_timer = time.time()
                     elif event.key == pygame.K_s and not game_field.pc:
                         player2_1down_y = True
                     elif event.key == pygame.K_p:
@@ -527,6 +530,11 @@ def gameloop(singles, doubles):
 
             # Rebote de la pelota
             ball_x, ball_y = ball_bounce_singles(ball_x,ball_y,player1_1x,player1_1y,player2_1x,player2_1y)
+
+            # Sube la dificultad si no hay goles
+            if time.time() - start_boring_timer > 10:
+                game_field.levelup_animation()
+                start_boring_timer = time.time()
 
             # Inteligencia artificial cuando la pc esta habilitada
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
@@ -604,6 +612,7 @@ def gameloop(singles, doubles):
                         game_field.reset_level()
                         game_field.new_player()
                         game_field.reset_scores()
+                        start_boring_timer = time.time()
 
                     elif event.key == pygame.K_s and not game_field.pc:
                         player2_1down_y = True
@@ -800,6 +809,7 @@ def message_to_screen(msg, color,x_displace=0, y_displace=0, size='small'):
 # S: Nueva posicion de la bola en x y y
 # R: -
 def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, player2_1y):
+    global start_boring_timer
     if (game_field.get_ball_direction()[
             0] > 0 and ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + game_field.paleta_length or (
             game_field.get_ball_direction()[1] > 0 and player2_1y <= ball_y+1 <= player2_1y + game_field.paleta_length) or (
@@ -841,6 +851,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+2:
         if game_field.get_friend_score() < 10:
             game_field.set_friend_score(game_field.get_friend_score() + 1)
+            start_boring_timer = time.time()
             ball_x = 19
             ball_y = 12
         elif game_field.pc:
@@ -853,6 +864,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
     elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
         if game_field.get_enemy_score() < 10:
             game_field.set_enemy_score(game_field.get_enemy_score() + 1)
+            start_boring_timer = time.time()
             ball_x = 19
             ball_y = 12
         elif game_field.pc:
@@ -945,6 +957,7 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+1:
         if game_field.get_friend_score() < 10:
             game_field.set_friend_score(game_field.get_friend_score() + 1)
+            start_boring_timer = time.time()
             ball_x = 19
             ball_y = 12
         else:
@@ -955,6 +968,7 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
     elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
         if game_field.get_enemy_score() < 10:
             game_field.set_enemy_score(game_field.get_enemy_score() + 1)
+            start_boring_timer = time.time()
             ball_x = 19
             ball_y = 12
         else:
