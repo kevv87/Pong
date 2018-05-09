@@ -532,7 +532,7 @@ def gameloop(singles, doubles):
             ball_x, ball_y = ball_bounce_singles(ball_x,ball_y,player1_1x,player1_1y,player2_1x,player2_1y)
 
             # Sube la dificultad si no hay goles
-            if time.time() - start_boring_timer > 10:
+            if time.time() - start_boring_timer > 10 and not game_field.pc:
                 game_field.levelup_animation()
                 start_boring_timer = time.time()
 
@@ -649,7 +649,7 @@ def gameloop(singles, doubles):
                                                  player2_1y, player2_2y)
 
             # Sube la dificultad si no hay goles
-            if time.time() - start_boring_timer > 10:
+            if time.time() - start_boring_timer > 10 and not game_field.pc:
                 game_field.levelup_animation()
                 start_boring_timer = time.time()
 
