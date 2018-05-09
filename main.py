@@ -43,7 +43,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 1
+        self.level = 3
         self.ball_velocity = 30
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -358,7 +358,6 @@ class Tablero:
 
     # Se encarga de la animacion en la transicion de nivel
     def levelup_animation(self):
-        self.reset_scores()
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix)):
                 if n % 2  == 0 and m == 19 and n != 0 and n != 24:
@@ -541,7 +540,7 @@ def gameloop(singles, doubles):
 
                 if choice_hit == -1:
                     if y_hit < player2_1y and player2_1y-1 >= 1:
-                       nxt_move = -1
+                        nxt_move = -1
                     elif y_hit > player2_1y and player2_1y + int(game_field.paleta_length+1) <= 24:
                         nxt_move = 1
                     elif y_hit == player2_1y:
@@ -551,7 +550,8 @@ def gameloop(singles, doubles):
                 elif choice_hit == 0:
                     if y_hit < player2_1y + int(game_field.paleta_length+1)/2 -1 and player2_1y-1 >= 1:
                         nxt_move = -1
-                    elif y_hit > player2_1y + int(game_field.paleta_length+1)/2 -1 and player2_1y + int(game_field.paleta_length+1) <= 24:
+                    elif y_hit > player2_1y + int(game_field.paleta_length+1)/2 -1 and player2_1y + int(
+                            game_field.paleta_length+1) <= 24:
                         nxt_move = 1
                     elif y_hit == player2_1y + int(game_field.paleta_length+1)/2 -1:
                         nxt_move = 0
@@ -843,21 +843,25 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
             game_field.set_friend_score(game_field.get_friend_score() + 1)
             ball_x = 19
             ball_y = 12
-        else:
+        elif game_field.pc:
             game_field.levelup_animation()
             clock.tick(3)
             ball_x = 19
             ball_y = 12
+        else:
+            game_field.win()
     elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
         if game_field.get_enemy_score() < 10:
             game_field.set_enemy_score(game_field.get_enemy_score() + 1)
             ball_x = 19
             ball_y = 12
-        else:
+        elif game_field.pc:
             game_field.lose()
             clock.tick(3)
             ball_x = 19
             ball_y = 12
+        else:
+            game_field.win()
     if (game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(game_field.get_matrix()) - 1) or (
             game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
         game_field.set_ball_direction((game_field.get_ball_direction()[0], game_field.get_ball_direction()[1] * -1))
