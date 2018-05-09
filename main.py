@@ -1,21 +1,18 @@
 import pygame
 import random
+import mutagen.oggvorbis
 
 # Inicializacion de pygame
-pygame.mixer.pre_init(44100, -16, 1, 512)
+
 pygame.init()
 
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
 
-smallfont = pygame.font.SysFont('comicsansms', 25)
-mediumfont = pygame.font.SysFont('comicsansms',50)
-largefont = pygame.font.SysFont('comicsansms', 80)
-
 # Sonidos
-pong_sound = pygame.mixer.Sound('sounds/pong.wav')
-ping_sound = pygame.mixer.Sound('sounds/ping.wav')
+pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
+ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
 
 # Fuentes predeterminadas
 smallfont = pygame.font.SysFont('couriernew', 25)
@@ -53,6 +50,7 @@ class Tablero:
         self.paleta_length = 9 - 3*(self.level-1)
         self.singles = SINGLES
         self.doubles = DOUBLES
+        self.lvl_music()
 
     # Metodos
 
@@ -63,6 +61,22 @@ class Tablero:
             for m in range(40):
                 self.game_matrix[n].append(False)
         self.game_matrix = self.game_matrix[:len(self.game_matrix)-1]
+
+
+    # Musica
+    def lvl_music(self):
+        if self.level == 1:
+            music_file = 'sounds/lvl1.ogg'
+        elif self.level == 2:
+            music_file = 'sounds/Shadowblaze-ChampionBattle.ogg'
+        elif self.level == 3:
+            music_file = 'sounds/NDY.ogg'
+        sample_rate = mutagen.oggvorbis.OggVorbis(music_file).info.sample_rate
+        pygame.mixer.quit()
+        pygame.mixer.pre_init(sample_rate, -16, 1, 512)
+        pygame.mixer.init()
+        pygame.mixer.music.load(music_file)
+        pygame.mixer.music.play(-1)
 
     # Metodos set y get
     def get_matrix(self):
@@ -358,6 +372,7 @@ class Tablero:
             pygame.quit()
             quit()
         message_to_screen('Level Up!!', white, size = 'large')
+        self.music_update()
 
     # Metodos de actualizacion
     def update_paleta(self):
@@ -377,8 +392,11 @@ class Tablero:
         pygame.display.update()
         self.update_velocity()
 
+    def music_update(self):
+        self.lvl_music()
+
 # Instancia del Tablero
-game_field = Tablero(True, block_height, block_width, False, True)
+game_field = Tablero(True, block_height, block_width, True, False)
 
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
@@ -799,7 +817,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
                 game_field.set_ball_velocity(game_field.ball_velocity)
             elif player2_1y + game_field.paleta_length / 3 < ball_y < player2_1y + (2 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                game_field.set_ball_velocity(game_field.ball_velocity + 10)
+                game_field.set_ball_velocity(game_field.ball_velocity )
             elif player2_1y + (2 * game_field.paleta_length / 3) <= ball_y <= player2_1y + (
                     3 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
@@ -812,7 +830,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
                 game_field.set_ball_velocity(game_field.ball_velocity)
             elif player1_1y + game_field.paleta_length / 3 < ball_y < player1_1y + (2 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                game_field.set_ball_velocity(game_field.ball_velocity + 10)
+                game_field.set_ball_velocity(game_field.ball_velocity)
             elif player1_1y + (2 * game_field.paleta_length / 3) < ball_y <= player1_1y + (
                     3 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
