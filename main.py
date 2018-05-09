@@ -397,7 +397,7 @@ class Tablero:
         self.lvl_music()
 
 # Instancia del Tablero
-game_field = Tablero(True, block_height, block_width, True, False)
+game_field = Tablero(True, block_height, block_width, False, True)
 
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
@@ -648,16 +648,21 @@ def gameloop(singles, doubles):
             ball_x, ball_y = ball_bounce_doubles(ball_x,ball_y,player1_1x, player1_2x, player1_1y, player1_2y, player2_1x, player2_2x,
                                                  player2_1y, player2_2y)
 
+            # Sube la dificultad si no hay goles
+            if time.time() - start_boring_timer > 10:
+                game_field.levelup_animation()
+                start_boring_timer = time.time()
+
             # Inteligencia artificial
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
                 nxt_move = 0
                 if ball_x < len(game_field.get_matrix()[0]) - 11:
                     if ball_x == 1 or ball_x == 20 or ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
-                        y_hit = simulacion_2nd(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                        y_hit = simulacion_2nd(ball_x, ball_y, game_field.get_ball_direction()[1])# + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
                         while not 2 <= y_hit < 24:
-                            y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
+                               # -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
                     if choice_hit == -1:
                         if y_hit < player2_1y and player2_1y - 1 >= 1:
