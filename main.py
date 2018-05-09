@@ -838,7 +838,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
             if player2_1y <= ball_y <= player2_1y + game_field.paleta_length / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
                 game_field.set_ball_velocity(game_field.ball_velocity)
-            elif player2_1y + game_field.paleta_length / 3 < ball_y < player2_1y + (2 * game_field.paleta_length) / 3:
+            elif player2_1y + game_field.paleta_length / 3 <= ball_y <= player2_1y + (2 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
                 game_field.set_ball_velocity(game_field.ball_velocity )
             elif player2_1y + (2 * game_field.paleta_length / 3) <= ball_y <= player2_1y + (
@@ -848,13 +848,13 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
             # Pong
             pong_sound.play()
         elif game_field.get_ball_direction()[0] > 0:
-            if player1_1y <= ball_y < player1_1y + game_field.paleta_length / 3:
+            if player1_1y <= ball_y <= player1_1y + game_field.paleta_length / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
                 game_field.set_ball_velocity(game_field.ball_velocity)
-            elif player1_1y + game_field.paleta_length / 3 < ball_y < player1_1y + (2 * game_field.paleta_length) / 3:
+            elif player1_1y + game_field.paleta_length / 3 <= ball_y <= player1_1y + (2 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
                 game_field.set_ball_velocity(game_field.ball_velocity)
-            elif player1_1y + (2 * game_field.paleta_length / 3) < ball_y <= player1_1y + (
+            elif player1_1y + (2 * game_field.paleta_length / 3) <= ball_y <= player1_1y + (
                     3 * game_field.paleta_length) / 3:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(game_field.ball_velocity)
@@ -916,14 +916,14 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
             game_field.get_ball_direction()[1] > 0 and player1_2y <= ball_y+1 <= player2_1y))))):
         game_field.set_ball_direction((game_field.get_ball_direction()[0] * -1, game_field.get_ball_direction()[1]))
         if game_field.get_ball_direction()[0] < 0 and ball_x > len(game_field.get_matrix()[0]) - 10:
-            if player2_1y <= ball_y < player2_1y + (game_field.paleta_length / 3)-1:
+            if player2_1y <= ball_y <= player2_1y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
                 game_field.set_ball_velocity(30)
             elif player2_1y + game_field.paleta_length / 3 <= ball_y <= player2_1y + (
                     (2 * game_field.paleta_length) / 3) - 1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
                 game_field.set_ball_velocity(40)
-            elif player2_1y + (2 * game_field.paleta_length / 3) < ball_y <= player2_1y + ((
+            elif player2_1y + (2 * game_field.paleta_length / 3) <= ball_y <= player2_1y + ((
                     3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
