@@ -14,6 +14,9 @@ black = (0, 0, 0)
 # Sonidos
 pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
 ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
+point_sound = pygame.mixer.Sound('sounds/point.ogg')
+fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
+
 
 # Fuentes predeterminadas
 smallfont = pygame.font.SysFont('couriernew', 25)
@@ -44,7 +47,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 1
+        self.level = 3
         self.ball_velocity = 30
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -483,7 +486,7 @@ def gameloop(singles, doubles):
 
     while game:
         choosed = False
-        star_boring_timer = time.time()
+        start_boring_timer = time.time()
         # Modo singles
         while singles:
 
@@ -710,11 +713,11 @@ def gameloop(singles, doubles):
                 else:
                     if ball_x == 1 or ball_x == 20:
                         choice_hit = random.choice([-1, 0, 1])
-                        y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                            -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
+                        y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1])# + random.randint(
+                            #-int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
                         while not 2 <= y_hit < 24:
-                            y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            y_hit = simulacion(ball_x, ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
+                               # -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
                     if choice_hit == -1:
                         if y_hit < player2_2y and player2_1y + int(game_field.paleta_length + 1) + 1 <= 24:
@@ -868,6 +871,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+2:
         if game_field.get_friend_score() < 10:
             game_field.set_friend_score(game_field.get_friend_score() + 1)
+            point_sound.play()
             start_boring_timer = time.time()
             ball_x = 19
             ball_y = 12
@@ -882,6 +886,10 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
         if game_field.get_enemy_score() < 10:
             game_field.set_enemy_score(game_field.get_enemy_score() + 1)
             start_boring_timer = time.time()
+            if game_field.pc:
+                fail_sound.play()
+            else:
+                point_sound.play()
             ball_x = 19
             ball_y = 12
         elif game_field.pc:
@@ -938,14 +946,14 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
             if game_field.pc:
                 choosed = False
         elif game_field.get_ball_direction()[0] < 0:
-            if player2_2y <= ball_y < player2_2y + (game_field.paleta_length / 3)-1:
+            if player2_2y <= ball_y <= player2_2y + (game_field.paleta_length / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
                 game_field.set_ball_velocity(30)
             elif player2_2y + game_field.paleta_length / 3 <= ball_y <= player2_2y + (
                     (2 * game_field.paleta_length) / 3) - 1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
                 game_field.set_ball_velocity(40)
-            elif player2_2y + (2 * game_field.paleta_length / 3) < ball_y <= player2_2y + ((
+            elif player2_2y + (2 * game_field.paleta_length / 3) <= ball_y <= player2_2y + ((
                     3 * game_field.paleta_length) / 3)-1:
                 game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
                 game_field.set_ball_velocity(30)
@@ -983,6 +991,7 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
     elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0])+1:
         if game_field.get_friend_score() < 10:
             game_field.set_friend_score(game_field.get_friend_score() + 1)
+            point_sound.play()
             start_boring_timer = time.time()
             ball_x = 19
             ball_y = 12
@@ -996,6 +1005,10 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
     elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
         if game_field.get_enemy_score() < 10:
             game_field.set_enemy_score(game_field.get_enemy_score() + 1)
+            if game_field.pc:
+                fail_sound.play()
+            else:
+                point_sound.play()
             start_boring_timer = time.time()
             ball_x = 19
             ball_y = 12
