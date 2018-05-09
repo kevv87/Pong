@@ -654,11 +654,8 @@ def gameloop(singles, doubles):
                     paleta_choose = random.choice([1, 2])
                     choosed = True
                 elif ball_x == 27:
-                    print('no hay de otra')
                     paleta_choose = 1
                     choosed = True
-
-                print(paleta_choose)
                 if paleta_choose == 1:
                     if ball_x == 1 or ball_x == 20 or ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
