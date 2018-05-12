@@ -999,7 +999,10 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
             if game_field.pc:
                 choosed = False
         else:
-            game_field.levelup_animation()
+            if game_field.pc:
+                game_field.levelup_animation()
+            else:
+                game_field.win()
             clock.tick(3)
             ball_x = 19
             ball_y = 12
@@ -1014,7 +1017,10 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
             ball_x = 19
             ball_y = 12
         else:
-            game_field.levelup_animation()
+            if game_field.pc:
+                game_field.levelup_animation()
+            else:
+                game_field.win()
             clock.tick(3)
             ball_x = 19
             ball_y = 12
@@ -1026,7 +1032,7 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
     return ball_x, ball_y
 
 
-gameloop(game_field.singles, game_field.doubles)
+gameloop(True, False)
 
 # Finalizacion del juego
 pygame.quit()
