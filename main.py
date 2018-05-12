@@ -362,19 +362,21 @@ class Tablero:
 
     # Se encarga de la animacion en la transicion de nivel
     def levelup_animation(self):
-        for n in range(len(self.game_matrix)):
-            for m in range(len(self.game_matrix)):
-                if n % 2  == 0 and m == 19 and n != 0 and n != 24:
-                    self.game_matrix[n][m] = False
-            self.screen()
-            pygame.display.update()
         if self.level != 3:
             self.level += 1
             self.update_paleta()
             self.update_velocity()
-        else:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix)):
+                    if n % 2 == 0 and m == 19 and n != 0 and n != 24:
+                        self.game_matrix[n][m] = False
+                self.screen()
+                pygame.display.update()
+        elif self.pc:
             pygame.quit()
             quit()
+        else:
+            pass
         message_to_screen('Level Up!!', white, size = 'large')
         self.music_update()
 
