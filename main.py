@@ -900,6 +900,7 @@ def ball_bounce_singles(ball_x, ball_y, player1_1x, player1_1y, player2_1x, play
 # S: Nueva posicion de la bola en x y y.
 # R: -
 def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, player1_2y, player2_1x, player2_2x, player2_1y, player2_2y):
+    global start_boring_timer
     if (game_field.get_ball_direction()[0] > 0 and (
             (ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + game_field.paleta_length or (
             game_field.get_ball_direction()[1] > 0 and player2_1y <= ball_y+1 <= player2_1y) or (
