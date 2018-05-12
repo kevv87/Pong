@@ -362,19 +362,21 @@ class Tablero:
 
     # Se encarga de la animacion en la transicion de nivel
     def levelup_animation(self):
-        for n in range(len(self.game_matrix)):
-            for m in range(len(self.game_matrix)):
-                if n % 2  == 0 and m == 19 and n != 0 and n != 24:
-                    self.game_matrix[n][m] = False
-            self.screen()
-            pygame.display.update()
         if self.level != 3:
             self.level += 1
             self.update_paleta()
             self.update_velocity()
-        else:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix)):
+                    if n % 2 == 0 and m == 19 and n != 0 and n != 24:
+                        self.game_matrix[n][m] = False
+                self.screen()
+                pygame.display.update()
+        elif self.pc:
             pygame.quit()
             quit()
+        else:
+            pass
         message_to_screen('Level Up!!', white, size = 'large')
         self.music_update()
 
@@ -1000,7 +1002,10 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
             if game_field.pc:
                 choosed = False
         else:
-            game_field.levelup_animation()
+            if game_field.pc:
+                game_field.levelup_animation()
+            else:
+                game_field.win()
             clock.tick(3)
             ball_x = 19
             ball_y = 12
@@ -1015,7 +1020,10 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
             ball_x = 19
             ball_y = 12
         else:
-            game_field.levelup_animation()
+            if game_field.pc:
+                game_field.levelup_animation()
+            else:
+                game_field.win()
             clock.tick(3)
             ball_x = 19
             ball_y = 12
@@ -1027,7 +1035,7 @@ def ball_bounce_doubles(ball_x, ball_y, player1_1x, player1_2x, player1_1y, play
     return ball_x, ball_y
 
 
-gameloop(game_field.singles, game_field.doubles)
+gameloop(True, False)
 
 # Finalizacion del juego
 pygame.quit()
