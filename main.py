@@ -1,5 +1,4 @@
 import pygame
-<<<<<<< HEAD
 from tkinter import *  #Importa todo de tkinter
 from tkinter import font
 
@@ -22,13 +21,13 @@ canvas.create_rectangle(220,272,240,292,fill="white",outline="white", width=5)
 canvas.create_rectangle(220,332,240,352,fill="white",outline="white", width=5)
 canvas.create_rectangle(220,392,240,412,fill="white",outline="white", width=5)
 
-pong = PhotoImage(file="PONG.png")
+pong = PhotoImage(file="images/PONG.png")
 pongL = Label(canvas, image=pong)
 pongL.pack()
 pongL.place(x=170,y=50)
 
 pygame.mixer.init()
-pygame.mixer.music.load("Blip_Select.wav")
+pygame.mixer.music.load("sounds/Blip_Select.wav")
 
 def play_sound():
     pygame.mixer.music.play()
@@ -48,13 +47,13 @@ def toplevelHelp():
     canvas2.create_rectangle(30, 220, 50, 380, fill="white", outline="white", width=5)
     canvas2.create_rectangle(750, 220, 770, 380, fill="white", outline="white", width=5)
 
-    ws = PhotoImage(file="ws.png")
+    ws = PhotoImage(file="images/ws.png")
     wsL = Label(canvas2, image=ws)
     wsL.image = ws
     wsL.pack()
     wsL.place(x=50, y=50)
 
-    ab = PhotoImage(file="ab.png")
+    ab = PhotoImage(file="images/ab.png")
     abL = Label(canvas2, image=ab)
     abL.image = ab
     abL.pack()
@@ -73,9 +72,25 @@ def toplevelHelp():
     boton_v.pack() #botón para la función mostrar4
     boton_v.place(x=350,y=530)
 
-    instrucciones = Label(canvas2, text="Descripción: \n PONG es un juego tanto para 1 como 2 jugadores, el juego consiste en evitar que la pelota pase \n su paleta y anotar pasando la bola detrás de la paleta del contrincante", font="courier 10",bg="black", fg="white")
+    instrucciones = Label(canvas2, text="Descripción: \n PONG es un juego tanto para 1 como 2 jugadores, el juego consiste en evitar que la pelota \n pase  su paleta y anotar pasando la bola detrás de la paleta del  contrincante. El juego \n tiene la modalidad de 1 jugador contra la máquina y 2 jugadores que se enfrentan entre sí", font="courier 10",bg="black", fg="white")
     instrucciones.pack()
-    instrucciones.place(x=0, y=0)
+    instrucciones.place(x=36, y=50)
+
+    dificultad = Label(canvas2, text="Dificultades: \n el juego consta de un sistema de dificultad el cual es diferente en el modo PvC (player \n vs computer) a el modo PvP (player vs player). En el modo PvC hay 3 rondas  de 10 puntos \n cada una con una dificultad mayor y en el modo PvP la dificultad aumenta mientras \n la pelota siga en juego, hasta que uno de los jugadores anote un punto", font="courier 10",bg="black", fg="white")
+    dificultad.pack()
+    dificultad.place(x=36, y=180)
+
+    controles = Label(canvas2, text="Controles:", font="courier 10",bg="black", fg="white")
+    controles.pack()
+    controles.place(x=350, y=300)
+
+    player1 = Label(canvas2, text="Player1", font="courier 10",bg="black", fg="white")
+    player1.pack()
+    player1.place(x=220, y=480)
+
+    player2 = Label(canvas2, text="Player2", font="courier 10",bg="black", fg="white")
+    player2.pack()
+    player2.place(x=500, y=480)
 
 def unir1():
     play_sound()
@@ -92,7 +107,6 @@ help1 = Button(canvas,command=unir1, text="Help",bg="black", fg="white", bd=0, f
 help1.place(x=260, y=380)
 
 white = (255,255,255)
-=======
 import random
 import mutagen.oggvorbis
 import time
@@ -127,7 +141,6 @@ clock = pygame.time.Clock()
 
 # Clase tablero, encargada de guardar algunas variables importantes para el desarrollo de cualquier modalidad del juego
 # asi como metodos que se usan en todas las modalidades del juego.
->>>>>>> master
 
 class Tablero:
     def __init__(self, PC, block_width, block_height, SINGLES, DOUBLES):
