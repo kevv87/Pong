@@ -49,11 +49,11 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 3
+        self.level = 1
         self.ball_velocity = 30
         self.ball_direction = (-1, 0)
         self.pc = PC
-        self.paleta_length = 9 - 3*(self.level-1)
+        self.paleta_length = 9
         self.singles = SINGLES
         self.doubles = DOUBLES
         self.lvl_music()
@@ -403,6 +403,9 @@ class Tablero:
     def music_update(self):
         self.lvl_music()
 
+    def paleta_length_update(self):
+        self.paleta_length = 9 - 3*self.level
+
 # Instancia del Tablero
 game_field = Tablero(True, block_height, block_width, False, True)
 
@@ -446,6 +449,9 @@ class Paleta:
                             matrix[n+i][m] = True
         game_field.set_matrix(matrix)
 
+    def update(self, block_width, block_height):
+        self.width = block_width
+        self.height = block_height
 
 
 class Game:
@@ -555,6 +561,10 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not game_field.pc:
                 game_field.levelup_animation()
+                self.player1_1.update(block_width, 9 - 3*game_field.level)
+                self.player2_1.update(block_width, 9 - 3*game_field.level)
+                self.player1_2.update(block_width, 9 - 3*game_field.level)
+                self.player2_2.update(block_width, 9 - 3*game_field.level)
                 start_boring_timer = time.time()
             # Inteligencia artificial cuando la pc esta habilitada
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
@@ -602,8 +612,8 @@ class Game:
             self.ball_x += 1 * game_field.get_ball_direction()[0]
             self.ball_y += 1 * game_field.get_ball_direction()[1]
             bola = Bola(self.ball_x, self.ball_y, block_width, block_height)
-            player1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
-            player2 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
+            self.player1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
+            self.player2 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
             game_field.screen()
             if game_field.pc:
                 message_to_screen('Press w to add a new player', white, 200, 250)
@@ -673,6 +683,10 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not game_field.pc:
                 game_field.levelup_animation()
+                self.player1_1.update(block_width, 9 - 3*game_field.level)
+                self.player2_1.update(block_width, 9 - 3*game_field.level)
+                self.player1_2.update(block_width, 9 - 3*game_field.level)
+                self.player2_2.update(block_width, 9 - 3*game_field.level)
                 start_boring_timer = time.time()
 
             # Inteligencia artificial
@@ -697,10 +711,10 @@ class Game:
                 if paleta_choose == 1:
                     if self.ball_x == 1 or self.ball_x == 20 or self.ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
-                        y_hit = self.simulacion(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) #+ random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                        y_hit = self.simulacion(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
                         while not 2 <= y_hit < 29:
-                            y_hit = self.simulacion(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
-                                #-int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            y_hit = self.simulacion(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(
+                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
                     if choice_hit == -1:
                         if y_hit < self.player2_1y and self.player2_1y - 1 >= 1:
@@ -733,13 +747,13 @@ class Game:
                             nxt_move = 0
 
                 else:
-                    if self.ball_x == 1 or self.ball_x == 20:
+                    if self.ball_x == 1 or self.ball_x == 20 or self.ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
-                        y_hit = self.simulacion_2nd(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
-                            #-int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
+                        y_hit = self.simulacion_2nd(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(
+                            -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
                         while not 2 <= y_hit < 29:
-                            y_hit = self.simulacion_2nd(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) #+ random.randint(
-                                #-int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            y_hit = self.simulacion_2nd(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(
+                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
 
                     if choice_hit == -1:
                         if y_hit < self.player2_2y and self.player2_1y + int(game_field.paleta_length + 1) + 1 <= 24:
@@ -780,11 +794,11 @@ class Game:
             game_field.clean_matrix()
             self.ball_x += 1 * game_field.get_ball_direction()[0]
             self.ball_y += 1 * game_field.get_ball_direction()[1]
-            bola = Bola(self.ball_x, self.ball_y, block_width, block_height)
-            player1_1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
-            player2_1 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
-            player1_2 = Paleta(self.player1_2x, self.player1_2y, block_width, block_height)
-            player1_2 = Paleta(self.player2_2x, self.player2_2y, block_width, block_height)
+            self.bola = Bola(self.ball_x, self.ball_y, block_width, block_height)
+            self.player1_1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
+            self.player2_1 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
+            self.player1_2 = Paleta(self.player1_2x, self.player1_2y, block_width, block_height)
+            self.player2_2 = Paleta(self.player2_2x, self.player2_2y, block_width, block_height)
             game_field.screen()
             if game_field.pc:
                 message_to_screen('Press w to add a new player', white, 200, 250)
@@ -797,9 +811,6 @@ class Game:
     # donde se mueve la misma. Retorna la posicion en y donde va a pegar la bola al lado derecho. Se utiliza para la inteligencia
     # artificial. Version singles.
     def simulacion(self, pos_x, pos_y, direction):
-        global ijk
-        ijk += 1
-        print(ijk)
         if direction == 0:
             return pos_y
         elif pos_x == 38:
@@ -817,9 +828,6 @@ class Game:
     # donde se mueve la misma. Retorna la posicion en y donde va a pegar la bola al lado derecho. Se utiliza para la inteligencia
     # artificial. Version doubles.
     def simulacion_2nd(self, pos_x, pos_y, direction):
-        global ijk
-        ijk += 1
-        print(ijk)
         if direction == 0:
             return pos_y
         elif pos_x == len(game_field.get_matrix()[0]) - 12:
@@ -893,6 +901,10 @@ class Game:
                 ball_y = 12
             elif game_field.pc:
                 game_field.levelup_animation()
+                self.player1_1.update(block_width, 9 - 3*game_field.level)
+                self.player2_1.update(block_width, 9 - 3*game_field.level)
+                self.player1_2.update(block_width, 9 - 3*game_field.level)
+                self.player2_2.update(block_width, 9 - 3*game_field.level)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
@@ -1022,6 +1034,10 @@ class Game:
                 if game_field.pc:
                     game_field.reset_scores()
                     game_field.levelup_animation()
+                    self.player1_1.update(block_width, 9 - 3*game_field.level)
+                    self.player2_1.update(block_width, 9 - 3*game_field.level)
+                    self.player1_2.update(block_width, 9 - 3*game_field.level)
+                    self.player2_2.update(block_width, 9 - 3*game_field.level)
                 else:
                     game_field.win()
                 clock.tick(3)
@@ -1041,6 +1057,10 @@ class Game:
                 if game_field.pc:
                     game_field.reset_scores()
                     game_field.levelup_animation()
+                    self.player1_1.update(block_width, 9 - 3*game_field.level)
+                    self.player2_1.update(block_width, 9 - 3*game_field.level)
+                    self.player1_2.update(block_width, 9 - 3*game_field.level)
+                    self.player2_2.update(block_width, 9 - 3*game_field.level)
                 else:
                     game_field.win()
                 clock.tick(3)
