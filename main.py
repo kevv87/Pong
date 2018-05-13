@@ -561,10 +561,10 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not game_field.pc:
                 game_field.levelup_animation()
-                self.player1_1.update(block_width, 9 - 3*game_field.level)
-                self.player2_1.update(block_width, 9 - 3*game_field.level)
-                self.player1_2.update(block_width, 9 - 3*game_field.level)
-                self.player2_2.update(block_width, 9 - 3*game_field.level)
+                self.player1_1y = 1
+                self.player2_2y = 1
+                self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                 start_boring_timer = time.time()
             # Inteligencia artificial cuando la pc esta habilitada
             if game_field.pc and game_field.get_ball_direction()[0] > 0:
@@ -683,10 +683,10 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not game_field.pc:
                 game_field.levelup_animation()
-                self.player1_1.update(block_width, 9 - 3*game_field.level)
-                self.player2_1.update(block_width, 9 - 3*game_field.level)
-                self.player1_2.update(block_width, 9 - 3*game_field.level)
-                self.player2_2.update(block_width, 9 - 3*game_field.level)
+                self.player1_1y = 1
+                self.player2_2y = 1
+                self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                 start_boring_timer = time.time()
 
             # Inteligencia artificial
@@ -901,10 +901,10 @@ class Game:
                 ball_y = 12
             elif game_field.pc:
                 game_field.levelup_animation()
-                self.player1_1.update(block_width, 9 - 3*game_field.level)
-                self.player2_1.update(block_width, 9 - 3*game_field.level)
-                self.player1_2.update(block_width, 9 - 3*game_field.level)
-                self.player2_2.update(block_width, 9 - 3*game_field.level)
+                self.player1_1y = 1
+                self.player2_2y = 1
+                self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
@@ -1034,10 +1034,10 @@ class Game:
                 if game_field.pc:
                     game_field.reset_scores()
                     game_field.levelup_animation()
-                    self.player1_1.update(block_width, 9 - 3*game_field.level)
-                    self.player2_1.update(block_width, 9 - 3*game_field.level)
-                    self.player1_2.update(block_width, 9 - 3*game_field.level)
-                    self.player2_2.update(block_width, 9 - 3*game_field.level)
+                    self.player1_1y = 1
+                    self.player2_2y = 1
+                    self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                    self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                 else:
                     game_field.win()
                 clock.tick(3)
@@ -1057,10 +1057,10 @@ class Game:
                 if game_field.pc:
                     game_field.reset_scores()
                     game_field.levelup_animation()
-                    self.player1_1.update(block_width, 9 - 3*game_field.level)
-                    self.player2_1.update(block_width, 9 - 3*game_field.level)
-                    self.player1_2.update(block_width, 9 - 3*game_field.level)
-                    self.player2_2.update(block_width, 9 - 3*game_field.level)
+                    self.player1_1y = 1
+                    self.player2_2y = 1
+                    self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                    self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                 else:
                     game_field.win()
                 clock.tick(3)
