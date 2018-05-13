@@ -47,7 +47,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 3
+        self.level = 1
         self.ball_velocity = 30
         self.ball_direction = (-1, 0)
         self.pc = PC
