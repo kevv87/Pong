@@ -1035,7 +1035,7 @@ class Game:
                     game_field.reset_scores()
                     game_field.levelup_animation()
                     self.player1_1y = 1
-                    self.player2_2y = 1
+                    self.player2_1y = 1
                     self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                     self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                 else:
@@ -1058,7 +1058,7 @@ class Game:
                     game_field.reset_scores()
                     game_field.levelup_animation()
                     self.player1_1y = 1
-                    self.player2_2y = 1
+                    self.player2_1y = 1
                     self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                     self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
                 else:
