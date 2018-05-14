@@ -112,7 +112,7 @@ import mutagen.oggvorbis
 import time
 
 ijk =0
-
+pausa=False
 # Inicializacion de pygame
 
 pygame.init()
@@ -162,7 +162,6 @@ class Tablero:
         self.ball_direction = (-1, 0)
         self.pc = PC
         self.paleta_length = 9 - (3*(self.level-1))
-
         self.lvl_music()
 
     # Metodos
@@ -191,7 +190,6 @@ class Tablero:
         pygame.mixer.music.load(music_file)
         pygame.mixer.music.play(-1)
 
-    # Metodos set y get
     def get_matrix(self):
         return self.game_matrix
 
@@ -431,10 +429,12 @@ class Tablero:
         while pause:
             message_to_screen('Juego pausado', white, size='large')
             message_to_screen('Presione p para reanudar', white, y_displace=80)
+            pygame.mixer.music.pause()
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_p:
+                        pygame.mixer.music.unppause()
                         pause = False
                 elif event.type == pygame.QUIT:
                     quit()
