@@ -900,6 +900,7 @@ class Game:
                 ball_y = 12
             elif game_field.pc:
                 game_field.levelup_animation()
+                game_field.reset_scores()
                 self.player1_1y = 1
                 self.player2_2y = 1
                 self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
