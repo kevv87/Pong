@@ -321,8 +321,8 @@ class Tablero:
             pygame.display.update()
 
         while pause:
-            message_to_screen('Juego pausado', white, size='large')
-            message_to_screen('Presione p para reanudar', white, y_displace=80)
+            self.message_to_screen('Juego pausado', white, size='large')
+            self.message_to_screen('Presione p para reanudar', white, y_displace=80)
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -351,8 +351,8 @@ class Tablero:
             self.screen()
             clock.tick(1)
             if i%2 == 0:
-                message_to_screen('A new challenger', white, size='medium')
-                message_to_screen('has arrived', white, size='medium', y_displace=40)
+                self.message_to_screen('A new challenger', white, size='medium')
+                self.message_to_screen('has arrived', white, size='medium', y_displace=40)
             pygame.display.update()
 
     # Devuelve los marcadores a 0
@@ -378,7 +378,6 @@ class Tablero:
             quit()
         else:
             pass
-        message_to_screen('Level Up!!', white, size = 'large')
         self.music_update()
 
     # Metodos de actualizacion
@@ -404,6 +403,24 @@ class Tablero:
 
     def paleta_length_update(self):
         self.paleta_length = 9 - 3*self.level
+
+    # Funcion encargada de renderizar el texto a poner en la pantalla, recibe un texto, un color y un tamanno y retorna
+    # el texto renderizado asi como el punto central del mismo.
+    def text_objects(self, text, color, size):
+        if size == 'small':
+            textSurface = smallfont.render(text, True, color)
+        if size == 'medium':
+            textSurface = mediumfont.render(text, True, color)
+        elif size == 'large':
+            textSurface = largefont.render(text, True, color)
+        return textSurface, textSurface.get_rect()
+
+    # Dado un mensaje, un color, un desplazamiento del centro de la pantalla en x, un desplazamiento del centor de la pantalla
+    # en y y un tamanno de los ya predeterminados, este funcion muestra un texto en la pantalla.
+    def message_to_screen(self, msg, color,x_displace=0, y_displace=0, size='small'):
+        textSurf, textRect = self.text_objects(msg, color, size)
+        textRect.center = (self.width/2) + x_displace, (self.height/2) + y_displace
+        self.gameDisplay.blit(textSurf, textRect)
 
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
@@ -551,6 +568,7 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not self.game_field.pc:
                 self.game_field.levelup_animation()
+                self.message_to_screen('Level Up!!', white, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
                 self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -679,6 +697,7 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not self.game_field.pc:
                 self.game_field.levelup_animation()
+                self.message_to_screen('Level Up!!', white, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
                 self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -897,6 +916,7 @@ class Game:
                 ball_y = 12
             elif self.game_field.pc:
                 self.game_field.levelup_animation()
+                self.message_to_screen('Level Up!!', white, size = 'large')
                 self.game_field.reset_scores()
                 self.player1_1y = 1
                 self.player2_2y = 1
@@ -1032,6 +1052,7 @@ class Game:
                 if self.game_field.pc:
                     self.game_field.reset_scores()
                     self.game_field.levelup_animation()
+                    self.message_to_screen('Level Up!!', white, size = 'large')
                     self.player1_1y = 1
                     self.player2_1y = 1
                     self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
