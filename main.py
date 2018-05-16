@@ -405,9 +405,6 @@ class Tablero:
     def paleta_length_update(self):
         self.paleta_length = 9 - 3*self.level
 
-# Instancia del Tablero
-game_field = Tablero(True, block_height, block_width)
-
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
 class Bola:
@@ -481,6 +478,9 @@ class Game:
         # Controlan el juego
         self.game = True
         self.pause = False
+
+        # Instancia del Tablero
+        game_field = Tablero(True, block_height, block_width)
 
         self.gameloop('singles')
 
