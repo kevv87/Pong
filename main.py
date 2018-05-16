@@ -2,7 +2,20 @@ import pygame
 from tkinter import *  #Importa todo de tkinter
 from tkinter import font
 
+lobby = True
+
+# Inicializacion de pygame
 pygame.init()
+
+# Sonidos
+select_sound = pygame.mixer.Sound('sounds/select.ogg')
+pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
+ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
+point_sound = pygame.mixer.Sound('sounds/point.ogg')
+fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
+
+#musica de lobby
+pygame.mixer.music.load()
 
 
 root = Tk() #Hacer la ventana
@@ -27,10 +40,11 @@ pongL.pack()
 pongL.place(x=170,y=50)
 
 pygame.mixer.init()
-pygame.mixer.music.load("sounds/Blip_Select.wav")
+
+while lobby == True:
 
 def play_sound():
-    pygame.mixer.music.play()
+    select_sound.play()
 
 def toplevelHelp():
     root.withdraw()
@@ -51,38 +65,34 @@ def toplevelHelp():
     wsL = Label(canvas2, image=ws)
     wsL.image = ws
     wsL.pack()
-    wsL.place(x=50, y=50)
+    wsL.place(x=500, y=370)
 
     ab = PhotoImage(file="images/ab.png")
     abL = Label(canvas2, image=ab)
     abL.image = ab
     abL.pack()
-    abL.place(x=120, y=50)
+    abL.place(x=220, y=370)
 
     def mostrar(): #función que muestra el root y destruye el toplevel
         root.deiconify()
         toplevel_help.destroy()
-
-    def unir2():
         play_sound()
-        root.deiconify()
-        toplevel_help.destroy()
 
     boton_v = Button(toplevel_help, command=unir2 , text="<volver>",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
     boton_v.pack() #botón para la función mostrar4
-    boton_v.place(x=350,y=530)
+    boton_v.place(x=325,y=530)
 
     instrucciones = Label(canvas2, text="Descripción: \n PONG es un juego tanto para 1 como 2 jugadores, el juego consiste en evitar que la pelota \n pase  su paleta y anotar pasando la bola detrás de la paleta del  contrincante. El juego \n tiene la modalidad de 1 jugador contra la máquina y 2 jugadores que se enfrentan entre sí", font="courier 10",bg="black", fg="white")
     instrucciones.pack()
     instrucciones.place(x=36, y=50)
 
-    dificultad = Label(canvas2, text="Dificultades: \n el juego consta de un sistema de dificultad el cual es diferente en el modo PvC (player \n vs computer) a el modo PvP (player vs player). En el modo PvC hay 3 rondas  de 10 puntos \n cada una con una dificultad mayor y en el modo PvP la dificultad aumenta mientras \n la pelota siga en juego, hasta que uno de los jugadores anote un punto", font="courier 10",bg="black", fg="white")
+    dificultad = Label(canvas2, text="Dificultades: \n El juego consta de un sistema de dificultad el cual es diferente \n en el modo PvC (player vs computer) a el modo PvP (player vs player). \n En el modo PvC hay 3 rondas  de 10 puntos cada una con una dificultad \n mayor y en el modo PvP la dificultad aumenta mientras la \n pelota siga en juego, hasta que uno de los jugadores anote un punto", font="courier 10",bg="black", fg="white")
     dificultad.pack()
-    dificultad.place(x=36, y=180)
+    dificultad.place(x=110, y=180)
 
     controles = Label(canvas2, text="Controles:", font="courier 10",bg="black", fg="white")
     controles.pack()
-    controles.place(x=350, y=300)
+    controles.place(x=350, y=320)
 
     player1 = Label(canvas2, text="Player1", font="courier 10",bg="black", fg="white")
     player1.pack()
@@ -96,15 +106,21 @@ def unir1():
     play_sound()
     toplevelHelp()
 
+def unir2():
+    play_sound()
+    root.destroy()
+
 
 pvp = Button(canvas, command= play_sound, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
 pvp.place(x=260, y=260)
 
-pvpc = Button(canvas, command=play_sound, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
+pvpc = Button(canvas, command=unir2, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
 pvpc.place(x=260, y=320)
 
 help1 = Button(canvas,command=unir1, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
 help1.place(x=260, y=380)
+
+root.mainloop()
 
 white = (255,255,255)
 import random
@@ -113,19 +129,10 @@ import time
 
 ijk =0
 pausa=False
-# Inicializacion de pygame
-
-pygame.init()
 
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
-
-# Sonidos
-pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
-ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
-point_sound = pygame.mixer.Sound('sounds/point.ogg')
-fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 
 # Fuentes predeterminadas
@@ -1201,5 +1208,3 @@ Game()
 # Finalizacion del juego
 pygame.quit()
 quit()
-
-root.mainloop()
