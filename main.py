@@ -49,7 +49,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 2
+        self.level = 1
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -448,15 +448,11 @@ class Paleta:
                             matrix[n+i][m] = True
         game_field.set_matrix(matrix)
 
-    def update(self, block_width, block_height):
-        self.width = block_width
-        self.height = block_height
-
 
 class Game:
     def __init__(self):
         global choosed
-        global star_boring_timer
+        global start_boring_timer
 
         # Posiciones iniciales de los jugadores
 
@@ -479,12 +475,6 @@ class Game:
         self.player2_2up_y = False
         self.player2_2down_y = False
 
-        # Segundas paletas
-        self.player1_1down_y = False
-        self.player1_1up_y = False
-        self.player2_1up_y = False
-        self.player2_1down_y = False
-
         self.ball_x = 19
         self.ball_y = 12
 
@@ -500,21 +490,20 @@ class Game:
         self.choosed = False
         start_boring_timer = time.time()
         if mode == 'singles':
-            self.singles(True)
+            self.singles()
         elif mode == 'doubles':
-            self.doubles(True)
+            self.doubles()
         else:
             return 'Err'
 
-    def singles(self, singles):
+    def singles(self):
         global start_boring_timer
         global choosed
-        while singles:
+        while self.game:
 
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    singles = False
                     self.game = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
@@ -621,15 +610,14 @@ class Game:
             # Controla la velocidad
             clock.tick(game_field.get_ball_velocity())
 
-    def doubles(self, doubles):
+    def doubles(self):
         global start_boring_timer
         global choosed
-        while doubles:
+        while self.game:
 
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    doubles = False
                     self.game = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
