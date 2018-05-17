@@ -303,12 +303,16 @@ class Tablero:
                         self.game_matrix[n][m] = False
         self.scores()
 
-    def lose(self):
-        pygame.quit()
-        quit()
 
-    def win(self):
-        pass
+    def win(self, winner):
+        win_screen = True
+        x_displace_fromcenter = winner*200
+        while win_screen:
+            self.message_to_screen('You', white, size='large', x_displace=-x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('won!', white, size='large', x_displace=-x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('You', white, size='large', x_displace=x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('lose!', white, size='large', x_displace=x_displace_fromcenter, y_displace=40)
+            pygame.display.update()
 
     # Pausa el juego
     def pause(self):
@@ -926,7 +930,7 @@ class Game:
                 ball_x = 19
                 ball_y = 12
             else:
-                self.game_field.win()
+                self.game_field.win(1)
         elif self.game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
             if self.game_field.get_enemy_score() < 10:
                 self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
@@ -938,12 +942,12 @@ class Game:
                 ball_x = 19
                 ball_y = 12
             elif self.game_field.pc:
-                self.game_field.lose()
+                self.game_field.win(-1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
             else:
-                self.game_field.win()
+                self.game_field.win(-1)
         if (self.game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(self.game_field.get_matrix()) - 1) or (
                 self.game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], self.game_field.get_ball_direction()[1] * -1))
@@ -1058,7 +1062,7 @@ class Game:
                     self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                     self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 else:
-                    self.game_field.win()
+                    self.game_field.win(1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
@@ -1074,9 +1078,9 @@ class Game:
                 ball_y = 12
             else:
                 if self.game_field.pc:
-                    self.game_field.lose()
+                    self.game_field.win(-1)
                 else:
-                    self.game_field.win()
+                    self.game_field.win(-1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
