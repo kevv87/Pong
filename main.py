@@ -2,7 +2,7 @@ import pygame
 from tkinter import *  #Importa todo de tkinter
 from tkinter import font
 
-lobby = True
+
 
 # Inicializacion de pygame
 pygame.init()
@@ -15,7 +15,9 @@ point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 #musica de lobby
-pygame.mixer.music.load()
+pygame.mixer.init()
+pygame.mixer.music.load("sounds/start_menu.ogg")
+pygame.mixer.music.play(100000000)
 
 
 root = Tk() #Hacer la ventana
@@ -41,10 +43,6 @@ pongL.place(x=170,y=50)
 
 pygame.mixer.init()
 
-while lobby == True:
-
-def play_sound():
-    select_sound.play()
 
 def toplevelHelp():
     root.withdraw()
@@ -73,12 +71,13 @@ def toplevelHelp():
     abL.pack()
     abL.place(x=220, y=370)
 
-    def mostrar(): #función que muestra el root y destruye el toplevel
+    def unir3(): #función que muestra el root y destruye el toplevel
         root.deiconify()
         toplevel_help.destroy()
-        play_sound()
+        select_sound.play()
 
-    boton_v = Button(toplevel_help, command=unir2 , text="<volver>",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
+
+    boton_v = Button(toplevel_help, command=unir3 , text="<volver>",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
     boton_v.pack() #botón para la función mostrar4
     boton_v.place(x=325,y=530)
 
@@ -102,16 +101,18 @@ def toplevelHelp():
     player2.pack()
     player2.place(x=500, y=480)
 
+
 def unir1():
-    play_sound()
+    select_sound.play()
     toplevelHelp()
 
 def unir2():
-    play_sound()
+    select_sound.play()
     root.destroy()
 
 
-pvp = Button(canvas, command= play_sound, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
+
+pvp = Button(canvas, command= unir2, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
 pvp.place(x=260, y=260)
 
 pvpc = Button(canvas, command=unir2, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
@@ -441,7 +442,7 @@ class Tablero:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_p:
-                        pygame.mixer.music.unppause()
+                        pygame.mixer.music.unpause()
                         pause = False
                 elif event.type == pygame.QUIT:
                     quit()
