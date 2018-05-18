@@ -885,7 +885,7 @@ class Game:
 
             if self.game_field.get_ball_direction()[0] < 0:
                 if player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length / 3 -1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
                     self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 elif player2_1y + self.game_field.paleta_length / 3 <= ball_y <= player2_1y + (
                         2 * self.game_field.paleta_length) / 3 -1:
@@ -893,13 +893,13 @@ class Game:
                     self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 elif player2_1y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_1y + (
                         3 * self.game_field.paleta_length) / 3 -1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
                     self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 # Pong
                 pong_sound.play()
             elif self.game_field.get_ball_direction()[0] > 0:
                 if player1_1y <= ball_y <= player1_1y + self.game_field.paleta_length / 3 - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
                     self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 elif player1_1y + self.game_field.paleta_length / 3 <= ball_y <= player1_1y + (
                         2 * self.game_field.paleta_length) / 3 - 1:
@@ -907,7 +907,7 @@ class Game:
                     self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 elif player1_1y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player1_1y + (
                         3 * self.game_field.paleta_length) / 3 - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
                     self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 # Ping
                 ping_sound.play()
@@ -985,14 +985,14 @@ class Game:
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0] * -1, self.game_field.get_ball_direction()[1]))
             if self.game_field.get_ball_direction()[0] < 0 and ball_x > len(self.game_field.get_matrix()[0]) - 10:
                 if player2_1y <= ball_y <= player2_1y + (self.game_field.paleta_length / 3) - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
                     self.game_field.set_ball_velocity(30)
                 elif player2_1y + self.game_field.paleta_length / 3 <= ball_y <= player2_1y + (
                         (2 * self.game_field.paleta_length) / 3) - 1:
                     self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
                     self.game_field.set_ball_velocity(40)
                 elif player2_1y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_1y + (( 3 * self.game_field.paleta_length) / 3) - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
                     self.game_field.set_ball_velocity(30)
                 # Pong
                 pong_sound.play()
@@ -1000,14 +1000,14 @@ class Game:
                     choosed = False
             elif self.game_field.get_ball_direction()[0] < 0:
                 if player2_2y <= ball_y <= player2_2y + (self.game_field.paleta_length / 3) - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
                     self.game_field.set_ball_velocity(30)
                 elif player2_2y + self.game_field.paleta_length / 3 <= ball_y <= player2_2y + (
                         (2 * self.game_field.paleta_length) / 3) - 1:
                     self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
                     self.game_field.set_ball_velocity(40)
                 elif player2_2y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_2y + ((3 * self.game_field.paleta_length) / 3) - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
                     self.game_field.set_ball_velocity(30)
                 # Pong
                 pong_sound.play()
@@ -1015,7 +1015,7 @@ class Game:
                     choosed = False
             elif self.game_field.get_ball_direction()[0] > 0 and ball_x < 11:
                 if player1_1y <= ball_y <= player1_1y + (self.game_field.paleta_length / 3) - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
                     self.game_field.set_ball_velocity(30)
                 elif player1_1y + self.game_field.paleta_length / 3 <= ball_y <= (
                         player1_1y + (2 * self.game_field.paleta_length) / 3) - 1:
@@ -1023,14 +1023,14 @@ class Game:
                     self.game_field.set_ball_velocity(40)
                 elif (player1_1y + (2 * self.game_field.paleta_length / 3)) <= ball_y <= player1_1y + (
                         (3 * self.game_field.paleta_length) / 3) - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
                     self.game_field.set_ball_velocity(30)
 
                 # Ping
                 ping_sound.play()
             elif self.game_field.get_ball_direction()[0] > 0:
                 if player1_2y <= ball_y <= player1_2y + (self.game_field.paleta_length / 3) - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
                     self.game_field.set_ball_velocity(30)
                 elif player1_2y + self.game_field.paleta_length / 3 <= ball_y <= (
                         player1_2y + (2 * self.game_field.paleta_length) / 3) - 1:
@@ -1038,7 +1038,7 @@ class Game:
                     self.game_field.set_ball_velocity(40)
                 elif (player1_2y + (2 * self.game_field.paleta_length / 3)) <= ball_y <= player1_2y + (
                         (3 * self.game_field.paleta_length) / 3) - 1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
                     self.game_field.set_ball_velocity(30)
                 # Ping
                 ping_sound.play()
