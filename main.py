@@ -1,141 +1,23 @@
 import pygame
-from tkinter import *  #Importa todo de tkinter
-from tkinter import font
-
-
-
-# Inicializacion de pygame
-pygame.init()
-
-# Sonidos
-select_sound = pygame.mixer.Sound('sounds/select.ogg')
-pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
-ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
-point_sound = pygame.mixer.Sound('sounds/point.ogg')
-fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
-
-#musica de lobby
-pygame.mixer.init()
-pygame.mixer.music.load("sounds/start_menu.ogg")
-pygame.mixer.music.play(100000000)
-
-def root():
-    root = Tk() #Hacer la ventana
-
-    root.title() #título de la ventana
-    root.minsize(800,600) #Tamaño mínimo de la ventana
-    root.resizable(width = NO, height = NO) #Que el tamaño de la ventana no cambie
-
-    canvas = Canvas(root, width=800, height=600, bg="#000000") #Se crea el canvas y se configura
-    canvas.place(x=0, y=0)
-    canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="#FFFFFF", width=9 )
-    canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="white", width=1 )
-    canvas.create_rectangle(30,220,50,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(750,220,770,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,272,240,292,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,332,240,352,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,392,240,412,fill="white",outline="white", width=5)
-
-    pong = PhotoImage(file="images/PONG.png")
-    pongL = Label(canvas, image=pong)
-    pongL.pack()
-    pongL.place(x=170,y=50)
-
-    pygame.mixer.init()
-
-
-    def toplevelHelp():
-        root.withdraw()
-        toplevel_help= Toplevel()
-        toplevel_help.title("Help")
-        toplevel_help.minsize(800,600)
-        toplevel_help.resizable(width=NO, height=NO)
-        toplevel_help.configure(bg="Black")
-
-        canvas2 = Canvas(toplevel_help, width=800, height=600, bg="#000000")  # Se crea el canvas y se configura
-        canvas2.place(x=0, y=0)
-        canvas2.create_rectangle(5, 5, 795, 595, fill="#000000", outline="#FFFFFF", width=9)
-        canvas2.create_rectangle(5, 5, 795, 595, fill="#000000", outline="white", width=1)
-        canvas2.create_rectangle(30, 220, 50, 380, fill="white", outline="white", width=5)
-        canvas2.create_rectangle(750, 220, 770, 380, fill="white", outline="white", width=5)
-
-        ws = PhotoImage(file="images/ws.png")
-        wsL = Label(canvas2, image=ws)
-        wsL.image = ws
-        wsL.pack()
-        wsL.place(x=500, y=370)
-
-        ab = PhotoImage(file="images/ab.png")
-        abL = Label(canvas2, image=ab)
-        abL.image = ab
-        abL.pack()
-        abL.place(x=220, y=370)
-
-        def unir3(): #función que muestra el root y destruye el toplevel
-            root.deiconify()
-            toplevel_help.destroy()
-            select_sound.play()
-
-
-        boton_v = Button(toplevel_help, command=unir3 , text="<volver>",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-        boton_v.pack() #botón para la función mostrar4
-        boton_v.place(x=325,y=530)
-
-        instrucciones = Label(canvas2, text="Descripción: \n PONG es un juego tanto para 1 como 2 jugadores, el juego consiste en evitar que la pelota \n pase  su paleta y anotar pasando la bola detrás de la paleta del  contrincante. El juego \n tiene la modalidad de 1 jugador contra la máquina y 2 jugadores que se enfrentan entre sí", font="courier 10",bg="black", fg="white")
-        instrucciones.pack()
-        instrucciones.place(x=36, y=50)
-
-        dificultad = Label(canvas2, text="Dificultades: \n El juego consta de un sistema de dificultad el cual es diferente \n en el modo PvC (player vs computer) a el modo PvP (player vs player). \n En el modo PvC hay 3 rondas  de 10 puntos cada una con una dificultad \n mayor y en el modo PvP la dificultad aumenta mientras la \n pelota siga en juego, hasta que uno de los jugadores anote un punto", font="courier 10",bg="black", fg="white")
-        dificultad.pack()
-        dificultad.place(x=110, y=180)
-
-        controles = Label(canvas2, text="Controles:", font="courier 10",bg="black", fg="white")
-        controles.pack()
-        controles.place(x=350, y=320)
-
-        player1 = Label(canvas2, text="Player1", font="courier 10",bg="black", fg="white")
-        player1.pack()
-        player1.place(x=220, y=480)
-
-        player2 = Label(canvas2, text="Player2", font="courier 10",bg="black", fg="white")
-        player2.pack()
-        player2.place(x=500, y=480)
-
-
-    def unir1():
-        select_sound.play()
-        toplevelHelp()
-
-    def unir2():
-        select_sound.play()
-        root.destroy()
-
-
-
-    pvp = Button(canvas, command= unir2, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvp.place(x=260, y=260)
-
-    pvpc = Button(canvas, command=unir2, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvpc.place(x=260, y=320)
-
-    help1 = Button(canvas,command=unir1, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    help1.place(x=260, y=380)
-
-    root.mainloop()
-
-root()
-
-white = (255,255,255)
 import random
 import mutagen.oggvorbis
 import time
 
 ijk =0
-pausa=False
+
+# Inicializacion de pygame
+
+pygame.init()
 
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
+
+# Sonidos
+pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
+ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
+point_sound = pygame.mixer.Sound('sounds/point.ogg')
+fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 
 # Fuentes predeterminadas
@@ -167,11 +49,12 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 2
+        self.level = 1
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
         self.paleta_length = 9 - (3*(self.level-1))
+
         self.lvl_music()
 
     # Metodos
@@ -200,6 +83,7 @@ class Tablero:
         pygame.mixer.music.load(music_file)
         pygame.mixer.music.play(-1)
 
+    # Metodos set y get
     def get_matrix(self):
         return self.game_matrix
 
@@ -419,12 +303,10 @@ class Tablero:
                         self.game_matrix[n][m] = False
         self.scores()
 
-    def lose(self):
-        pygame.quit()
-        quit()
 
-    def win(self):
-        pass
+
+
+
 
     # Pausa el juego
     def pause(self):
@@ -437,14 +319,12 @@ class Tablero:
             pygame.display.update()
 
         while pause:
-            message_to_screen('Juego pausado', white, size='large')
-            message_to_screen('Presione p para reanudar', white, y_displace=80)
-            pygame.mixer.music.pause()
+            self.message_to_screen('Juego pausado', white, size='large')
+            self.message_to_screen('Presione p para reanudar', white, y_displace=80)
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_p:
-                        pygame.mixer.music.unpause()
                         pause = False
                 elif event.type == pygame.QUIT:
                     quit()
@@ -469,8 +349,8 @@ class Tablero:
             self.screen()
             clock.tick(1)
             if i%2 == 0:
-                message_to_screen('A new challenger', white, size='medium')
-                message_to_screen('has arrived', white, size='medium', y_displace=40)
+                self.message_to_screen('A new challenger', white, size='medium')
+                self.message_to_screen('has arrived', white, size='medium', y_displace=40)
             pygame.display.update()
 
     # Devuelve los marcadores a 0
@@ -496,7 +376,6 @@ class Tablero:
             quit()
         else:
             pass
-        message_to_screen('Level Up!!', white, size = 'large')
         self.music_update()
 
     # Metodos de actualizacion
@@ -523,8 +402,23 @@ class Tablero:
     def paleta_length_update(self):
         self.paleta_length = 9 - 3*self.level
 
-# Instancia del Tablero
-game_field = Tablero(True, block_height, block_width)
+    # Funcion encargada de renderizar el texto a poner en la pantalla, recibe un texto, un color y un tamanno y retorna
+    # el texto renderizado asi como el punto central del mismo.
+    def text_objects(self, text, color, size):
+        if size == 'small':
+            textSurface = smallfont.render(text, True, color)
+        if size == 'medium':
+            textSurface = mediumfont.render(text, True, color)
+        elif size == 'large':
+            textSurface = largefont.render(text, True, color)
+        return textSurface, textSurface.get_rect()
+
+    # Dado un mensaje, un color, un desplazamiento del centro de la pantalla en x, un desplazamiento del centor de la pantalla
+    # en y y un tamanno de los ya predeterminados, este funcion muestra un texto en la pantalla.
+    def message_to_screen(self, msg, color,x_displace=0, y_displace=0, size='small'):
+        textSurf, textRect = self.text_objects(msg, color, size)
+        textRect.center = (self.width/2) + x_displace, (self.height/2) + y_displace
+        self.gameDisplay.blit(textSurf, textRect)
 
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
@@ -534,16 +428,14 @@ class Bola:
         self.height = block_height
         self.x = pos_x
         self.y = pos_y
-        self.mod_matrix()
 
     # Modifica la matriz del juego segun la posicion de la bola
-    def mod_matrix(self):
-        matrix = game_field.get_matrix()
+    def mod_matrix(self, matrix):
         for n in range(len(matrix)):
             for m in range(len(matrix[0])):
                 if m == self.x and n == self.y:
                     matrix[n][m] = True
-        game_field.set_matrix(matrix)
+        return matrix
 
 
 # Clase encargada de guardar la posicion de cada paleta y modificar la matriz del juego segun la misma y su longitud
@@ -553,41 +445,38 @@ class Paleta:
         self.height = block_height
         self.x = pos_x
         self.y = pos_y
-        self.mod_matrix()
 
     # modifica la matriz del juego segun la posicion de la paleta y su longitud
-    def mod_matrix(self):
-        matrix = game_field.get_matrix()
+    def mod_matrix(self, matrix, paleta_length):
         for n in range(len(matrix)):
             for m in range(len(matrix[0])):
                 if m == self.x and n == self.y:
-                    for i in range(game_field.paleta_length):
-                        if n+i <=len(game_field.get_matrix())-1:
+                    for i in range(paleta_length):
+                        if n+i <=len(matrix)-1:
                             matrix[n+i][m] = True
-        game_field.set_matrix(matrix)
-
-    def update(self, block_width, block_height):
-        self.width = block_width
-        self.height = block_height
+        return matrix
 
 
 class Game:
     def __init__(self):
         global choosed
-        global star_boring_timer
+        global start_boring_timer
+
+        # Instancia del Tablero
+        self.game_field = Tablero(True, block_height, block_width)
 
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
         self.player1_1x = 0
         self.player1_1y = 1
-        self.player2_1x = len(game_field.get_matrix()[0]) - 1
+        self.player2_1x = len(self.game_field.get_matrix()[0]) - 1
         self.player2_1y = 1
         # Segundas paletas
         self.player1_2x = 11
-        self.player1_2y = (len(game_field.get_matrix()) - game_field.paleta_length) - 1
-        self.player2_2x = len(game_field.get_matrix()[0]) - 11
-        self.player2_2y = len(game_field.get_matrix()) - 1 - game_field.paleta_length
+        self.player1_2y = (len(self.game_field.get_matrix()) - self.game_field.paleta_length) - 1
+        self.player2_2x = len(self.game_field.get_matrix()[0]) - 11
+        self.player2_2y = len(self.game_field.get_matrix()) - 1 - self.game_field.paleta_length
 
         # Controlan el movimiento de los jugadores
 
@@ -618,39 +507,38 @@ class Game:
         self.choosed = False
         start_boring_timer = time.time()
         if mode == 'singles':
-            self.singles(True)
+            self.singles()
         elif mode == 'doubles':
-            self.doubles(True)
+            self.doubles()
         else:
             return 'Err'
 
-    def singles(self, singles):
+    def singles(self):
         global start_boring_timer
         global choosed
-        while singles:
+        while self.game:
 
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    singles = False
                     self.game = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = True
                     elif event.key == pygame.K_DOWN:
                         self.player1_1down_y = True
-                    elif event.key == pygame.K_w and not game_field.pc:
+                    elif event.key == pygame.K_w and not self.game_field.pc:
                         self.player2_1up_y = True
                     elif event.key == pygame.K_w:
-                        game_field.pc = False
-                        game_field.reset_level()
-                        game_field.new_player()
-                        game_field.reset_scores()
+                        self.game_field.pc = False
+                        self.game_field.reset_level()
+                        self.game_field.new_player()
+                        self.game_field.reset_scores()
                         start_boring_timer = time.time()
-                    elif event.key == pygame.K_s and not game_field.pc:
+                    elif event.key == pygame.K_s and not self.game_field.pc:
                        self.player2_1down_y = True
                     elif event.key == pygame.K_p:
-                        game_field.pause()
+                        self.game_field.pause()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -662,13 +550,13 @@ class Game:
                         self.player2_1down_y = False
 
             # Movimiento de las paletas del primer jugador
-            if self.player1_1down_y and self.player1_1y + game_field.paleta_length + 1 < len(game_field.get_matrix()):
+            if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
             elif self.player1_1up_y and self.player1_1y+1 > 2:
                 self.player1_1y -= 1
 
             # Movimiento de las paletas del segundo jugador
-            if self.player2_1down_y and self.player2_1y + game_field.paleta_length + 1 < len(game_field.get_matrix()):
+            if self.player2_1down_y and self.player2_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player2_1y += 1
             elif self.player2_1up_y and self.player2_1y+1 > 2:
                 self.player2_1y -= 1
@@ -676,48 +564,49 @@ class Game:
             # Rebote de la pelota
             self.ball_x, self.ball_y = self.ball_bounce_singles(self.ball_x,self.ball_y,self.player1_1x,self.player1_1y,self.player2_1x,self.player2_1y)
             # Sube la dificultad si no hay goles
-            if time.time() - start_boring_timer > 10 and not game_field.pc:
-                game_field.levelup_animation()
+            if time.time() - start_boring_timer > 10 and not self.game_field.pc:
+                self.game_field.levelup_animation()
+                self.message_to_screen('Level Up!!', white, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
-                self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
-                self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 start_boring_timer = time.time()
             # Inteligencia artificial cuando la pc esta habilitada
-            if game_field.pc and game_field.get_ball_direction()[0] > 0:
+            if self.game_field.pc and self.game_field.get_ball_direction()[0] > 0:
                 if self.ball_x == 1 or self.ball_x == 20:
                     choice_hit = random.choice([-1, 0, 1])
-                    y_hit = self.simulacion(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                    y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(-int(self.game_field.paleta_length/2)+2, 2+int(self.game_field.paleta_length/2))
                     while not 0 <= y_hit < 24:
-                        y_hit = self.simulacion(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                            -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                        y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(
+                            -int(self.game_field.paleta_length / 2) + 1, 1 + int(self.game_field.paleta_length / 2))
 
 
                 if choice_hit == -1:
                     if y_hit < self.player2_1y and self.player2_1y-1 >= 1:
                         nxt_move = -1
-                    elif y_hit > self.player2_1y and self.player2_1y + int(game_field.paleta_length+1) <= 24:
+                    elif y_hit > self.player2_1y and self.player2_1y + int(self.game_field.paleta_length+1) <= 24:
                         nxt_move = 1
                     elif y_hit == self.player2_1y:
                         nxt_move = 0
                     else:
                         nxt_move = 0
                 elif choice_hit == 0:
-                    if y_hit < self.player2_1y + int(game_field.paleta_length+1)/2 -1 and self.player2_1y-1 >= 1:
+                    if y_hit < self.player2_1y + int(self.game_field.paleta_length+1)/2 -1 and self.player2_1y-1 >= 1:
                         nxt_move = -1
-                    elif y_hit > self.player2_1y + int(game_field.paleta_length+1)/2 -1 and self.player2_1y + int(
-                            game_field.paleta_length+1) <= 24:
+                    elif y_hit > self.player2_1y + int(self.game_field.paleta_length+1)/2 -1 and self.player2_1y + int(
+                            self.game_field.paleta_length+1) <= 24:
                         nxt_move = 1
-                    elif y_hit == self.player2_1y + int(game_field.paleta_length+1)/2 -1:
+                    elif y_hit == self.player2_1y + int(self.game_field.paleta_length+1)/2 -1:
                         nxt_move = 0
                     else:
                         nxt_move = 0
                 elif choice_hit == 1:
-                    if y_hit < self.player2_1y + int(game_field.paleta_length) -1 and self.player2_1y-1 >= 1:
+                    if y_hit < self.player2_1y + int(self.game_field.paleta_length) -1 and self.player2_1y-1 >= 1:
                         nxt_move = -1
-                    elif y_hit > self.player2_1y + int(game_field.paleta_length) -1 and self.player2_1y + int(game_field.paleta_length+1) <= 24:
+                    elif y_hit > self.player2_1y + int(self.game_field.paleta_length) -1 and self.player2_1y + int(self.game_field.paleta_length+1) <= 24:
                         nxt_move = 1
-                    elif y_hit == self.player2_1y + int(game_field.paleta_length) -1:
+                    elif y_hit == self.player2_1y + int(self.game_field.paleta_length) -1:
                         nxt_move = 0
                     else:
                         nxt_move = 0
@@ -725,48 +614,54 @@ class Game:
                 self.player2_1y += nxt_move
 
             # Se realizan los movimientos y se modifica la pantalla
-            game_field.clean_matrix()
-            self.ball_x += 1 * game_field.get_ball_direction()[0]
-            self.ball_y += 1 * game_field.get_ball_direction()[1]
-            bola = Bola(self.ball_x, self.ball_y, block_width, block_height)
+
+            self.game_field.clean_matrix()
+            self.game_field.screen()
+            matrix = self.game_field.get_matrix()
+            self.ball_x += 1 * self.game_field.get_ball_direction()[0]
+            self.ball_y += 1 * self.game_field.get_ball_direction()[1]
+            self.bola = Bola(self.ball_x, self.ball_y, block_width, block_height)
+            self.bola.mod_matrix(matrix)
             self.player1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
             self.player2 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
-            game_field.screen()
-            if game_field.pc:
-                message_to_screen('Press w to add a new player', white, 200, 250)
+            self.player1.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player2.mod_matrix(matrix, self.game_field.paleta_length)
+            self.game_field.set_matrix(matrix)
+            self.game_field.screen()
+            if self.game_field.pc:
+                self.message_to_screen('Press w to add a new player', white, 200, 250)
             pygame.display.update()
 
             # Controla la velocidad
-            clock.tick(game_field.get_ball_velocity())
+            clock.tick(self.game_field.get_ball_velocity())
 
-    def doubles(self, doubles):
+    def doubles(self):
         global start_boring_timer
         global choosed
-        while doubles:
+        while self.game:
 
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    doubles = False
                     self.game = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = True
                     elif event.key == pygame.K_DOWN:
                         self.player1_1down_y = True
-                    elif event.key == pygame.K_w and not game_field.pc:
+                    elif event.key == pygame.K_w and not self.game_field.pc:
                         self.player2_1up_y = True
                     elif event.key == pygame.K_w:
-                        game_field.pc = False
-                        game_field.reset_level()
-                        game_field.new_player()
-                        game_field.reset_scores()
+                        self.game_field.pc = False
+                        self.game_field.reset_level()
+                        self.game_field.new_player()
+                        self.game_field.reset_scores()
                         start_boring_timer = time.time()
 
-                    elif event.key == pygame.K_s and not game_field.pc:
+                    elif event.key == pygame.K_s and not self.game_field.pc:
                         self.player2_1down_y = True
                     elif event.key == pygame.K_p:
-                        game_field.pause()
+                        self.game_field.pause()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -778,7 +673,7 @@ class Game:
                         self.player2_1down_y = False
 
             # Movimiento de las paletas del primer jugador
-            if self.player1_1down_y and self.player1_1y + game_field.paleta_length + 1 < len(game_field.get_matrix()):
+            if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
                 self.player1_2y -= 1
             elif self.player1_1up_y and self.player1_1y+1 > 2:
@@ -786,7 +681,7 @@ class Game:
                 self.player1_2y += 1
 
             # Movimiento de las paletas del segundo jugador
-            if self.player2_1down_y and self.player2_1y + game_field.paleta_length + 1 < len(game_field.get_matrix()):
+            if self.player2_1down_y and self.player2_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player2_1y += 1
                 self.player2_2y -= 1
             elif self.player2_1up_y and self.player2_1y+1 > 2:
@@ -798,16 +693,17 @@ class Game:
                                                  self.player2_1y, self.player2_2y)
 
             # Sube la dificultad si no hay goles
-            if time.time() - start_boring_timer > 10 and not game_field.pc:
-                game_field.levelup_animation()
+            if time.time() - start_boring_timer > 10 and not self.game_field.pc:
+                self.game_field.levelup_animation()
+                self.message_to_screen('Level Up!!', white, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
-                self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
-                self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 start_boring_timer = time.time()
 
             # Inteligencia artificial
-            if game_field.pc and game_field.get_ball_direction()[0] > 0:
+            if self.game_field.pc and self.game_field.get_ball_direction()[0] > 0:
                 try:
                     choosed
                 except:
@@ -828,37 +724,37 @@ class Game:
                 if paleta_choose == 1:
                     if self.ball_x == 1 or self.ball_x == 20 or self.ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
-                        y_hit = self.simulacion(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(-int(game_field.paleta_length/2)+2, 2+int(game_field.paleta_length/2))
+                        y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(-int(self.game_field.paleta_length/2)+2, 2+int(self.game_field.paleta_length/2))
                         while not 2 <= y_hit < 29:
-                            y_hit = self.simulacion(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(
+                                -int(self.game_field.paleta_length / 2) + 1, 1 + int(self.game_field.paleta_length / 2))
 
                     if choice_hit == -1:
                         if y_hit < self.player2_1y and self.player2_1y - 1 >= 1:
                             nxt_move = -1
-                        elif y_hit > self.player2_1y and self.player2_1y + int(game_field.paleta_length + 1) + 1 < 24:
+                        elif y_hit > self.player2_1y and self.player2_1y + int(self.game_field.paleta_length + 1) + 1 < 24:
                             nxt_move = 1
                         elif y_hit == self.player2_1y:
                             nxt_move = 0
                         else:
                             nxt_move = 0
                     elif choice_hit == 0:
-                        if y_hit < self.player2_1y + int(game_field.paleta_length + 1) / 2 - 1 and self.player2_1y - 1 >= 1:
+                        if y_hit < self.player2_1y + int(self.game_field.paleta_length + 1) / 2 - 1 and self.player2_1y - 1 >= 1:
                             nxt_move = -1
-                        elif y_hit > self.player2_1y + int(game_field.paleta_length + 1) / 2 - 1 and self.player2_1y + int(
-                                game_field.paleta_length + 1) <= 24:
+                        elif y_hit > self.player2_1y + int(self.game_field.paleta_length + 1) / 2 - 1 and self.player2_1y + int(
+                                self.game_field.paleta_length + 1) <= 24:
                             nxt_move = 1
-                        elif y_hit == self.player2_1y + int(game_field.paleta_length + 1) / 2 - 1:
+                        elif y_hit == self.player2_1y + int(self.game_field.paleta_length + 1) / 2 - 1:
                             nxt_move = 0
                         else:
                             nxt_move = 0
                     elif choice_hit == 1:
-                        if y_hit < self.player2_1y + int(game_field.paleta_length) - 1 and self.player2_1y - 1 >= 1:
+                        if y_hit < self.player2_1y + int(self.game_field.paleta_length) - 1 and self.player2_1y - 1 >= 1:
                             nxt_move = -1
-                        elif y_hit > self.player2_1y + int(game_field.paleta_length) - 1 and self.player2_1y + int(
-                                game_field.paleta_length + 1) <= 24:
+                        elif y_hit > self.player2_1y + int(self.game_field.paleta_length) - 1 and self.player2_1y + int(
+                                self.game_field.paleta_length + 1) <= 24:
                             nxt_move = 1
-                        elif y_hit == self.player2_1y + int(game_field.paleta_length) - 1:
+                        elif y_hit == self.player2_1y + int(self.game_field.paleta_length) - 1:
                             nxt_move = 0
                         else:
                             nxt_move = 0
@@ -866,14 +762,14 @@ class Game:
                 else:
                     if self.ball_x == 1 or self.ball_x == 20 or self.ball_x == 12:
                         choice_hit = random.choice([-1, 0, 1])
-                        y_hit = self.simulacion_2nd(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                            -int(game_field.paleta_length / 2) + 2, 2 + int(game_field.paleta_length / 2))
+                        y_hit = self.simulacion_2nd(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(
+                            -int(self.game_field.paleta_length / 2) + 2, 2 + int(self.game_field.paleta_length / 2))
                         while not 2 <= y_hit < 29:
-                            y_hit = self.simulacion_2nd(self.ball_x, self.ball_y, game_field.get_ball_direction()[1]) + random.randint(
-                                -int(game_field.paleta_length / 2) + 1, 1 + int(game_field.paleta_length / 2))
+                            y_hit = self.simulacion_2nd(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(
+                                -int(self.game_field.paleta_length / 2) + 1, 1 + int(self.game_field.paleta_length / 2))
 
                     if choice_hit == -1:
-                        if y_hit < self.player2_2y and self.player2_1y + int(game_field.paleta_length + 1) + 1 <= 24:
+                        if y_hit < self.player2_2y and self.player2_1y + int(self.game_field.paleta_length + 1) + 1 <= 24:
                             nxt_move = 1
                         elif y_hit > self.player2_2y and self.player2_1y - 1 >= 1:
                             nxt_move = -1
@@ -882,22 +778,22 @@ class Game:
                         else:
                             nxt_move = 0
                     elif choice_hit == 0:
-                        if y_hit < self.player2_2y + int(game_field.paleta_length + 1) / 2 - 1 and self.player2_1y + int(
-                                game_field.paleta_length + 1) <= 24:
+                        if y_hit < self.player2_2y + int(self.game_field.paleta_length + 1) / 2 - 1 and self.player2_1y + int(
+                                self.game_field.paleta_length + 1) <= 24:
                             nxt_move = 1
-                        elif y_hit > self.player2_2y + int(game_field.paleta_length + 1) / 2 - 1 and  self.player2_1y - 1 >= 1:
+                        elif y_hit > self.player2_2y + int(self.game_field.paleta_length + 1) / 2 - 1 and  self.player2_1y - 1 >= 1:
                             nxt_move = -1
-                        elif y_hit == self.player2_2y + int(game_field.paleta_length + 1) / 2 - 1:
+                        elif y_hit == self.player2_2y + int(self.game_field.paleta_length + 1) / 2 - 1:
                             nxt_move = 0
                         else:
                             nxt_move = 0
                     elif choice_hit == 1:
-                        if y_hit < self.player2_2y + int(game_field.paleta_length) - 1 and self.player2_1y + int(
-                                game_field.paleta_length + 1) + 1 <= 24:
+                        if y_hit < self.player2_2y + int(self.game_field.paleta_length) - 1 and self.player2_1y + int(
+                                self.game_field.paleta_length + 1) + 1 <= 24:
                             nxt_move = 1
-                        elif y_hit > self.player2_2y + int(game_field.paleta_length) - 1 and self.player2_1y - 1 >= 1 :
+                        elif y_hit > self.player2_2y + int(self.game_field.paleta_length) - 1 and self.player2_1y - 1 >= 1 :
                             nxt_move = -1
-                        elif y_hit == self.player2_2y + int(game_field.paleta_length) - 1:
+                        elif y_hit == self.player2_2y + int(self.game_field.paleta_length) - 1:
                             nxt_move = 0
                         else:
                             nxt_move = 0
@@ -908,21 +804,21 @@ class Game:
                 self.player2_2y -= nxt_move
 
             # Se realizan los movimientos y se modifica la pantalla
-            game_field.clean_matrix()
-            self.ball_x += 1 * game_field.get_ball_direction()[0]
-            self.ball_y += 1 * game_field.get_ball_direction()[1]
+            self.game_field.clean_matrix()
+            self.ball_x += 1 * self.game_field.get_ball_direction()[0]
+            self.ball_y += 1 * self.game_field.get_ball_direction()[1]
             self.bola = Bola(self.ball_x, self.ball_y, block_width, block_height)
             self.player1_1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
             self.player2_1 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
             self.player1_2 = Paleta(self.player1_2x, self.player1_2y, block_width, block_height)
             self.player2_2 = Paleta(self.player2_2x, self.player2_2y, block_width, block_height)
-            game_field.screen()
-            if game_field.pc:
-                message_to_screen('Press w to add a new player', white, 200, 250)
+            self.game_field.screen()
+            if self.game_field.pc:
+                self.message_to_screen('Press w to add a new player', white, 200, 250)
             pygame.display.update()
 
             # Se controla la velocidad
-            clock.tick(game_field.get_ball_velocity())
+            clock.tick(self.game_field.get_ball_velocity())
 
     # Funcion recursiva encargada de simular el movimiento de la bola dadas una pos inicial en x y y y una direccion hacia
     # donde se mueve la misma. Retorna la posicion en y donde va a pegar la bola al lado derecho. Se utiliza para la inteligencia
@@ -947,7 +843,7 @@ class Game:
     def simulacion_2nd(self, pos_x, pos_y, direction):
         if direction == 0:
             return pos_y
-        elif pos_x == len(game_field.get_matrix()[0]) - 12:
+        elif pos_x == len(self.game_field.get_matrix()[0]) - 12:
             return pos_y
         elif pos_y == 1:
             return self.simulacion_2nd(pos_x, pos_y + 1, direction * -1)
@@ -964,89 +860,91 @@ class Game:
     # S: Nueva posicion de la bola en x y y
     # R: -
     def ball_bounce_singles(self, ball_x, ball_y, player1_1x, player1_1y, player2_1x, player2_1y):
-        if (game_field.get_ball_direction()[
+        if (self.game_field.get_ball_direction()[
                 0] > 0 and ball_x + 1 == player2_1x and (
-                    player2_1y <= ball_y <= player2_1y + game_field.paleta_length or (
-                    game_field.get_ball_direction()[
-                        1] > 0 and player2_1y <= ball_y + 1 <= player2_1y + game_field.paleta_length) or (
-                            game_field.get_ball_direction()[
-                                1] < 0 and player2_1y <= ball_y - 1 <= player2_1y + game_field.paleta_length))) or (
-                game_field.get_ball_direction()[
-                    0] < 0 and ball_x - 1 == 0 and (player1_1y <= ball_y <= player1_1y + game_field.paleta_length or (
-                game_field.get_ball_direction()[
-                    1] > 0 and player1_1y <= ball_y + 1 <= player1_1y + game_field.paleta_length) or (
-                                                            game_field.get_ball_direction()[
-                                                                1] > 0 and player1_1y <= ball_y + 1 <= player1_1y + game_field.paleta_length)
+                    player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length or (
+                    self.game_field.get_ball_direction()[
+                        1] > 0 and player2_1y <= ball_y + 1 <= player2_1y + self.game_field.paleta_length) or (
+                            self.game_field.get_ball_direction()[
+                                1] < 0 and player2_1y <= ball_y - 1 <= player2_1y + self.game_field.paleta_length))) or (
+                self.game_field.get_ball_direction()[
+                    0] < 0 and ball_x - 1 == 0 and (player1_1y <= ball_y <= player1_1y + self.game_field.paleta_length or (
+                self.game_field.get_ball_direction()[
+                    1] > 0 and player1_1y <= ball_y + 1 <= player1_1y + self.game_field.paleta_length) or (
+                                                            self.game_field.get_ball_direction()[
+                                                                1] > 0 and player1_1y <= ball_y + 1 <= player1_1y + self.game_field.paleta_length)
                 )):
 
-            game_field.set_ball_direction((game_field.get_ball_direction()[0] * -1, game_field.get_ball_direction()[1]))
+            self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0] * -1, self.game_field.get_ball_direction()[1]))
 
-            if game_field.get_ball_direction()[0] < 0:
-                if player2_1y <= ball_y <= player2_1y + game_field.paleta_length / 3 -1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
-                    game_field.set_ball_velocity(game_field.ball_velocity)
-                elif player2_1y + game_field.paleta_length / 3 <= ball_y <= player2_1y + (
-                        2 * game_field.paleta_length) / 3 -1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                    game_field.set_ball_velocity(game_field.ball_velocity)
-                elif player2_1y + (2 * game_field.paleta_length / 3) <= ball_y <= player2_1y + (
-                        3 * game_field.paleta_length) / 3 -1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
-                    game_field.set_ball_velocity(game_field.ball_velocity)
+            if self.game_field.get_ball_direction()[0] < 0:
+                if player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length / 3 -1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                elif player2_1y + self.game_field.paleta_length / 3 <= ball_y <= player2_1y + (
+                        2 * self.game_field.paleta_length) / 3 -1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
+                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                elif player2_1y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_1y + (
+                        3 * self.game_field.paleta_length) / 3 -1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 # Pong
                 pong_sound.play()
-            elif game_field.get_ball_direction()[0] > 0:
-                if player1_1y <= ball_y <= player1_1y + game_field.paleta_length / 3 - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
-                    game_field.set_ball_velocity(game_field.ball_velocity)
-                elif player1_1y + game_field.paleta_length / 3 <= ball_y <= player1_1y + (
-                        2 * game_field.paleta_length) / 3 - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                    game_field.set_ball_velocity(game_field.ball_velocity)
-                elif player1_1y + (2 * game_field.paleta_length / 3) <= ball_y <= player1_1y + (
-                        3 * game_field.paleta_length) / 3 - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
-                    game_field.set_ball_velocity(game_field.ball_velocity)
+            elif self.game_field.get_ball_direction()[0] > 0:
+                if player1_1y <= ball_y <= player1_1y + self.game_field.paleta_length / 3 - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                elif player1_1y + self.game_field.paleta_length / 3 <= ball_y <= player1_1y + (
+                        2 * self.game_field.paleta_length) / 3 - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
+                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                elif player1_1y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player1_1y + (
+                        3 * self.game_field.paleta_length) / 3 - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 # Ping
                 ping_sound.play()
-        elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0]) + 2:
-            if game_field.get_friend_score() < 10:
-                game_field.set_friend_score(game_field.get_friend_score() + 1)
+        elif self.game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(self.game_field.get_matrix()[0]) + 2:
+            if self.game_field.get_friend_score() < 10:
+                self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
                 ball_x = 19
                 ball_y = 12
-            elif game_field.pc:
-                game_field.levelup_animation()
+            elif self.game_field.pc:
+                self.game_field.levelup_animation()
+                self.message_to_screen('Level Up!!', white, size = 'large')
+                self.game_field.reset_scores()
                 self.player1_1y = 1
                 self.player2_2y = 1
-                self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
-                self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
             else:
-                game_field.win()
-        elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
-            if game_field.get_enemy_score() < 10:
-                game_field.set_enemy_score(game_field.get_enemy_score() + 1)
+                self.win(1)
+        elif self.game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
+            if self.game_field.get_enemy_score() < 10:
+                self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
                 start_boring_timer = time.time()
-                if game_field.pc:
+                if self.game_field.pc:
                     fail_sound.play()
                 else:
                     point_sound.play()
                 ball_x = 19
                 ball_y = 12
-            elif game_field.pc:
-                game_field.lose()
+            elif self.game_field.pc:
+                self.win(-1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
             else:
-                game_field.win()
-        if (game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(game_field.get_matrix()) - 1) or (
-                game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
-            game_field.set_ball_direction((game_field.get_ball_direction()[0], game_field.get_ball_direction()[1] * -1))
+                self.win(-1)
+        if (self.game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(self.game_field.get_matrix()) - 1) or (
+                self.game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
+            self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], self.game_field.get_ball_direction()[1] * -1))
 
         return ball_x, ball_y
 
@@ -1060,110 +958,112 @@ class Game:
                             player2_1y, player2_2y):
         global start_boring_timer
         global choosed
-        if (game_field.get_ball_direction()[0] > 0 and (
-                (ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + game_field.paleta_length or (
-                        game_field.get_ball_direction()[1] > 0 and player2_1y <= ball_y + 1 <= player2_1y) or (
-                                                       game_field.get_ball_direction()[
+        if (self.game_field.get_ball_direction()[0] > 0 and (
+                (ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length or (
+                        self.game_field.get_ball_direction()[1] > 0 and player2_1y <= ball_y + 1 <= player2_1y) or (
+                                                       self.game_field.get_ball_direction()[
                                                            1] < 0 and player2_1y <= ball_y - 1 <= player2_1y))) or (
-                        ball_x + 1 == player2_2x and (player2_2y <= ball_y <= player2_2y + game_field.paleta_length or (
-                        game_field.get_ball_direction()[1] > 0 and player2_2y <= ball_y + 1 <= player2_2y) or (
-                                                              game_field.get_ball_direction()[
+                        ball_x + 1 == player2_2x and (player2_2y <= ball_y <= player2_2y + self.game_field.paleta_length or (
+                        self.game_field.get_ball_direction()[1] > 0 and player2_2y <= ball_y + 1 <= player2_2y) or (
+                                                              self.game_field.get_ball_direction()[
                                                                   1] < 0 and player2_2y <= ball_y - 1 <= player2_2y))))) or (
-                game_field.get_ball_direction()[0] < 0 and (
-                ball_x - 1 == player1_1x and (player1_1y <= ball_y <= player1_1y + game_field.paleta_length or (
-                game_field.get_ball_direction()[1] > 0 and player1_1y <= ball_y + 1 <= player1_1y) or (
-                                                      game_field.get_ball_direction()[
+                self.game_field.get_ball_direction()[0] < 0 and (
+                ball_x - 1 == player1_1x and (player1_1y <= ball_y <= player1_1y + self.game_field.paleta_length or (
+                self.game_field.get_ball_direction()[1] > 0 and player1_1y <= ball_y + 1 <= player1_1y) or (
+                                                      self.game_field.get_ball_direction()[
                                                           1] > 0 and player1_1y <= ball_y + 1 <= player1_2y)) or (
-                        ball_x - 1 == player1_2x and (player1_2y <= ball_y <= player1_2y + game_field.paleta_length or (
-                        game_field.get_ball_direction()[1] > 0 and player1_2y <= ball_y + 1 <= player2_1y) or (
-                                                              game_field.get_ball_direction()[
+                        ball_x - 1 == player1_2x and (player1_2y <= ball_y <= player1_2y + self.game_field.paleta_length or (
+                        self.game_field.get_ball_direction()[1] > 0 and player1_2y <= ball_y + 1 <= player2_1y) or (
+                                                              self.game_field.get_ball_direction()[
                                                                   1] > 0 and player1_2y <= ball_y + 1 <= player2_1y))))):
-            game_field.set_ball_direction((game_field.get_ball_direction()[0] * -1, game_field.get_ball_direction()[1]))
-            if game_field.get_ball_direction()[0] < 0 and ball_x > len(game_field.get_matrix()[0]) - 10:
-                if player2_1y <= ball_y <= player2_1y + (game_field.paleta_length / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
-                    game_field.set_ball_velocity(30)
-                elif player2_1y + game_field.paleta_length / 3 <= ball_y <= player2_1y + (
-                        (2 * game_field.paleta_length) / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                    game_field.set_ball_velocity(40)
-                elif player2_1y + (2 * game_field.paleta_length / 3) <= ball_y <= player2_1y + (( 3 * game_field.paleta_length) / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
-                    game_field.set_ball_velocity(30)
+            self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0] * -1, self.game_field.get_ball_direction()[1]))
+            if self.game_field.get_ball_direction()[0] < 0 and ball_x > len(self.game_field.get_matrix()[0]) - 10:
+                if player2_1y <= ball_y <= player2_1y + (self.game_field.paleta_length / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_velocity(30)
+                elif player2_1y + self.game_field.paleta_length / 3 <= ball_y <= player2_1y + (
+                        (2 * self.game_field.paleta_length) / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
+                    self.game_field.set_ball_velocity(40)
+                elif player2_1y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_1y + (( 3 * self.game_field.paleta_length) / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_velocity(30)
                 # Pong
                 pong_sound.play()
-                if game_field.pc:
+                if self.game_field.pc:
                     choosed = False
-            elif game_field.get_ball_direction()[0] < 0:
-                if player2_2y <= ball_y <= player2_2y + (game_field.paleta_length / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
-                    game_field.set_ball_velocity(30)
-                elif player2_2y + game_field.paleta_length / 3 <= ball_y <= player2_2y + (
-                        (2 * game_field.paleta_length) / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                    game_field.set_ball_velocity(40)
-                elif player2_2y + (2 * game_field.paleta_length / 3) <= ball_y <= player2_2y + ((3 * game_field.paleta_length) / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
-                    game_field.set_ball_velocity(30)
+            elif self.game_field.get_ball_direction()[0] < 0:
+                if player2_2y <= ball_y <= player2_2y + (self.game_field.paleta_length / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_velocity(30)
+                elif player2_2y + self.game_field.paleta_length / 3 <= ball_y <= player2_2y + (
+                        (2 * self.game_field.paleta_length) / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
+                    self.game_field.set_ball_velocity(40)
+                elif player2_2y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_2y + ((3 * self.game_field.paleta_length) / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_velocity(30)
                 # Pong
                 pong_sound.play()
-                if game_field.pc:
+                if self.game_field.pc:
                     choosed = False
-            elif game_field.get_ball_direction()[0] > 0 and ball_x < 11:
-                if player1_1y <= ball_y <= player1_1y + (game_field.paleta_length / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
-                    game_field.set_ball_velocity(30)
-                elif player1_1y + game_field.paleta_length / 3 <= ball_y <= (
-                        player1_1y + (2 * game_field.paleta_length) / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                    game_field.set_ball_velocity(40)
-                elif (player1_1y + (2 * game_field.paleta_length / 3)) <= ball_y <= player1_1y + (
-                        (3 * game_field.paleta_length) / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
-                    game_field.set_ball_velocity(30)
+            elif self.game_field.get_ball_direction()[0] > 0 and ball_x < 11:
+                if player1_1y <= ball_y <= player1_1y + (self.game_field.paleta_length / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_velocity(30)
+                elif player1_1y + self.game_field.paleta_length / 3 <= ball_y <= (
+                        player1_1y + (2 * self.game_field.paleta_length) / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
+                    self.game_field.set_ball_velocity(40)
+                elif (player1_1y + (2 * self.game_field.paleta_length / 3)) <= ball_y <= player1_1y + (
+                        (3 * self.game_field.paleta_length) / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_velocity(30)
+
                 # Ping
                 ping_sound.play()
-            elif game_field.get_ball_direction()[0] > 0:
-                if player1_2y <= ball_y <= player1_2y + (game_field.paleta_length / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], -1))
-                    game_field.set_ball_velocity(30)
-                elif player1_2y + game_field.paleta_length / 3 <= ball_y <= (
-                        player1_2y + (2 * game_field.paleta_length) / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 0))
-                    game_field.set_ball_velocity(40)
-                elif (player1_2y + (2 * game_field.paleta_length / 3)) <= ball_y <= player1_2y + (
-                        (3 * game_field.paleta_length) / 3) - 1:
-                    game_field.set_ball_direction((game_field.get_ball_direction()[0], 1))
-                    game_field.set_ball_velocity(30)
+            elif self.game_field.get_ball_direction()[0] > 0:
+                if player1_2y <= ball_y <= player1_2y + (self.game_field.paleta_length / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                    self.game_field.set_ball_velocity(30)
+                elif player1_2y + self.game_field.paleta_length / 3 <= ball_y <= (
+                        player1_2y + (2 * self.game_field.paleta_length) / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
+                    self.game_field.set_ball_velocity(40)
+                elif (player1_2y + (2 * self.game_field.paleta_length / 3)) <= ball_y <= player1_2y + (
+                        (3 * self.game_field.paleta_length) / 3) - 1:
+                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                    self.game_field.set_ball_velocity(30)
                 # Ping
                 ping_sound.play()
 
-        elif game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(game_field.get_matrix()[0]) + 1:
-            if game_field.get_friend_score() < 10:
-                game_field.set_friend_score(game_field.get_friend_score() + 1)
+        elif self.game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(self.game_field.get_matrix()[0]) + 1:
+            if self.game_field.get_friend_score() < 10:
+                self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
                 ball_x = 19
                 ball_y = 12
-                if game_field.pc:
+                if self.game_field.pc:
                     choosed = False
             else:
-                if game_field.pc:
-                    game_field.reset_scores()
-                    game_field.levelup_animation()
+                if self.game_field.pc:
+                    self.game_field.reset_scores()
+                    self.game_field.levelup_animation()
+                    self.message_to_screen('Level Up!!', white, size = 'large')
                     self.player1_1y = 1
                     self.player2_1y = 1
-                    self.player1_2y = len(game_field.get_matrix())-game_field.paleta_length-1
-                    self.player2_2y = len(game_field.get_matrix())-game_field.paleta_length-1
+                    self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                    self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 else:
-                    game_field.win()
+                    self.win(1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
-        elif game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
-            if game_field.get_enemy_score() < 10:
-                game_field.set_enemy_score(game_field.get_enemy_score() + 1)
-                if game_field.pc:
+        elif self.game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
+            if self.game_field.get_enemy_score() < 10:
+                self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
+                if self.game_field.pc:
                     fail_sound.play()
                 else:
                     point_sound.play()
@@ -1171,39 +1071,74 @@ class Game:
                 ball_x = 19
                 ball_y = 12
             else:
-                if game_field.pc:
-                    game_field.lose()
+                if self.game_field.pc:
+                    self.win(-1)
                 else:
-                    game_field.win()
+                    self.win(-1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
 
-        if (game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(game_field.get_matrix()) - 1) or (
-                game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
-            game_field.set_ball_direction((game_field.get_ball_direction()[0], game_field.get_ball_direction()[1] * -1))
+        if (self.game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(self.game_field.get_matrix()) - 1) or (
+                self.game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
+            self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], self.game_field.get_ball_direction()[1] * -1))
 
         return ball_x, ball_y
 
+    # Funcion encargada de renderizar el texto a poner en la pantalla, recibe un texto, un color y un tamanno y retorna
+    # el texto renderizado asi como el punto central del mismo.
+    def text_objects(self, text, color, size):
+        if size == 'small':
+            textSurface = smallfont.render(text, True, color)
+        if size == 'medium':
+            textSurface = mediumfont.render(text, True, color)
+        elif size == 'large':
+            textSurface = largefont.render(text, True, color)
+        return textSurface, textSurface.get_rect()
 
-# Funcion encargada de renderizar el texto a poner en la pantalla, recibe un texto, un color y un tamanno y retorna
-# el texto renderizado asi como el punto central del mismo.
-def text_objects(text, color, size):
-    if size == 'small':
-        textSurface = smallfont.render(text, True, color)
-    if size == 'medium':
-        textSurface = mediumfont.render(text, True, color)
-    elif size == 'large':
-        textSurface = largefont.render(text, True, color)
-    return textSurface, textSurface.get_rect()
+    # Dado un mensaje, un color, un desplazamiento del centro de la pantalla en x, un desplazamiento del centor de la pantalla
+    # en y y un tamanno de los ya predeterminados, este funcion muestra un texto en la pantalla.
+    def message_to_screen(self, msg, color,x_displace=0, y_displace=0, size='small'):
+        textSurf, textRect = self.text_objects(msg, color, size)
+        textRect.center = (self.game_field.width/2) + x_displace, (self.game_field.height/2) + y_displace
+        self.game_field.gameDisplay.blit(textSurf, textRect)
+
+    def win(self, winner):
+        win_screen = True
+        x_displace_fromcenter = winner*200
+        while win_screen:
+            for i in range(len(self.game_field.game_matrix)):
+                for j in range(len(self.game_field.game_matrix[0])):
+                    if i != 0 and i != 24 and i % 2 == 0 and j == 19:
+                        self.game_field.game_matrix[i][j] = False
+            self.game_field.screen()
+            self.message_to_screen('You', white, size='large', x_displace=-x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('won!', white, size='large', x_displace=-x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('You', white, size='large', x_displace=x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('lose!', white, size='large', x_displace=x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('Press enter to play again', white, y_displace=200)
+            self.message_to_screen('or space to return to main menu', white, y_displace=250)
+
+            # Reconocimiento de eventos
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        quit()
+                    elif event.key == pygame.K_RETURN:
+                        self.__init__()
+                    elif event.key == pygame.K_SPACE:
+                        print('Medinaaaaaaaaaa')
+
+            pygame.display.update()
 
 
-# Dado un mensaje, un color, un desplazamiento del centro de la pantalla en x, un desplazamiento del centor de la pantalla
-# en y y un tamanno de los ya predeterminados, este funcion muestra un texto en la pantalla.
-def message_to_screen(msg, color,x_displace=0, y_displace=0, size='small'):
-    textSurf, textRect = text_objects(msg, color, size)
-    textRect.center = (game_field.width/2) + x_displace, (game_field.height/2) + y_displace
-    game_field.gameDisplay.blit(textSurf, textRect)
+
+
+
 
 
 Game()
@@ -1211,3 +1146,4 @@ Game()
 # Finalizacion del juego
 pygame.quit()
 quit()
+
