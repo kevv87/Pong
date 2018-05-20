@@ -304,15 +304,9 @@ class Tablero:
         self.scores()
 
 
-    def win(self, winner):
-        win_screen = True
-        x_displace_fromcenter = winner*200
-        while win_screen:
-            self.message_to_screen('You', white, size='large', x_displace=-x_displace_fromcenter, y_displace=-50)
-            self.message_to_screen('won!', white, size='large', x_displace=-x_displace_fromcenter, y_displace=40)
-            self.message_to_screen('You', white, size='large', x_displace=x_displace_fromcenter, y_displace=-50)
-            self.message_to_screen('lose!', white, size='large', x_displace=x_displace_fromcenter, y_displace=40)
-            pygame.display.update()
+
+
+
 
     # Pausa el juego
     def pause(self):
@@ -930,7 +924,7 @@ class Game:
                 ball_x = 19
                 ball_y = 12
             else:
-                self.game_field.win(1)
+                self.win(1)
         elif self.game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
             if self.game_field.get_enemy_score() < 10:
                 self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
@@ -942,12 +936,12 @@ class Game:
                 ball_x = 19
                 ball_y = 12
             elif self.game_field.pc:
-                self.game_field.win(-1)
+                self.win(-1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
             else:
-                self.game_field.win(-1)
+                self.win(-1)
         if (self.game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(self.game_field.get_matrix()) - 1) or (
                 self.game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], self.game_field.get_ball_direction()[1] * -1))
@@ -1062,7 +1056,7 @@ class Game:
                     self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                     self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 else:
-                    self.game_field.win(1)
+                    self.win(1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
@@ -1078,9 +1072,9 @@ class Game:
                 ball_y = 12
             else:
                 if self.game_field.pc:
-                    self.game_field.win(-1)
+                    self.win(-1)
                 else:
-                    self.game_field.win(-1)
+                    self.win(-1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
@@ -1109,6 +1103,37 @@ class Game:
         textRect.center = (self.game_field.width/2) + x_displace, (self.game_field.height/2) + y_displace
         self.game_field.gameDisplay.blit(textSurf, textRect)
 
+    def win(self, winner):
+        win_screen = True
+        x_displace_fromcenter = winner*200
+        while win_screen:
+            for i in range(len(self.game_field.game_matrix)):
+                for j in range(len(self.game_field.game_matrix[0])):
+                    if i != 0 and i != 24 and i % 2 == 0 and j == 19:
+                        self.game_field.game_matrix[i][j] = False
+            self.game_field.screen()
+            self.message_to_screen('You', white, size='large', x_displace=-x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('won!', white, size='large', x_displace=-x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('You', white, size='large', x_displace=x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('lose!', white, size='large', x_displace=x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('Press enter to play again', white, y_displace=200)
+            self.message_to_screen('or space to return to main menu', white, y_displace=250)
+
+            # Reconocimiento de eventos
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        quit()
+                    elif event.key == pygame.K_RETURN:
+                        self.__init__()
+                    elif event.key == pygame.K_SPACE:
+                        print('Medinaaaaaaaaaa')
+
+            pygame.display.update()
 
 
 
