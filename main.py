@@ -1284,14 +1284,6 @@ def root():
         root.destroy()
         Game()
 
-    def muteF():
-        if mute:
-            pygame.mixer.music.unpause()
-            mute = False
-        else:
-            pygame.mixer.music.pause()
-            mute = True
-
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
     pvp.place(x=260, y=260)
 
@@ -1300,11 +1292,6 @@ def root():
 
     help1 = Button(canvas,command=unir2, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
     help1.place(x=260, y=380)
-
-    mute = PhotoImage(file="images/mute.png")
-    muteR = mute.subsample(x=15,y=15)
-    muteB = Button(canvas, command=muteF, image=muteR , bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
-    muteB.place(x=755, y=8)
 
     root.mainloop()
 
