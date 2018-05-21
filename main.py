@@ -1151,6 +1151,7 @@ class Game:
                     elif event.key == pygame.K_SPACE:
                         pygame.quit()
                         root()
+                        quit()
 
 
             pygame.display.update()
@@ -1160,7 +1161,9 @@ def root():
     root = Tk() #Hacer la ventana
 
     # musica de lobby
-    pygame.init()
+    sample_rate = mutagen.oggvorbis.OggVorbis("sounds/start_menu.ogg").info.sample_rate
+    pygame.mixer.quit()
+    pygame.mixer.pre_init(sample_rate, -16, 1, 512)
     pygame.mixer.init()
     pygame.mixer.music.load("sounds/start_menu.ogg")
     pygame.mixer.music.play(-1)
@@ -1275,14 +1278,15 @@ def root():
     def unir3():
         select_sound.play()
         root.destroy()
+        pygame.init()
         Game()
 
     def unir4():
         select_sound.play()
         root.destroy()
+        pygame.init()
         Game()
-        for event in pygame.event.get():
-            event.key = pygame.K_w
+
 
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
     pvp.place(x=260, y=260)
