@@ -1170,8 +1170,6 @@ class Game:
                         pygame.quit()
                         quit()
 
-
-
             pygame.display.update()
 
 Game(sys.argv[0], sys.argv[1])
