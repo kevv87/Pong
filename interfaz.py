@@ -2,6 +2,12 @@ import pygame
 import mutagen.oggvorbis
 from tkinter import *  #Importa todo de tkinter
 
+#Sonidos
+select_sound = pygame.mixer.Sound('sounds/select.ogg')
+pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
+ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
+point_sound = pygame.mixer.Sound('sounds/point.ogg')
+fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 #Función que crea el root con todas sus modificaciones
 def root():
@@ -174,3 +180,5 @@ def root():
 
     # mainloop del root
     root.mainloop()
+
+root()

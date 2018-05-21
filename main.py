@@ -1170,8 +1170,6 @@ class Game:
                         pygame.quit()
                         quit()
 
-
-
             pygame.display.update()
 
 # Finalizacion del juego
