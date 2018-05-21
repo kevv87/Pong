@@ -1260,7 +1260,7 @@ def root():
     def modeS():
         global ver
         ver = 'singles'
-
+    modeS()
     def modeD():
         global ver
         ver = 'doubles'
@@ -1278,7 +1278,6 @@ def root():
     doubles = Radiobutton(canvas, command=modeD,bg="black", value=2,variable=1)
     doubles.pack()
     doubles.place(x=480,y=540)
-
 
     def unir2():
         select_sound.play()
