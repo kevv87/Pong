@@ -26,6 +26,7 @@ def root():
     pygame.mixer.music.load("sounds/start_menu.ogg")
     pygame.mixer.music.play(-1)
 
+
     root.title() #título de la ventana
 
     # configuracion de la pantalla
@@ -53,7 +54,7 @@ def root():
     canvas.create_rectangle(220,392,240,412,fill="white",outline="white", width=5)
 
     #Label con la imagen del título de pong
-    pong = PhotoImage(file="images/PONG.png")
+    pong = PhotoImage(file="Images/PONG.png")
     pongL = Label(canvas, image=pong)
     pongL.pack()
     pongL.place(x=170,y=50)
@@ -84,14 +85,14 @@ def root():
         canvas2.create_rectangle(750, 220, 770, 380, fill="white", outline="white", width=5)
 
         # Label con la imagen de los controles del player2
-        ws = PhotoImage(file="images/ws.png")
+        ws = PhotoImage(file="Images/ws.png")
         wsL = Label(canvas2, image=ws)
         wsL.image = ws
         wsL.pack()
         wsL.place(x=500, y=370)
 
         #Label con la imagen de los controles del player1
-        ab = PhotoImage(file="images/ab.png")
+        ab = PhotoImage(file="Images/ab.png")
         abL = Label(canvas2, image=ab)
         abL.image = ab
         abL.pack()
@@ -179,7 +180,7 @@ def root():
         pygame.mixer.music.stop()
         root.withdraw()
         os.system('python3 main.py %s %r' %(MODE, False))
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
         root.deiconify()
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
@@ -189,7 +190,7 @@ def root():
         pygame.mixer.music.stop()
         root.withdraw()
         os.system('python3 main.py %s %r' %(MODE, True))
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
         root.deiconify()
 
 

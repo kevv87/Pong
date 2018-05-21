@@ -393,11 +393,11 @@ class Tablero:
                 self.screen()
                 pygame.display.update()
         elif self.pc:
-            pygame.quit()
-            quit()
+            return False
         else:
             pass
         self.music_update()
+        return True
 
     # Metodos de actualizacion
     def update_paleta(self):
@@ -483,11 +483,9 @@ class Game:
     def __init__(self, MODE, PC):
         global choosed
         global start_boring_timer
-        pygame.init()
 
         # Instancia del Tablero
         self.game_field = Tablero(PC, block_height, block_width)
-
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -623,8 +621,6 @@ class Game:
                     while not 0 <= y_hit < 24:
                         y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(
                             -int(self.game_field.paleta_length / 2) + 1, 1 + int(self.game_field.paleta_length / 2))
-
-
                 if choice_hit == -1:
                     if y_hit < self.player2_1y and self.player2_1y-1 >= 1:
                         nxt_move = -1
@@ -969,13 +965,17 @@ class Game:
                 ball_x = 19
                 ball_y = 12
             elif self.game_field.pc:
-                self.game_field.levelup_animation()
-                self.message_to_screen('Level Up!!', white, size = 'large')
-                self.game_field.reset_scores()
-                self.player1_1y = 1
-                self.player2_2y = 1
-                self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
-                self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                if self.game_field.pc:
+                    self.game_field.reset_scores()
+                    lvlup = self.game_field.levelup_animation()
+                    if lvlup:
+                        self.message_to_screen('Level Up!!', white, size='large')
+                        self.player1_1y = 1
+                        self.player2_1y = 1
+                        self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                        self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                    else:
+                        self.win(1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
@@ -1108,12 +1108,15 @@ class Game:
             else:
                 if self.game_field.pc:
                     self.game_field.reset_scores()
-                    self.game_field.levelup_animation()
-                    self.message_to_screen('Level Up!!', white, size = 'large')
-                    self.player1_1y = 1
-                    self.player2_1y = 1
-                    self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
-                    self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                    lvlup = self.game_field.levelup_animation()
+                    if lvlup:
+                        self.message_to_screen('Level Up!!', white, size='large')
+                        self.player1_1y = 1
+                        self.player2_1y = 1
+                        self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                        self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                    else:
+                        self.win(1)
                 else:
                     self.win(1)
                 clock.tick(3)
