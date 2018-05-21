@@ -2,22 +2,39 @@ import pygame
 import random
 import mutagen.oggvorbis
 import time
+import sys
+import os
 
-ijk =0
-
-# Inicializacion de pygame
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
+
+
+
 
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
 
 # Sonidos
+select_sound = pygame.mixer.Sound('sounds/select.ogg')
 pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
 ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
 point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
+
+
+white = (255,255,255)
+import random
+import mutagen.oggvorbis
+import time
+
+ijk =0
+pausa=False
+
+# Colores importantes
+white = (255, 255, 255)
+black = (0, 0, 0)
 
 
 # Fuentes predeterminadas
@@ -54,7 +71,6 @@ class Tablero:
         self.ball_direction = (-1, 0)
         self.pc = PC
         self.paleta_length = 9 - (3*(self.level-1))
-
         self.lvl_music()
 
     # Metodos
@@ -303,11 +319,6 @@ class Tablero:
                         self.game_matrix[n][m] = False
         self.scores()
 
-
-
-
-
-
     # Pausa el juego
     def pause(self):
         pause = True
@@ -319,12 +330,14 @@ class Tablero:
             pygame.display.update()
 
         while pause:
+            pygame.mixer.music.pause()
             self.message_to_screen('Juego pausado', white, size='large')
             self.message_to_screen('Presione p para reanudar', white, y_displace=80)
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_p:
+                        pygame.mixer.music.unpause()
                         pause = False
                 elif event.type == pygame.QUIT:
                     quit()
@@ -360,23 +373,34 @@ class Tablero:
         self.screen()
 
     # Se encarga de la animacion en la transicion de nivel
-    def levelup_animation(self):
+    def levelup_animation(self, spec=0):
         if self.level != 3:
-            self.level += 1
-            self.update_paleta()
-            self.update_velocity()
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix)):
-                    if n % 2 == 0 and m == 19 and n != 0 and n != 24:
-                        self.game_matrix[n][m] = False
+            if not spec:
+                self.level += 1
+                self.update_paleta()
+                self.update_velocity()
+                for n in range(len(self.game_matrix)):
+                    for m in range(len(self.game_matrix)):
+                        if n % 2 == 0 and m == 19 and n != 0 and n != 24:
+                            self.game_matrix[n][m] = False
+                    self.screen()
+            else:
+                self.level = spec
+                self.update_paleta()
+                self.update_velocity()
+                for n in range(len(self.game_matrix)):
+                    for m in range(len(self.game_matrix)):
+                        if n % 2 == 0 and m == 19 and n != 0 and n != 24:
+                            self.game_matrix[n][m] = False
                 self.screen()
                 pygame.display.update()
         elif self.pc:
-            pygame.quit()
-            quit()
+            return False
         else:
             pass
-        self.music_update()
+        if self.pc:
+            self.music_update()
+        return True
 
     # Metodos de actualizacion
     def update_paleta(self):
@@ -458,13 +482,14 @@ class Paleta:
 
 
 class Game:
-    def __init__(self):
+    global mode
+    def __init__(self, MODE, PC):
         global choosed
         global start_boring_timer
+        print(PC)
 
         # Instancia del Tablero
-        self.game_field = Tablero(True, block_height, block_width)
-
+        self.game_field = Tablero(bool(PC), block_height, block_width)
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -499,7 +524,10 @@ class Game:
         self.game = True
         self.pause = False
 
-        self.gameloop('singles')
+        self.mode = MODE
+        self.pc = bool(PC)
+
+        self.gameloop(MODE)
 
     def gameloop(self, mode):
         global start_boring_timer
@@ -519,6 +547,7 @@ class Game:
         while self.game:
 
             # Reconocimiento de eventos
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.game = False
@@ -527,7 +556,7 @@ class Game:
                         self.player1_1up_y = True
                     elif event.key == pygame.K_DOWN:
                         self.player1_1down_y = True
-                    elif event.key == pygame.K_w and not self.game_field.pc:
+                    elif event.key == pygame.K_w and not self.pc:
                         self.player2_1up_y = True
                     elif event.key == pygame.K_w:
                         self.game_field.pc = False
@@ -535,7 +564,7 @@ class Game:
                         self.game_field.new_player()
                         self.game_field.reset_scores()
                         start_boring_timer = time.time()
-                    elif event.key == pygame.K_s and not self.game_field.pc:
+                    elif event.key == pygame.K_s and not self.pc:
                        self.player2_1down_y = True
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
@@ -573,6 +602,23 @@ class Game:
                 self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 start_boring_timer = time.time()
             # Inteligencia artificial cuando la pc esta habilitada
+                try:
+                    choosed
+                except:
+                    choosed = False
+                nxt_move = 0
+                if self.ball_x == 1:
+                    choice_hit = random.choice([-1, 0, 1])
+                    choosed = True
+                elif self.ball_x == 12 and not choosed:
+                    choice_hit = random.choice([-1, 0, 1])
+                    choosed = True
+                elif self.ball_x == 20 and not choosed:
+                    choice_hit = random.choice([-1, 0, 1])
+                    choosed = True
+                elif self.ball_x == 27:
+                    choice_hit = random.choice([-1, 0, 1])
+                    choosed = True
             if self.game_field.pc and self.game_field.get_ball_direction()[0] > 0:
                 if self.ball_x == 1 or self.ball_x == 20:
                     choice_hit = random.choice([-1, 0, 1])
@@ -580,8 +626,6 @@ class Game:
                     while not 0 <= y_hit < 24:
                         y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(
                             -int(self.game_field.paleta_length / 2) + 1, 1 + int(self.game_field.paleta_length / 2))
-
-
                 if choice_hit == -1:
                     if y_hit < self.player2_1y and self.player2_1y-1 >= 1:
                         nxt_move = -1
@@ -710,20 +754,23 @@ class Game:
                     choosed = False
                 nxt_move = 0
                 if self.ball_x == 1:
+                    choice_hit = random.choice([-1, 0, 1])
                     paleta_choose = random.choice([1, 2])
                     choosed = True
                 elif self.ball_x == 12 and not choosed:
+                    choice_hit = random.choice([-1, 0, 1])
                     paleta_choose = random.choice([1, 2])
                     choosed = True
                 elif self.ball_x == 20 and not choosed:
+                    choice_hit = random.choice([-1, 0, 1])
                     paleta_choose = random.choice([1, 2])
                     choosed = True
                 elif self.ball_x == 27:
+                    choice_hit = random.choice([-1, 0, 1])
                     paleta_choose = 1
                     choosed = True
                 if paleta_choose == 1:
                     if self.ball_x == 1 or self.ball_x == 20 or self.ball_x == 12:
-                        choice_hit = random.choice([-1, 0, 1])
                         y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(-int(self.game_field.paleta_length/2)+2, 2+int(self.game_field.paleta_length/2))
                         while not 2 <= y_hit < 29:
                             y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(
@@ -805,13 +852,21 @@ class Game:
 
             # Se realizan los movimientos y se modifica la pantalla
             self.game_field.clean_matrix()
+
+            matrix = self.game_field.get_matrix()
             self.ball_x += 1 * self.game_field.get_ball_direction()[0]
             self.ball_y += 1 * self.game_field.get_ball_direction()[1]
             self.bola = Bola(self.ball_x, self.ball_y, block_width, block_height)
+            self.bola.mod_matrix(matrix)
             self.player1_1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
             self.player2_1 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
             self.player1_2 = Paleta(self.player1_2x, self.player1_2y, block_width, block_height)
             self.player2_2 = Paleta(self.player2_2x, self.player2_2y, block_width, block_height)
+            self.player1_1.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player2_2.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player2_1.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player1_2.mod_matrix(matrix, self.game_field.paleta_length)
+            self.game_field.set_matrix(matrix)
             self.game_field.screen()
             if self.game_field.pc:
                 self.message_to_screen('Press w to add a new player', white, 200, 250)
@@ -860,6 +915,7 @@ class Game:
     # S: Nueva posicion de la bola en x y y
     # R: -
     def ball_bounce_singles(self, ball_x, ball_y, player1_1x, player1_1y, player2_1x, player2_1y):
+        global start_boring_timer
         if (self.game_field.get_ball_direction()[
                 0] > 0 and ball_x + 1 == player2_1x and (
                     player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length or (
@@ -910,16 +966,22 @@ class Game:
                 self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
+                if not self.pc:
+                    self.game_field.levelup_animation(spec=1)
                 ball_x = 19
                 ball_y = 12
             elif self.game_field.pc:
-                self.game_field.levelup_animation()
-                self.message_to_screen('Level Up!!', white, size = 'large')
-                self.game_field.reset_scores()
-                self.player1_1y = 1
-                self.player2_2y = 1
-                self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
-                self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                if self.game_field.pc:
+                    self.game_field.reset_scores()
+                    lvlup = self.game_field.levelup_animation()
+                    if lvlup:
+                        self.message_to_screen('Level Up!!', white, size='large')
+                        self.player1_1y = 1
+                        self.player2_1y = 1
+                        self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                        self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                    else:
+                        self.win(1)
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
@@ -932,6 +994,7 @@ class Game:
                 if self.game_field.pc:
                     fail_sound.play()
                 else:
+                    self.game_field.levelup_animation(spec=1)
                     point_sound.play()
                 ball_x = 19
                 ball_y = 12
@@ -1046,15 +1109,20 @@ class Game:
                 ball_y = 12
                 if self.game_field.pc:
                     choosed = False
+                else:
+                    self.game_field.levelup_animation(spec=1)
             else:
                 if self.game_field.pc:
                     self.game_field.reset_scores()
-                    self.game_field.levelup_animation()
-                    self.message_to_screen('Level Up!!', white, size = 'large')
-                    self.player1_1y = 1
-                    self.player2_1y = 1
-                    self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
-                    self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                    lvlup = self.game_field.levelup_animation()
+                    if lvlup:
+                        self.message_to_screen('Level Up!!', white, size='large')
+                        self.player1_1y = 1
+                        self.player2_1y = 1
+                        self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                        self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                    else:
+                        self.win(1)
                 else:
                     self.win(1)
                 clock.tick(3)
@@ -1066,6 +1134,8 @@ class Game:
                 if self.game_field.pc:
                     fail_sound.play()
                 else:
+                    start_boring_timer = time.time()
+                    self.game_field.levelup_animation(spec=1)
                     point_sound.play()
                 start_boring_timer = time.time()
                 ball_x = 19
@@ -1129,21 +1199,15 @@ class Game:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_RETURN:
-                        self.__init__()
+                        self.__init__(self.mode, self.pc)
                     elif event.key == pygame.K_SPACE:
-                        print('Medinaaaaaaaaaa')
+                        pygame.quit()
+                        quit()
 
             pygame.display.update()
 
-
-
-
-
-
-
-Game()
+Game(sys.argv[1], bool(sys.argv[2]))
 
 # Finalizacion del juego
 pygame.quit()
 quit()
-
