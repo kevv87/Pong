@@ -9,9 +9,6 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
 
-
-
-
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -29,7 +26,7 @@ import random
 import mutagen.oggvorbis
 import time
 
-ijk =0
+
 pausa=False
 
 # Colores importantes
