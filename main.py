@@ -1160,6 +1160,7 @@ class Game:
 
 
 def root():
+    pygame.init()
     root = Tk() #Hacer la ventana
 
     # musica de lobby
@@ -1191,25 +1192,6 @@ def root():
 
     pygame.mixer.init()
 
-    def modeS():
-        mode = 'singles'
-
-    def modeD():
-        mode = 'doubles'
-
-    singlesL = Label(canvas, text="singles", bg="black", fg="white", font="courier 18")
-    singlesL.pack()
-    singlesL.place(x=250, y=500)
-    singles = Radiobutton(canvas,command=modeS, bg="black", value=1, variable=1)
-    singles.pack()
-    singles.place(x=290, y=540)
-
-    doublesL= Label(canvas, text="doubles",bg="black", fg="white", font="courier 18")
-    doublesL.pack()
-    doublesL.place(x=440,y=500)
-    doubles = Radiobutton(canvas, command=modeD,bg="black", value=2,variable=1)
-    doubles.pack()
-    doubles.place(x=480,y=540)
 
     def toplevelHelp():
         root.withdraw()
@@ -1272,21 +1254,46 @@ def root():
         player2.pack()
         player2.place(x=500, y=480)
 
+    def modeS():
+        global ver
+        ver = 'singles'
+
+    def modeD():
+        global ver
+        ver = 'doubles'
+
+    singlesL = Label(canvas, text="singles", bg="black", fg="white", font="courier 18")
+    singlesL.pack()
+    singlesL.place(x=250, y=500)
+    singles = Radiobutton(canvas,command=modeS, bg="black", value=1, variable=1)
+    singles.pack()
+    singles.place(x=290, y=540)
+
+    doublesL= Label(canvas, text="doubles",bg="black", fg="white", font="courier 18")
+    doublesL.pack()
+    doublesL.place(x=440,y=500)
+    doubles = Radiobutton(canvas, command=modeD,bg="black", value=2,variable=1)
+    doubles.pack()
+    doubles.place(x=480,y=540)
+
 
     def unir2():
         select_sound.play()
         toplevelHelp()
 
     def unir3():
+        global ver
+        MODE = ver
         select_sound.play()
         root.destroy()
-        Game()
+        Game(MODE,True)
 
     def unir4():
+        global ver
+        MODE = ver
         select_sound.play()
         root.destroy()
-        pygame.init()
-        Game()
+        Game(MODE,False)
 
 
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
@@ -1297,6 +1304,8 @@ def root():
 
     help1 = Button(canvas,command=unir2, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
     help1.place(x=260, y=380)
+
+
 
     root.mainloop()
 
