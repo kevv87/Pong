@@ -398,7 +398,8 @@ class Tablero:
             return False
         else:
             pass
-        self.music_update()
+        if self.pc:
+            self.music_update()
         return True
 
     # Metodos de actualizacion
