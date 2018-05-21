@@ -377,9 +377,12 @@ class Tablero:
         self.screen()
 
     # Se encarga de la animacion en la transicion de nivel
-    def levelup_animation(self):
+    def levelup_animation(self, spec=0):
         if self.level != 3:
-            self.level += 1
+            if not spec:
+                self.level += 1
+            else:
+                self.level = spec
             self.update_paleta()
             self.update_velocity()
             for n in range(len(self.game_matrix)):
@@ -940,6 +943,7 @@ class Game:
                 self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
+                self.game_field.levelup_animation(spec=1)
                 ball_x = 19
                 ball_y = 12
             elif self.game_field.pc:
@@ -959,6 +963,7 @@ class Game:
             if self.game_field.get_enemy_score() < 10:
                 self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
                 start_boring_timer = time.time()
+                self.game_field.levelup_animation(spec=1)
                 if self.game_field.pc:
                     fail_sound.play()
                 else:
@@ -1072,6 +1077,7 @@ class Game:
                 self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
+                self.game_field.levelup_animation(spec=1)
                 ball_x = 19
                 ball_y = 12
                 if self.game_field.pc:
@@ -1098,6 +1104,7 @@ class Game:
                 else:
                     point_sound.play()
                 start_boring_timer = time.time()
+                self.game_field.levelup_animation(spec=1)
                 ball_x = 19
                 ball_y = 12
             else:
