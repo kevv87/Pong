@@ -160,7 +160,7 @@ def root():
         global ver
         MODE = ver
         root.destroy()
-        os.system('python3 main.py %s %b' %())
+        os.system('python3 main.py %s %r' %(MODE, False))
         print('Finish')
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
@@ -168,7 +168,7 @@ def root():
         global ver
         MODE = ver
         root.destroy()
-        os.system('python3 main.py %s %b' %())
+        os.system('python3 main.py %s %r' %(MODE, True))
         print('Finish')
 
     # botón que ejecuta el juego en modo pvp mediante unir4
