@@ -27,8 +27,19 @@ def root():
     pygame.mixer.music.play(-1)
 
     root.title() #título de la ventana
-    root.minsize(800,600) #Tamaño mínimo de la ventana
+
+    # configuracion de la pantalla
+    width = 800
+    height = 600
+
+    ws = root.winfo_screenwidth()  # largo de la pantalla
+    hs = root.winfo_screenheight() # Anchura de la pantalla
+
+    x = (ws / 2) - (width / 2)
+    y = (hs / 2) - (height / 2)
+
     root.resizable(width = NO, height = NO) #Que el tamaño de la ventana no cambie
+    root.geometry("%dx%d+%d+%d" %(width, height, x, y))
 
     # Se crea el canvas y se configura
     canvas = Canvas(root, width=800, height=600, bg="#000000")
@@ -55,8 +66,14 @@ def root():
         root.withdraw()
         toplevel_help= Toplevel()
         toplevel_help.title("Help")
-        toplevel_help.minsize(800,600)
-        toplevel_help.resizable(width=NO, height=NO)
+        ws = toplevel_help.winfo_screenwidth()  # largo de la pantalla
+        hs = toplevel_help.winfo_screenheight()  # Anchura de la pantalla
+
+        x = (ws / 2) - (width / 2)
+        y = (hs / 2) - (height / 2)
+
+        toplevel_help.resizable(width=NO, height=NO)  # Que el tamaño de la ventana no cambie
+        toplevel_help.geometry("%dx%d+%d+%d" % (width, height, x, y))
         toplevel_help.configure(bg="Black")
 
         canvas2 = Canvas(toplevel_help, width=800, height=600, bg="#000000")  # Se crea el canvas2 y se configura

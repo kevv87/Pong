@@ -942,7 +942,8 @@ class Game:
                 self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
-                self.game_field.levelup_animation(spec=1)
+                if not self.pc:
+                    self.game_field.levelup_animation(spec=1)
                 ball_x = 19
                 ball_y = 12
             elif self.game_field.pc:
@@ -962,10 +963,10 @@ class Game:
             if self.game_field.get_enemy_score() < 10:
                 self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
                 start_boring_timer = time.time()
-                self.game_field.levelup_animation(spec=1)
                 if self.game_field.pc:
                     fail_sound.play()
                 else:
+                    self.game_field.levelup_animation(spec=1)
                     point_sound.play()
                 ball_x = 19
                 ball_y = 12
@@ -1076,11 +1077,12 @@ class Game:
                 self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
-                self.game_field.levelup_animation(spec=1)
                 ball_x = 19
                 ball_y = 12
                 if self.game_field.pc:
                     choosed = False
+                else:
+                    self.game_field.levelup_animation(spec=1)
             else:
                 if self.game_field.pc:
                     self.game_field.reset_scores()
@@ -1101,9 +1103,9 @@ class Game:
                 if self.game_field.pc:
                     fail_sound.play()
                 else:
+                    self.game_field.levelup_animation(spec=1)
                     point_sound.play()
                 start_boring_timer = time.time()
-                self.game_field.levelup_animation(spec=1)
                 ball_x = 19
                 ball_y = 12
             else:
