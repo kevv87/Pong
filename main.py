@@ -5,11 +5,11 @@ import time
 from tkinter import *  #Importa todo de tkinter
 from tkinter import font
 
-ijk =0
-
-# Inicializacion de pygame
 
 pygame.init()
+
+
+
 
 # Colores importantes
 white = (255, 255, 255)
@@ -517,6 +517,9 @@ class Game:
         # Controlan el juego
         self.game = True
         self.pause = False
+
+        self.mode = MODE
+        self.pc = PC
 
         self.gameloop(MODE)
 
@@ -1148,7 +1151,7 @@ class Game:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_RETURN:
-                        self.__init__()
+                        self.__init__(self.mode, self.pc)
                     elif event.key == pygame.K_SPACE:
                         pygame.quit()
                         root()
