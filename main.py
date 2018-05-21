@@ -1278,11 +1278,11 @@ def root():
         Game()
 
     def unir4():
-        for event in pygame.event.get():
-            event.key = pygame.K_w
         select_sound.play()
         root.destroy()
         Game()
+        for event in pygame.event.get():
+            event.key = pygame.K_w
 
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
     pvp.place(x=260, y=260)
