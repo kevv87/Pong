@@ -159,6 +159,7 @@ def root():
         MODE = ver
         root.destroy()
         os.system('python3 main.py %s %b' %())
+        print('Finish')
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir4():
@@ -166,6 +167,7 @@ def root():
         MODE = ver
         root.destroy()
         os.system('python3 main.py %s %b' %())
+        print('Finish')
 
     # botón que ejecuta el juego en modo pvp mediante unir4
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
