@@ -173,23 +173,23 @@ def root():
         select_sound.play()
         toplevelHelp()
 
-    # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
+    # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir3():
         global ver
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, False))
+        os.system('python3 main.py %s %r' %(MODE, True))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
-    # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
+    # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
         global ver
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, True))
+        os.system('python3 main.py %s %r' %(MODE, ''))
         pygame.mixer.music.play(-1)
         root.deiconify()
 

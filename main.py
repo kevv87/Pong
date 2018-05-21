@@ -319,11 +319,6 @@ class Tablero:
                         self.game_matrix[n][m] = False
         self.scores()
 
-
-
-
-
-
     # Pausa el juego
     def pause(self):
         pause = True
@@ -382,14 +377,21 @@ class Tablero:
         if self.level != 3:
             if not spec:
                 self.level += 1
+                self.update_paleta()
+                self.update_velocity()
+                for n in range(len(self.game_matrix)):
+                    for m in range(len(self.game_matrix)):
+                        if n % 2 == 0 and m == 19 and n != 0 and n != 24:
+                            self.game_matrix[n][m] = False
+                    self.screen()
             else:
                 self.level = spec
-            self.update_paleta()
-            self.update_velocity()
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix)):
-                    if n % 2 == 0 and m == 19 and n != 0 and n != 24:
-                        self.game_matrix[n][m] = False
+                self.update_paleta()
+                self.update_velocity()
+                for n in range(len(self.game_matrix)):
+                    for m in range(len(self.game_matrix)):
+                        if n % 2 == 0 and m == 19 and n != 0 and n != 24:
+                            self.game_matrix[n][m] = False
                 self.screen()
                 pygame.display.update()
         elif self.pc:
@@ -483,9 +485,10 @@ class Game:
     def __init__(self, MODE, PC):
         global choosed
         global start_boring_timer
+        print(PC)
 
         # Instancia del Tablero
-        self.game_field = Tablero(PC, block_height, block_width)
+        self.game_field = Tablero(bool(PC), block_height, block_width)
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -521,7 +524,7 @@ class Game:
         self.pause = False
 
         self.mode = MODE
-        self.pc = PC
+        self.pc = bool(PC)
 
         self.gameloop(MODE)
 
@@ -543,6 +546,7 @@ class Game:
         while self.game:
 
             # Reconocimiento de eventos
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.game = False
@@ -551,7 +555,7 @@ class Game:
                         self.player1_1up_y = True
                     elif event.key == pygame.K_DOWN:
                         self.player1_1down_y = True
-                    elif event.key == pygame.K_w and not self.game_field.pc:
+                    elif event.key == pygame.K_w and not self.pc:
                         self.player2_1up_y = True
                     elif event.key == pygame.K_w:
                         self.game_field.pc = False
@@ -559,7 +563,7 @@ class Game:
                         self.game_field.new_player()
                         self.game_field.reset_scores()
                         start_boring_timer = time.time()
-                    elif event.key == pygame.K_s and not self.game_field.pc:
+                    elif event.key == pygame.K_s and not self.pc:
                        self.player2_1down_y = True
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
@@ -910,6 +914,7 @@ class Game:
     # S: Nueva posicion de la bola en x y y
     # R: -
     def ball_bounce_singles(self, ball_x, ball_y, player1_1x, player1_1y, player2_1x, player2_1y):
+        global start_boring_timer
         if (self.game_field.get_ball_direction()[
                 0] > 0 and ball_x + 1 == player2_1x and (
                     player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length or (
@@ -1128,6 +1133,7 @@ class Game:
                 if self.game_field.pc:
                     fail_sound.play()
                 else:
+                    start_boring_timer = time.time()
                     self.game_field.levelup_animation(spec=1)
                     point_sound.play()
                 start_boring_timer = time.time()
@@ -1199,7 +1205,7 @@ class Game:
 
             pygame.display.update()
 
-Game(sys.argv[1], sys.argv[2])
+Game(sys.argv[1], bool(sys.argv[2]))
 
 # Finalizacion del juego
 pygame.quit()
