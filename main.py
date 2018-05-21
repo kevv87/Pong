@@ -476,12 +476,13 @@ class Paleta:
 
 class Game:
     global mode
-    def __init__(self):
+    def __init__(self, MODE, PC):
         global choosed
         global start_boring_timer
+        pygame.init()
 
         # Instancia del Tablero
-        self.game_field = Tablero(True, block_height, block_width)
+        self.game_field = Tablero(PC, block_height, block_width)
 
         # Posiciones iniciales de los jugadores
 
@@ -517,7 +518,7 @@ class Game:
         self.game = True
         self.pause = False
 
-        self.gameloop('singles')
+        self.gameloop(MODE)
 
     def gameloop(self, mode):
         global start_boring_timer
@@ -1154,6 +1155,7 @@ class Game:
                         quit()
 
 
+
             pygame.display.update()
 
 
@@ -1278,7 +1280,6 @@ def root():
     def unir3():
         select_sound.play()
         root.destroy()
-        pygame.init()
         Game()
 
     def unir4():
