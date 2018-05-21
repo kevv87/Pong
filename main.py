@@ -3,7 +3,9 @@ import random
 import mutagen.oggvorbis
 import time
 import sys
+import os
 
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
 
@@ -597,6 +599,23 @@ class Game:
                 self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 start_boring_timer = time.time()
             # Inteligencia artificial cuando la pc esta habilitada
+                try:
+                    choosed
+                except:
+                    choosed = False
+                nxt_move = 0
+                if self.ball_x == 1:
+                    choice_hit = random.choice([-1, 0, 1])
+                    choosed = True
+                elif self.ball_x == 12 and not choosed:
+                    choice_hit = random.choice([-1, 0, 1])
+                    choosed = True
+                elif self.ball_x == 20 and not choosed:
+                    choice_hit = random.choice([-1, 0, 1])
+                    choosed = True
+                elif self.ball_x == 27:
+                    choice_hit = random.choice([-1, 0, 1])
+                    choosed = True
             if self.game_field.pc and self.game_field.get_ball_direction()[0] > 0:
                 if self.ball_x == 1 or self.ball_x == 20:
                     choice_hit = random.choice([-1, 0, 1])
@@ -734,20 +753,23 @@ class Game:
                     choosed = False
                 nxt_move = 0
                 if self.ball_x == 1:
+                    choice_hit = random.choice([-1, 0, 1])
                     paleta_choose = random.choice([1, 2])
                     choosed = True
                 elif self.ball_x == 12 and not choosed:
+                    choice_hit = random.choice([-1, 0, 1])
                     paleta_choose = random.choice([1, 2])
                     choosed = True
                 elif self.ball_x == 20 and not choosed:
+                    choice_hit = random.choice([-1, 0, 1])
                     paleta_choose = random.choice([1, 2])
                     choosed = True
                 elif self.ball_x == 27:
+                    choice_hit = random.choice([-1, 0, 1])
                     paleta_choose = 1
                     choosed = True
                 if paleta_choose == 1:
                     if self.ball_x == 1 or self.ball_x == 20 or self.ball_x == 12:
-                        choice_hit = random.choice([-1, 0, 1])
                         y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(-int(self.game_field.paleta_length/2)+2, 2+int(self.game_field.paleta_length/2))
                         while not 2 <= y_hit < 29:
                             y_hit = self.simulacion(self.ball_x, self.ball_y, self.game_field.get_ball_direction()[1]) + random.randint(
