@@ -1172,7 +1172,7 @@ class Game:
 
             pygame.display.update()
 
-Game(sys.argv[0], sys.argv[1])
+Game(sys.argv[1], sys.argv[2])
 
 # Finalizacion del juego
 pygame.quit()
