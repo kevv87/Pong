@@ -1,8 +1,10 @@
 import pygame
 import mutagen.oggvorbis
 import os
+from tkinter import *  #Importa todo de tkinter}
 
-from tkinter import *  #Importa todo de tkinter
+#inicia pygame
+pygame.init()
 
 #Sonidos
 select_sound = pygame.mixer.Sound('sounds/select.ogg')
