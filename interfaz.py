@@ -1,5 +1,7 @@
 import pygame
 import mutagen.oggvorbis
+import os
+
 from tkinter import *  #Importa todo de tkinter
 
 
@@ -149,17 +151,15 @@ def root():
     def unir3():
         global ver
         MODE = ver
-        select_sound.play()
         root.destroy()
-        Game(MODE,True)
+        os.system('python3 main.py %s %b' %())
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir4():
         global ver
         MODE = ver
-        select_sound.play()
         root.destroy()
-        Game(MODE,False)
+        os.system('python3 main.py %s %b' %())
 
     # botón que ejecuta el juego en modo pvp mediante unir4
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)

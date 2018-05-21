@@ -2,7 +2,7 @@ import pygame
 import random
 import mutagen.oggvorbis
 import time
-
+import sys
 
 
 pygame.init()
@@ -1173,6 +1173,8 @@ class Game:
 
 
             pygame.display.update()
+
+Game(sys.argv[0], sys.argv[1])
 
 # Finalizacion del juego
 pygame.quit()
