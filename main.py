@@ -827,13 +827,21 @@ class Game:
 
             # Se realizan los movimientos y se modifica la pantalla
             self.game_field.clean_matrix()
+
+            matrix = self.game_field.get_matrix()
             self.ball_x += 1 * self.game_field.get_ball_direction()[0]
             self.ball_y += 1 * self.game_field.get_ball_direction()[1]
             self.bola = Bola(self.ball_x, self.ball_y, block_width, block_height)
+            self.bola.mod_matrix(matrix)
             self.player1_1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
             self.player2_1 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
             self.player1_2 = Paleta(self.player1_2x, self.player1_2y, block_width, block_height)
             self.player2_2 = Paleta(self.player2_2x, self.player2_2y, block_width, block_height)
+            self.player1_1.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player2_2.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player2_1.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player1_2.mod_matrix(matrix, self.game_field.paleta_length)
+            self.game_field.set_matrix(matrix)
             self.game_field.screen()
             if self.game_field.pc:
                 self.message_to_screen('Press w to add a new player', white, 200, 250)
