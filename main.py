@@ -482,6 +482,20 @@ class Paleta:
                             matrix[n+i][m] = True
         return matrix
 
+# Clase encargada de guardar la posicion de cada obstaculo, asi como crearlos dentro de la matriz.
+class Obstaculo:
+    def __init__(self, posx, posy, width, height):
+        self.x = posx
+        self.y = posy
+        self.width = width
+        self.height = height
+
+    def create(self, matrix):
+        for n in range(len(matrix)):
+            for m in range(len(matrix[0])):
+                if self.x + self.width > m >= self.x and self.y + self.height > n >= self.y:
+                    matrix[n][m] == True
+        return matrix
 
 class Game:
     global mode
@@ -521,6 +535,8 @@ class Game:
 
         self.ball_x = 19
         self.ball_y = 12
+
+        self.obstaculo_list = []
 
         # Controlan el juego
         self.game = True
@@ -1227,6 +1243,17 @@ class Game:
 
             pygame.display.update()
 
+    def obstaculos(self):
+        matrix = self.game_field.get_matrix()
+        if self.game_field.level == 1:
+            for i in range(1):
+                self.obstaculo_list.append('')
+            for i in range(1):
+                self.obstaculo_list[i] = Obstaculo(random.randint(1,23), random.randint(1,38), 2, 2)
+        elif self.game_field.level == 2:
+            pass
+        else:
+            pass
 Game(sys.argv[1], bool(sys.argv[2]))
 
 # Finalizacion del juego
