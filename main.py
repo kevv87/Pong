@@ -67,7 +67,12 @@ class Tablero:
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
+        self.practice = True
         self.paleta_length = 9 - (3*(self.level-1))
+        if not self.practice:
+            self.paleta_length_e = self.paleta_length
+        else:
+            self.paleta_length_e = 37
         self.lvl_music()
 
     # Metodos
@@ -477,6 +482,20 @@ class Paleta:
                             matrix[n+i][m] = True
         return matrix
 
+# Clase encargada de guardar la posicion de cada obstaculo, asi como crearlos dentro de la matriz.
+class Obstaculo:
+    def __init__(self, posx, posy, width, height):
+        self.x = posx
+        self.y = posy
+        self.width = width
+        self.height = height
+
+    def create(self, matrix):
+        for n in range(len(matrix)):
+            for m in range(len(matrix[0])):
+                if self.x + self.width > m >= self.x and self.y + self.height > n >= self.y:
+                    matrix[n][m] == True
+        return matrix
 
 class Game:
     global mode
@@ -498,7 +517,7 @@ class Game:
         self.player1_2x = 11
         self.player1_2y = (len(self.game_field.get_matrix()) - self.game_field.paleta_length) - 1
         self.player2_2x = len(self.game_field.get_matrix()[0]) - 11
-        self.player2_2y = len(self.game_field.get_matrix()) - 1 - self.game_field.paleta_length
+        self.player2_2y = len(self.game_field.get_matrix()) - 1 - self.game_field.paleta_length_e
 
         # Controlan el movimiento de los jugadores
 
@@ -516,6 +535,8 @@ class Game:
 
         self.ball_x = 19
         self.ball_y = 12
+
+        self.obstaculo_list = []
 
         # Controlan el juego
         self.game = True
@@ -582,7 +603,7 @@ class Game:
                 self.player1_1y -= 1
 
             # Movimiento de las paletas del segundo jugador
-            if self.player2_1down_y and self.player2_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
+            if self.player2_1down_y and self.player2_1y + self.game_field.paleta_length_e + 1 < len(self.game_field.get_matrix()):
                 self.player2_1y += 1
             elif self.player2_1up_y and self.player2_1y+1 > 2:
                 self.player2_1y -= 1
@@ -590,13 +611,13 @@ class Game:
             # Rebote de la pelota
             self.ball_x, self.ball_y = self.ball_bounce_singles(self.ball_x,self.ball_y,self.player1_1x,self.player1_1y,self.player2_1x,self.player2_1y)
             # Sube la dificultad si no hay goles
-            if time.time() - start_boring_timer > 10 and not self.game_field.pc:
+            if time.time() - start_boring_timer > 10 and not self.game_field.pc and not self.game_field.practice:
                 self.game_field.levelup_animation()
                 self.message_to_screen('Level Up!!', white, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
                 self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
-                self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length_e-1
                 start_boring_timer = time.time()
             # Inteligencia artificial cuando la pc esta habilitada
                 try:
@@ -666,10 +687,10 @@ class Game:
             self.player1 = Paleta(self.player1_1x, self.player1_1y, block_width, block_height)
             self.player2 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
             self.player1.mod_matrix(matrix, self.game_field.paleta_length)
-            self.player2.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player2.mod_matrix(matrix, self.game_field.paleta_length_e)
             self.game_field.set_matrix(matrix)
             self.game_field.screen()
-            if self.game_field.pc:
+            if self.game_field.pc and not self.game_field.practice:
                 self.message_to_screen('Press w to add a new player', white, 200, 250)
             pygame.display.update()
 
@@ -730,11 +751,18 @@ class Game:
                 self.player2_2y += 1
 
             # Movimiento de la bola
-            self.ball_x, self.ball_y = self.ball_bounce_doubles(self.ball_x,self.ball_y,self.player1_1x, self.player1_2x,self.player1_1y, self.player1_2y, self.player2_1x, self.player2_2x,
-                                                 self.player2_1y, self.player2_2y)
+            if not self.game_field.practice :
+                self.ball_x, self.ball_y = self.ball_bounce_doubles(self.ball_x,self.ball_y,self.player1_1x, self.player1_2x,self.player1_1y, self.player1_2y, self.player2_1x, self.player2_2x,
+                                                                   self.player2_1y, self.player2_2y)
+            elif self.game_field.ball_direction[0]<0:
+                self.ball_x, self.ball_y = self.ball_bounce_doubles(self.ball_x,self.ball_y,self.player1_1x, self.player1_2x,self.player1_1y, self.player1_2y, self.player2_1x, self.player2_2x,
+                                                                   self.player2_1y, self.player2_2y)
+            else:
+                self.ball_x, self.ball_y = self.ball_bounce_singles(self.ball_x,self.ball_y,self.player1_1x,self.player1_1y, self.player2_1x,
+                                                                    self.player2_1y)
 
             # Sube la dificultad si no hay goles
-            if time.time() - start_boring_timer > 10 and not self.game_field.pc:
+            if time.time() - start_boring_timer > 10 and not self.game_field.pc and not self.game_field.practice:
                 self.game_field.levelup_animation()
                 self.message_to_screen('Level Up!!', white, size = 'large')
                 self.player1_1y = 1
@@ -860,8 +888,8 @@ class Game:
             self.player1_2 = Paleta(self.player1_2x, self.player1_2y, block_width, block_height)
             self.player2_2 = Paleta(self.player2_2x, self.player2_2y, block_width, block_height)
             self.player1_1.mod_matrix(matrix, self.game_field.paleta_length)
-            self.player2_2.mod_matrix(matrix, self.game_field.paleta_length)
-            self.player2_1.mod_matrix(matrix, self.game_field.paleta_length)
+            self.player2_2.mod_matrix(matrix, self.game_field.paleta_length_e)
+            self.player2_1.mod_matrix(matrix, self.game_field.paleta_length_e)
             self.player1_2.mod_matrix(matrix, self.game_field.paleta_length)
             self.game_field.set_matrix(matrix)
             self.game_field.screen()
@@ -915,11 +943,11 @@ class Game:
         global start_boring_timer
         if (self.game_field.get_ball_direction()[
                 0] > 0 and ball_x + 1 == player2_1x and (
-                    player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length or (
+                    player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length_e or (
                     self.game_field.get_ball_direction()[
-                        1] > 0 and player2_1y <= ball_y + 1 <= player2_1y + self.game_field.paleta_length) or (
+                        1] > 0 and player2_1y <= ball_y + 1 <= player2_1y + self.game_field.paleta_length_e) or (
                             self.game_field.get_ball_direction()[
-                                1] < 0 and player2_1y <= ball_y - 1 <= player2_1y + self.game_field.paleta_length))) or (
+                                1] < 0 and player2_1y <= ball_y - 1 <= player2_1y + self.game_field.paleta_length_e))) or (
                 self.game_field.get_ball_direction()[
                     0] < 0 and ball_x - 1 == 0 and (player1_1y <= ball_y <= player1_1y + self.game_field.paleta_length or (
                 self.game_field.get_ball_direction()[
@@ -931,17 +959,29 @@ class Game:
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0] * -1, self.game_field.get_ball_direction()[1]))
 
             if self.game_field.get_ball_direction()[0] < 0:
-                if player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length / 3 -1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
-                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
-                elif player2_1y + self.game_field.paleta_length / 3 <= ball_y <= player2_1y + (
-                        2 * self.game_field.paleta_length) / 3 -1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
-                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
-                elif player2_1y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_1y + (
-                        3 * self.game_field.paleta_length) / 3 -1:
-                    self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
-                    self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                if player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length_e / 3 -1:
+                    if not self.game_field.practice:
+                        self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
+                        self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                    else:
+                        self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], random.randint(-1,1)))
+                        self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                elif player2_1y + self.game_field.paleta_length_e / 3 <= ball_y <= player2_1y + (
+                        2 * self.game_field.paleta_length_e) / 3 -1:
+                    if not self.game_field.practice:
+                        self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
+                        self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                    else:
+                        self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], random.randint(-1,1)))
+                        self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                elif player2_1y + (2 * self.game_field.paleta_length_e / 3) <= ball_y <= player2_1y + (
+                        3 * self.game_field.paleta_length_e) / 3 -1:
+                    if not self.game_field.practice:
+                        self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
+                        self.game_field.set_ball_velocity(self.game_field.ball_velocity)
+                    else:
+                        self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], random.randint(-1,1)))
+                        self.game_field.set_ball_velocity(self.game_field.ball_velocity)
                 # Pong
                 pong_sound.play()
             elif self.game_field.get_ball_direction()[0] > 0:
@@ -976,7 +1016,7 @@ class Game:
                         self.player1_1y = 1
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
-                        self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                        self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length_e-1
                     else:
                         self.win(1)
                 clock.tick(3)
@@ -1019,11 +1059,11 @@ class Game:
         global start_boring_timer
         global choosed
         if (self.game_field.get_ball_direction()[0] > 0 and (
-                (ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length or (
+                (ball_x + 1 == player2_1x and (player2_1y <= ball_y <= player2_1y + self.game_field.paleta_length_e or (
                         self.game_field.get_ball_direction()[1] > 0 and player2_1y <= ball_y + 1 <= player2_1y) or (
                                                        self.game_field.get_ball_direction()[
                                                            1] < 0 and player2_1y <= ball_y - 1 <= player2_1y))) or (
-                        ball_x + 1 == player2_2x and (player2_2y <= ball_y <= player2_2y + self.game_field.paleta_length or (
+                        ball_x + 1 == player2_2x and (player2_2y <= ball_y <= player2_2y + self.game_field.paleta_length_e or (
                         self.game_field.get_ball_direction()[1] > 0 and player2_2y <= ball_y + 1 <= player2_2y) or (
                                                               self.game_field.get_ball_direction()[
                                                                   1] < 0 and player2_2y <= ball_y - 1 <= player2_2y))))) or (
@@ -1038,14 +1078,14 @@ class Game:
                                                                   1] > 0 and player1_2y <= ball_y + 1 <= player2_1y))))):
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0] * -1, self.game_field.get_ball_direction()[1]))
             if self.game_field.get_ball_direction()[0] < 0 and ball_x > len(self.game_field.get_matrix()[0]) - 10:
-                if player2_1y <= ball_y <= player2_1y + (self.game_field.paleta_length / 3) - 1:
+                if player2_1y <= ball_y <= player2_1y + (self.game_field.paleta_length_e / 3) - 1:
                     self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
                     self.game_field.set_ball_velocity(30)
-                elif player2_1y + self.game_field.paleta_length / 3 <= ball_y <= player2_1y + (
-                        (2 * self.game_field.paleta_length) / 3) - 1:
+                elif player2_1y + self.game_field.paleta_length_e / 3 <= ball_y <= player2_1y + (
+                        (2 * self.game_field.paleta_length_e) / 3) - 1:
                     self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
                     self.game_field.set_ball_velocity(40)
-                elif player2_1y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_1y + (( 3 * self.game_field.paleta_length) / 3) - 1:
+                elif player2_1y + (2 * self.game_field.paleta_length_e / 3) <= ball_y <= player2_1y + (( 3 * self.game_field.paleta_length_e) / 3) - 1:
                     self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
                     self.game_field.set_ball_velocity(30)
                 # Pong
@@ -1053,14 +1093,14 @@ class Game:
                 if self.game_field.pc:
                     choosed = False
             elif self.game_field.get_ball_direction()[0] < 0:
-                if player2_2y <= ball_y <= player2_2y + (self.game_field.paleta_length / 3) - 1:
+                if player2_2y <= ball_y <= player2_2y + (self.game_field.paleta_length_e / 3) - 1:
                     self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 1))
                     self.game_field.set_ball_velocity(30)
-                elif player2_2y + self.game_field.paleta_length / 3 <= ball_y <= player2_2y + (
-                        (2 * self.game_field.paleta_length) / 3) - 1:
+                elif player2_2y + self.game_field.paleta_length_e / 3 <= ball_y <= player2_2y + (
+                        (2 * self.game_field.paleta_length_e) / 3) - 1:
                     self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], 0))
                     self.game_field.set_ball_velocity(40)
-                elif player2_2y + (2 * self.game_field.paleta_length / 3) <= ball_y <= player2_2y + ((3 * self.game_field.paleta_length) / 3) - 1:
+                elif player2_2y + (2 * self.game_field.paleta_length_e / 3) <= ball_y <= player2_2y + ((3 * self.game_field.paleta_length_e) / 3) - 1:
                     self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], -1))
                     self.game_field.set_ball_velocity(30)
                 # Pong
@@ -1117,7 +1157,7 @@ class Game:
                         self.player1_1y = 1
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
-                        self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
+                        self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length_e-1
                     else:
                         self.win(1)
                 else:
@@ -1203,6 +1243,17 @@ class Game:
 
             pygame.display.update()
 
+    def obstaculos(self):
+        matrix = self.game_field.get_matrix()
+        if self.game_field.level == 1:
+            for i in range(1):
+                self.obstaculo_list.append('')
+            for i in range(1):
+                self.obstaculo_list[i] = Obstaculo(random.randint(1,23), random.randint(1,38), 2, 2)
+        elif self.game_field.level == 2:
+            pass
+        else:
+            pass
 Game(sys.argv[1], bool(sys.argv[2]))
 
 # Finalizacion del juego
