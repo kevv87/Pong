@@ -67,7 +67,7 @@ class Tablero:
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
-        self.practice = True
+        self.practice = False
         self.paleta_length = 9 - (3*(self.level-1))
         if not self.practice:
             self.paleta_length_e = self.paleta_length
