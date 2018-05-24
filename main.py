@@ -1046,6 +1046,26 @@ class Game:
                 ball_y = 12
             else:
                 self.win(-1)
+        for i in self.obstaculo_list:
+                if i.y == ball_y and i.x == ball_x:
+                    print('here')
+                if (self.game_field.get_ball_direction()[
+                0] > 0 and ball_x + 1 == i.x and (
+                    i.y <= ball_y <= i.y + i.height or (
+                    self.game_field.get_ball_direction()[
+                        1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
+                            self.game_field.get_ball_direction()[
+                                1] < 0 and i.y <= ball_y - 1 <= i.y + i.height))) or (
+                self.game_field.get_ball_direction()[
+                    0] < 0 and ball_x - 1 == i.x and (i.y <= ball_y <= i.y + i.height or (
+                self.game_field.get_ball_direction()[
+                    1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
+                                                            self.game_field.get_ball_direction()[
+                                                                1] > 0 and i.y <= ball_y + 1 <= i.y + i.height)
+                )):
+                    self.game_field.set_ball_direction(
+                        (self.game_field.get_ball_direction()[0] * -1, random.randint(-1,1)))
+                    break
         if (self.game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(self.game_field.get_matrix()) - 1) or (
                 self.game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], self.game_field.get_ball_direction()[1] * -1))
