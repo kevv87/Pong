@@ -10,7 +10,7 @@ gameDisplay = pygame.display.set_mode((width, height))
 white = (255, 255, 255)
 black = (0, 0, 0)
 
-client = Client(('localhost', 1234))
+#client = Client(('localhost', 1234))
 listen = Listener(('localhost', 1235))
 conn = listen.accept()
 
@@ -25,16 +25,16 @@ def screen(matrix):
             else:
                 pygame.draw.rect(gameDisplay, black, [m * block_width, n * block_height,
                                                                block_width, block_height])
+    pygame.display.update()
 
 
 while True:
-    client.send(['hello', 'world'])
     matriz = conn.recv()
 
     # Si el mensaje recibido es la palabra close se cierra la aplicacion
     if matriz == "close":
         break
     screen(matriz)
-
+    print('in')
 
 print("Adios.")

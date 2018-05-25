@@ -1264,8 +1264,8 @@ class Game:
             pass
 
     def start_server(self):
-        self.listener = Listener(('localhost', 1234))
-        self.conn = self.listener.accept()
+        #self.listener = Listener(('localhost', 1234))
+        #self.conn = self.listener.accept()
         self.client = Client(('localhost', 1235))
 
 
