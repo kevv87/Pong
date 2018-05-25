@@ -1,6 +1,8 @@
 import pygame
 from multiprocessing.connection import Listener, Client
 
+port = int(input('Puerto:'))
+
 pygame.init()
 width = 800
 height = 600
@@ -10,8 +12,10 @@ gameDisplay = pygame.display.set_mode((width, height))
 white = (255, 255, 255)
 black = (0, 0, 0)
 
-listen = Listener(('localhost', 1235))
+listen = Listener(('', port))
 conn = listen.accept()
+
+setups = []
 
 
 # Convierte los valores verdaderos de la matriz a casillas en blanco en la pantalla
@@ -28,11 +32,14 @@ def screen(matrix):
 
 def startup():
     global client
-    msg = conn.recv()
+    global setups
+    msg, port = conn.recv()
+    print(port)
     while msg != 'server-client':
         pass
-    client = Client(('localhost', 1234))
+    client = Client(('localhost', int(port)))
     client.send('client-server')
+    setups = conn.recv()
 
 startup()
 

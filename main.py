@@ -504,9 +504,12 @@ class Game:
         global choosed
         global start_boring_timer
 
-        self.client = None
-        self.listener = None
-        self.conn = None
+        self.client1 = None
+        self.listener1 = None
+        self.conn1 = None
+        self.client2 = None
+        self.listener2 = None
+        self.conn2 = None
 
         # Instancia del Tablero
         self.game_field = Tablero(bool(PC), block_height, block_width)
@@ -572,7 +575,7 @@ class Game:
 
             # Reconocimiento de eventos
 
-            if self.conn == None:
+            if self.conn1 == None:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.game = False
@@ -603,7 +606,7 @@ class Game:
                         elif event.key == pygame.K_s:
                             self.player2_1down_y = False
             else:
-                eventos = self.conn.recv()
+                eventos = self.conn1.recv()
                 for keydown in eventos[0]:
                     print(keydown)
                     if keydown == 'UP':
@@ -960,10 +963,12 @@ class Game:
             self.player2_1.mod_matrix(matrix, self.game_field.paleta_length_e)
             self.player1_2.mod_matrix(matrix, self.game_field.paleta_length)
             self.game_field.set_matrix(matrix)
-            self.game_field.screen()
+            if self.conn == None:
+                self.game_field.screen()
+            else:
+                self.send_matrix(matrix)
             if self.game_field.pc:
                 self.message_to_screen('Press w to add a new player', white, 200, 250)
-            self.send_matrix(matrix)
             pygame.display.update()
 
             # Se controla la velocidad
@@ -1325,18 +1330,33 @@ class Game:
             pass
 
     def start_server(self):
-        self.client = Client(('localhost', 1235))
-        self.client.send('server-client')
-        self.listener = Listener(('localhost', 1234))
-        self.conn = self.listener.accept()
-        msg = self.conn.recv()
+        self.client1 = Client(('localhost', 1235))
+        self.client1.send(['server-client', 1234])
+        self.listener1 = Listener(('', 1234))
+        self.conn1 = self.listener1.accept()
+        msg = self.conn1.recv()
         while msg != 'client-server':
             pass
-        print('Connected')
+        setups = ['1', self.mode, self.pc]
+        self.client1.send(setups)
+        print('Connected to first player')
+        if not self.pc:
+            self.client2 = Client(('localhost', 1237))
+            self.client2.send(['server-client',1236])
+            self.listener2 = Listener(('', 1236))
+            self.conn2 = self.listener2.accept()
+            msg = self.conn2.recv()
+            while msg != 'client-server':
+                pass
+            setups = ['2', self.mode, self.pc]
+            self.client2.send(setups)
+            print('Connected to first player')
+        print('Connection stablished')
 
     def send_matrix(self, matrix):
-        if self.client != None:
-            self.client.send(matrix)
+        if self.client1 != None and self.client2 != None:
+            self.client1.send(matrix)
+            self.client2.send(matrix)
 
 Game(sys.argv[1], bool(sys.argv[2]))
 
