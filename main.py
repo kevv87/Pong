@@ -572,35 +572,66 @@ class Game:
 
             # Reconocimiento de eventos
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.game = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
+            if self.conn == None:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.game = False
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_UP:
+                            self.player1_1up_y = True
+                        elif event.key == pygame.K_DOWN:
+                            self.player1_1up_y = True
+                        elif event.key == pygame.K_w and not self.pc:
+                            self.player2_1up_y = True
+                        elif event.key == pygame.K_w:
+                            self.game_field.pc = False
+                            self.game_field.reset_level()
+                            self.game_field.new_player()
+                            self.game_field.reset_scores()
+                            start_boring_timer = time.time()
+                        elif event.key == pygame.K_s and not self.pc:
+                            self.player2_1down_y = True
+                        elif event.key == pygame.K_p:
+                            self.game_field.pause()
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_UP:
+                            self.player1_1up_y = False
+                        elif event.key == pygame.K_DOWN:
+                            self.player1_1down_y = False
+                        elif event.key == pygame.K_w:
+                            self.player2_1up_y = False
+                        elif event.key == pygame.K_s:
+                            self.player2_1down_y = False
+            else:
+                eventos = self.conn.recv()
+                for keydown in eventos[0]:
+                    print(keydown)
+                    if keydown == 'UP':
                         self.player1_1up_y = True
-                    elif event.key == pygame.K_DOWN:
+                    elif keydown == 'DOWN':
                         self.player1_1down_y = True
-                    elif event.key == pygame.K_w and not self.pc:
+                    elif keydown == 'W' and not self.pc:
                         self.player2_1up_y = True
-                    elif event.key == pygame.K_w:
+                    elif keydown == 'W':
                         self.game_field.pc = False
                         self.game_field.reset_level()
                         self.game_field.new_player()
                         self.game_field.reset_scores()
                         start_boring_timer = time.time()
-                    elif event.key == pygame.K_s and not self.pc:
-                       self.player2_1down_y = True
-                    elif event.key == pygame.K_p:
+                    elif keydown == 'S' and not self.pc:
+                        self.player2_1down_y = True
+                    elif keydown == 'P':
                         self.game_field.pause()
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_UP:
+                for keyup in eventos[1]:
+                    if keyup == 'UP':
                         self.player1_1up_y = False
-                    elif event.key == pygame.K_DOWN:
+                    elif keyup == 'DOWN':
                         self.player1_1down_y = False
-                    elif event.key == pygame.K_w:
+                    elif keyup == 'W':
                         self.player2_1up_y = False
-                    elif event.key == pygame.K_s:
+                    elif keyup == 'S':
                         self.player2_1down_y = False
+
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -1264,10 +1295,14 @@ class Game:
             pass
 
     def start_server(self):
-        #self.listener = Listener(('localhost', 1234))
-        #self.conn = self.listener.accept()
         self.client = Client(('localhost', 1235))
-
+        self.client.send('server-client')
+        self.listener = Listener(('localhost', 1234))
+        self.conn = self.listener.accept()
+        msg = self.conn.recv()
+        while msg != 'client-server':
+            pass
+        print('Connected')
 
     def send_matrix(self, matrix):
         if self.client != None:
