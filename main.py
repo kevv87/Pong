@@ -606,23 +606,14 @@ class Game:
                         elif event.key == pygame.K_s:
                             self.player2_1down_y = False
             else:
-                eventos = self.conn1.recv()
+                eventos1er = self.conn1.recv()
+                eventos2do = self.conn2.recv()
+                eventos = self.juntar(eventos1er, eventos2do)
                 for keydown in eventos[0]:
-                    print(keydown)
                     if keydown == 'UP':
                         self.player1_1up_y = True
                     elif keydown == 'DOWN':
                         self.player1_1down_y = True
-                    elif keydown == 'W' and not self.pc:
-                        self.player2_1up_y = True
-                    elif keydown == 'W':
-                        self.game_field.pc = False
-                        self.game_field.reset_level()
-                        self.game_field.new_player()
-                        self.game_field.reset_scores()
-                        start_boring_timer = time.time()
-                    elif keydown == 'S' and not self.pc:
-                        self.player2_1down_y = True
                     elif keydown == 'P':
                         self.game_field.pause()
                 for keyup in eventos[1]:
@@ -630,11 +621,18 @@ class Game:
                         self.player1_1up_y = False
                     elif keyup == 'DOWN':
                         self.player1_1down_y = False
-                    elif keyup == 'W':
+                for keydown in eventos[3]:
+                    if keydown == 'W':
+                        self.player2_1up_y = True
+                    elif keydown == 'S':
+                        self.player2_1down_y = True
+                    elif keydown == 'P':
+                        self.game_field.pause()
+                for keyup in eventos[4]:
+                    if keyup == 'W':
                         self.player2_1up_y = False
                     elif keyup == 'S':
                         self.player2_1down_y = False
-
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -1350,13 +1348,18 @@ class Game:
                 pass
             setups = ['2', self.mode, self.pc]
             self.client2.send(setups)
-            print('Connected to first player')
+            print('Connected to second player')
         print('Connection stablished')
 
     def send_matrix(self, matrix):
         if self.client1 != None and self.client2 != None:
             self.client1.send(matrix)
             self.client2.send(matrix)
+
+    def juntar(self, lista1, lista2):
+        for i in lista2:
+            lista1.append(i)
+        return lista1
 
 Game(sys.argv[1], bool(sys.argv[2]))
 
