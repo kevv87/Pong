@@ -12,10 +12,15 @@ gameDisplay = pygame.display.set_mode((width, height))
 white = (255, 255, 255)
 black = (0, 0, 0)
 
+# Fuentes predeterminadas
+smallfont = pygame.font.SysFont('couriernew', 25)
+mediumfont = pygame.font.SysFont('couriernew',50)
+largefont = pygame.font.SysFont('couriernew', 80)
+
 listen = Listener(('', port))
 conn = listen.accept()
 
-setups = []
+setups = [] # indice 0 es numero de jugador
 
 
 # Convierte los valores verdaderos de la matriz a casillas en blanco en la pantalla
@@ -30,6 +35,24 @@ def screen(matrix):
                                                                block_width, block_height])
     pygame.display.update()
 
+# Funcion encargada de renderizar el texto a poner en la pantalla, recibe un texto, un color y un tamanno y retorna
+# el texto renderizado asi como el punto central del mismo.
+def text_objects(text, color, size):
+    if size == 'small':
+        textSurface = smallfont.render(text, True, color)
+    if size == 'medium':
+        textSurface = mediumfont.render(text, True, color)
+    elif size == 'large':
+        textSurface = largefont.render(text, True, color)
+    return textSurface, textSurface.get_rect()
+
+    # Dado un mensaje, un color, un desplazamiento del centro de la pantalla en x, un desplazamiento del centor de la pantalla
+    # en y y un tamanno de los ya predeterminados, este funcion muestra un texto en la pantalla.
+def message_to_screen(msg, color,x_displace=0, y_displace=0, size='small'):
+    textSurf, textRect = text_objects(msg, color, size)
+    textRect.center = (width/2) + x_displace, (height/2) + y_displace
+    gameDisplay.blit(textSurf, textRect)
+
 def startup():
     global client
     global setups
@@ -41,10 +64,32 @@ def startup():
     client.send('client-server')
     setups = conn.recv()
 
+
+def pause():
+    global setups
+    cmd = 'pause'
+    msg_tosend = [[],[],[]]
+    while cmd != 'unpause':
+        #pygame.mixer.music.pause()
+        message_to_screen('Juego pausado', white, size='large')
+        message_to_screen('Presione p para reanudar', white, y_displace=80)
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    #pygame.mixer.music.unpause()
+                    msg_tosend[2].append('P')
+            elif event.type == pygame.QUIT:
+                quit()
+
+        pygame.display.update()
+        client.send(msg_tosend)
+        cmd = conn.recv()
+        print(cmd)
+
 startup()
 
 while True:
-
 
     msg_tosend = [[],[],[]]
 
@@ -77,7 +122,11 @@ while True:
     # Si el mensaje recibido es la palabra close se cierra la aplicacion
     if matriz == "close":
         break
-    screen(matriz)
+    elif matriz == 'pause':
+        pause()
+
+    if isinstance(matriz, list) and isinstance(matriz[0], list):
+        screen(matriz)
 
 
 print("Adios.")

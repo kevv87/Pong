@@ -322,35 +322,6 @@ class Tablero:
                         self.game_matrix[n][m] = False
         self.scores()
 
-    # Pausa el juego
-    def pause(self):
-        pause = True
-        for n in range(len(self.game_matrix)):
-            for m in range(len(self.game_matrix)):
-                if n % 2  == 0 and m == 19 and n != 0 and n != 24:
-                    self.game_matrix[n][m] = False
-            self.screen()
-            pygame.display.update()
-
-        while pause:
-            pygame.mixer.music.pause()
-            self.message_to_screen('Juego pausado', white, size='large')
-            self.message_to_screen('Presione p para reanudar', white, y_displace=80)
-
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_p:
-                        pygame.mixer.music.unpause()
-                        pause = False
-                elif event.type == pygame.QUIT:
-                    quit()
-
-            pygame.display.update()
-
-        for n in range(len(self.game_matrix)):
-            for m in range(len(self.game_matrix)):
-                if n % 2  == 0:
-                    self.game_matrix[n][m] = True
 
     # Presenta la animacion de un nuevo jugador
     def new_player(self):
@@ -547,10 +518,10 @@ class Game:
 
         # Controlan el juego
         self.game = True
-        self.pause = False
 
         self.mode = MODE
         self.pc = bool(PC)
+        self.server = True
 
         self.start_server()
         self.gameloop(MODE)
@@ -567,6 +538,52 @@ class Game:
             self.doubles()
         else:
             return 'Err'
+
+    # Pausa el juego
+    def pause(self, by=1):
+        pause = True
+        if self.server:
+            self.client1.send('pause')
+            self.client2.send('pause')
+        while pause:
+            pygame.mixer.music.pause()
+            self.message_to_screen('Juego pausado', white, size='large')
+            self.message_to_screen('Presione p para reanudar', white, y_displace=80)
+
+            if not self.server:
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_p:
+                            pygame.mixer.music.unpause()
+                            pause = False
+                    elif event.type == pygame.QUIT:
+                        quit()
+                pygame.display.update()
+            else:
+                if by == 1:
+                    cmd1 = self.conn1.recv()[2]
+                    for comando in cmd1:
+                        print(comando)
+                        if comando == 'P':
+                            print('unpausing')
+                            self.client2.send('unpause')
+                            self.client1.send('unpause')
+                            pause = False
+                        else:
+                            self.client1.send('still')
+                            self.client2.send('still')
+                else:
+                    print('2')
+                    cmd2 = self.conn2.recv()[2]
+                    if cmd2[0] == 'P':
+                        print('unpausing')
+                        self.client1.send('unpause')
+                        self.client2.send('unpause')
+                        pause = False
+                    else:
+                        self.client2.send('still')
+                        self.client1.send('still')
+
 
     def singles(self):
         global start_boring_timer
@@ -595,7 +612,7 @@ class Game:
                         elif event.key == pygame.K_s and not self.pc:
                             self.player2_1down_y = True
                         elif event.key == pygame.K_p:
-                            self.game_field.pause()
+                            self.pause()
                     if event.type == pygame.KEYUP:
                         if event.key == pygame.K_UP:
                             self.player1_1up_y = False
@@ -615,7 +632,7 @@ class Game:
                     elif keydown == 'DOWN':
                         self.player1_1down_y = True
                     elif keydown == 'P':
-                        self.game_field.pause()
+                        self.pause(1)
                 for keyup in eventos[1]:
                     if keyup == 'UP':
                         self.player1_1up_y = False
@@ -627,7 +644,7 @@ class Game:
                     elif keydown == 'S':
                         self.player2_1down_y = True
                     elif keydown == 'P':
-                        self.game_field.pause()
+                        self.pause(2)
                 for keyup in eventos[4]:
                     if keyup == 'W':
                         self.player2_1up_y = False
