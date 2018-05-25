@@ -743,7 +743,7 @@ class Game:
         while self.game:
 
             # Reconocimiento de eventos
-            if self.conn == None:
+            if self.conn1 == None:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.game = False
@@ -774,23 +774,14 @@ class Game:
                         elif event.key == pygame.K_s:
                             self.player2_1down_y = False
             else:
-                eventos = self.conn.recv()
+                eventos1er = self.conn1.recv()
+                eventos2do = self.conn2.recv()
+                eventos = self.juntar(eventos1er, eventos2do)
                 for keydown in eventos[0]:
-                    print(keydown)
                     if keydown == 'UP':
                         self.player1_1up_y = True
                     elif keydown == 'DOWN':
                         self.player1_1down_y = True
-                    elif keydown == 'W' and not self.pc:
-                        self.player2_1up_y = True
-                    elif keydown == 'W':
-                        self.game_field.pc = False
-                        self.game_field.reset_level()
-                        self.game_field.new_player()
-                        self.game_field.reset_scores()
-                        start_boring_timer = time.time()
-                    elif keydown == 'S' and not self.pc:
-                        self.player2_1down_y = True
                     elif keydown == 'P':
                         self.game_field.pause()
                 for keyup in eventos[1]:
@@ -798,7 +789,15 @@ class Game:
                         self.player1_1up_y = False
                     elif keyup == 'DOWN':
                         self.player1_1down_y = False
-                    elif keyup == 'W':
+                for keydown in eventos[3]:
+                    if keydown == 'W':
+                        self.player2_1up_y = True
+                    elif keydown == 'S':
+                        self.player2_1down_y = True
+                    elif keydown == 'P':
+                        self.game_field.pause()
+                for keyup in eventos[4]:
+                    if keyup == 'W':
                         self.player2_1up_y = False
                     elif keyup == 'S':
                         self.player2_1down_y = False
@@ -961,7 +960,7 @@ class Game:
             self.player2_1.mod_matrix(matrix, self.game_field.paleta_length_e)
             self.player1_2.mod_matrix(matrix, self.game_field.paleta_length)
             self.game_field.set_matrix(matrix)
-            if self.conn == None:
+            if self.conn1 == None:
                 self.game_field.screen()
             else:
                 self.send_matrix(matrix)
@@ -1338,17 +1337,16 @@ class Game:
         setups = ['1', self.mode, self.pc]
         self.client1.send(setups)
         print('Connected to first player')
-        if not self.pc:
-            self.client2 = Client(('localhost', 1237))
-            self.client2.send(['server-client',1236])
-            self.listener2 = Listener(('', 1236))
-            self.conn2 = self.listener2.accept()
-            msg = self.conn2.recv()
-            while msg != 'client-server':
-                pass
-            setups = ['2', self.mode, self.pc]
-            self.client2.send(setups)
-            print('Connected to second player')
+        self.client2 = Client(('localhost', 1237))
+        self.client2.send(['server-client',1236])
+        self.listener2 = Listener(('', 1236))
+        self.conn2 = self.listener2.accept()
+        msg = self.conn2.recv()
+        while msg != 'client-server':
+            pass
+        setups = ['2', self.mode, self.pc]
+        self.client2.send(setups)
+        print('Connected to second player')
         print('Connection stablished')
 
     def send_matrix(self, matrix):
