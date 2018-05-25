@@ -1,4 +1,5 @@
 import pygame
+import socket
 import random
 import mutagen.oggvorbis
 import time
@@ -502,7 +503,8 @@ class Game:
     def __init__(self, MODE, PC):
         global choosed
         global start_boring_timer
-        print(PC)
+
+        self.s = None
 
         # Instancia del Tablero
         self.game_field = Tablero(bool(PC), block_height, block_width)
@@ -546,6 +548,7 @@ class Game:
         self.pc = bool(PC)
 
         self.gameloop(MODE)
+        self.start_server()
 
     def gameloop(self, mode):
         global start_boring_timer
@@ -693,6 +696,7 @@ class Game:
             if self.game_field.pc and not self.game_field.practice:
                 self.message_to_screen('Press w to add a new player', white, 200, 250)
             pygame.display.update()
+            self.send_matrix(matrix)
 
             # Controla la velocidad
             clock.tick(self.game_field.get_ball_velocity())
@@ -1254,6 +1258,25 @@ class Game:
             pass
         else:
             pass
+
+    def start_server(self):
+        # Creamos un objeto socket para el servidor. Podemos dejarlo sin parametros pero si
+        # quieren pueden pasarlos de la manera server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s = socket.socket()
+
+        # Nos conectamos al servidor con el metodo connect. Tiene dos parametros
+        # El primero es la IP del servidor y el segundo el puerto de conexion
+        self.s.connect(("localhost", 9999))
+
+        while True:
+            confirm = self.s.recv(1024)
+            if confirm == 'Connected':
+                break
+
+    def send_matrix(self, matrix):
+        if self.s != None:
+            self.s.send(matrix)
+
 Game(sys.argv[1], bool(sys.argv[2]))
 
 # Finalizacion del juego
