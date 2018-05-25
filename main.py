@@ -1,10 +1,10 @@
 import pygame
-import socket
 import random
 import mutagen.oggvorbis
 import time
 import sys
 import os
+from multiprocessing.connection import Client, Listener
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -68,7 +68,7 @@ class Tablero:
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
-        self.practice = True
+        self.practice = False
         self.paleta_length = 9 - (3*(self.level-1))
         if not self.practice:
             self.paleta_length_e = self.paleta_length
@@ -504,7 +504,9 @@ class Game:
         global choosed
         global start_boring_timer
 
-        self.s = None
+        self.client = None
+        self.listener = None
+        self.conn = None
 
         # Instancia del Tablero
         self.game_field = Tablero(bool(PC), block_height, block_width)
@@ -547,8 +549,9 @@ class Game:
         self.mode = MODE
         self.pc = bool(PC)
 
-        self.gameloop(MODE)
         self.start_server()
+        self.gameloop(MODE)
+
 
     def gameloop(self, mode):
         global start_boring_timer
@@ -695,8 +698,9 @@ class Game:
             self.game_field.screen()
             if self.game_field.pc and not self.game_field.practice:
                 self.message_to_screen('Press w to add a new player', white, 200, 250)
-            pygame.display.update()
+
             self.send_matrix(matrix)
+            pygame.display.update()
 
             # Controla la velocidad
             clock.tick(self.game_field.get_ball_velocity())
@@ -1260,22 +1264,14 @@ class Game:
             pass
 
     def start_server(self):
-        # Creamos un objeto socket para el servidor. Podemos dejarlo sin parametros pero si
-        # quieren pueden pasarlos de la manera server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s = socket.socket()
+        self.listener = Listener(('localhost', 1234))
+        self.conn = self.listener.accept()
+        self.client = Client(('localhost', 1235))
 
-        # Nos conectamos al servidor con el metodo connect. Tiene dos parametros
-        # El primero es la IP del servidor y el segundo el puerto de conexion
-        self.s.connect(("localhost", 9999))
-
-        while True:
-            confirm = self.s.recv(1024)
-            if confirm == 'Connected':
-                break
 
     def send_matrix(self, matrix):
-        if self.s != None:
-            self.s.send(matrix)
+        if self.client != None:
+            self.client.send(matrix)
 
 Game(sys.argv[1], bool(sys.argv[2]))
 
