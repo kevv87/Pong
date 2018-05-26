@@ -59,6 +59,7 @@ def root():
     pongL.pack()
     pongL.place(x=170,y=50)
 
+
     #inicializa el mixer de pygame
     pygame.mixer.init()
 
@@ -201,6 +202,7 @@ def root():
     # botón que ejeucta el juego en modo pvpc mediante unir3
     pvpc = Button(canvas, command=unir3, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
     pvpc.place(x=260, y=320)
+
     # botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1 = Button(canvas,command=unir2, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1.place(x=260, y=380)
@@ -208,4 +210,4 @@ def root():
     # mainloop del root
     root.mainloop()
 
-root()
+root()#botón que ejecuta la ventan#botón que ejecuta la ventana de toplevelHelp mediante unir2a de toplevelHelp mediante unir2
