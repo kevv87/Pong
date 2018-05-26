@@ -63,11 +63,11 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 1
+        self.level = 3
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
-        self.practice = True
+        self.practice = False
         self.paleta_length = 9 - (3*(self.level-1))
         if not self.practice:
             self.paleta_length_e = self.paleta_length
@@ -491,10 +491,11 @@ class Obstaculo:
         self.height = height
 
     def create(self, matrix):
+        save = matrix
         for n in range(len(matrix)):
             for m in range(len(matrix[0])):
                 if self.x + self.width > m >= self.x and self.y + self.height > n >= self.y:
-                    matrix[n][m] == True
+                    matrix[n][m] = True
         return matrix
 
 class Game:
@@ -537,6 +538,7 @@ class Game:
         self.ball_y = 12
 
         self.obstaculo_list = []
+        self.obstaculos()
 
         # Controlan el juego
         self.game = True
@@ -688,6 +690,8 @@ class Game:
             self.player2 = Paleta(self.player2_1x, self.player2_1y, block_width, block_height)
             self.player1.mod_matrix(matrix, self.game_field.paleta_length)
             self.player2.mod_matrix(matrix, self.game_field.paleta_length_e)
+            for i in self.obstaculo_list:
+                matrix = i.create(matrix)
             self.game_field.set_matrix(matrix)
             self.game_field.screen()
             if self.game_field.pc and not self.game_field.practice:
@@ -891,6 +895,8 @@ class Game:
             self.player2_2.mod_matrix(matrix, self.game_field.paleta_length_e)
             self.player2_1.mod_matrix(matrix, self.game_field.paleta_length_e)
             self.player1_2.mod_matrix(matrix, self.game_field.paleta_length)
+            for i in self.obstaculo_list:
+                matrix = i.create(matrix)
             self.game_field.set_matrix(matrix)
             self.game_field.screen()
             if self.game_field.pc:
@@ -1042,6 +1048,26 @@ class Game:
                 ball_y = 12
             else:
                 self.win(-1)
+        for i in self.obstaculo_list:
+                if i.y == ball_y and i.x == ball_x:
+                    print('here')
+                if (self.game_field.get_ball_direction()[
+                0] > 0 and ball_x + 1 == i.x and (
+                    i.y <= ball_y <= i.y + i.height or (
+                    self.game_field.get_ball_direction()[
+                        1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
+                            self.game_field.get_ball_direction()[
+                                1] < 0 and i.y <= ball_y - 1 <= i.y + i.height))) or (
+                self.game_field.get_ball_direction()[
+                    0] < 0 and ball_x - 1 == i.x and (i.y <= ball_y <= i.y + i.height or (
+                self.game_field.get_ball_direction()[
+                    1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
+                                                            self.game_field.get_ball_direction()[
+                                                                1] > 0 and i.y <= ball_y + 1 <= i.y + i.height)
+                )):
+                    self.game_field.set_ball_direction(
+                        (self.game_field.get_ball_direction()[0] * -1, random.randint(-1,1)))
+                    break
         if (self.game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(self.game_field.get_matrix()) - 1) or (
                 self.game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], self.game_field.get_ball_direction()[1] * -1))
@@ -1185,7 +1211,26 @@ class Game:
                 clock.tick(3)
                 ball_x = 19
                 ball_y = 12
-
+        for i in self.obstaculo_list:
+                if i.y == ball_y and i.x == ball_x:
+                    print('here')
+                if (self.game_field.get_ball_direction()[
+                0] > 0 and ball_x + 1 == i.x and (
+                    i.y <= ball_y <= i.y + i.height or (
+                    self.game_field.get_ball_direction()[
+                        1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
+                            self.game_field.get_ball_direction()[
+                                1] < 0 and i.y <= ball_y - 1 <= i.y + i.height))) or (
+                self.game_field.get_ball_direction()[
+                    0] < 0 and ball_x - 1 == i.x and (i.y <= ball_y <= i.y + i.height or (
+                self.game_field.get_ball_direction()[
+                    1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
+                                                            self.game_field.get_ball_direction()[
+                                                                1] > 0 and i.y <= ball_y + 1 <= i.y + i.height)
+                )):
+                    self.game_field.set_ball_direction(
+                        (self.game_field.get_ball_direction()[0] * -1, random.randint(-1,1)))
+                    break
         if (self.game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(self.game_field.get_matrix()) - 1) or (
                 self.game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], self.game_field.get_ball_direction()[1] * -1))
@@ -1249,11 +1294,17 @@ class Game:
             for i in range(1):
                 self.obstaculo_list.append('')
             for i in range(1):
-                self.obstaculo_list[i] = Obstaculo(random.randint(1,23), random.randint(1,38), 2, 2)
+                self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
         elif self.game_field.level == 2:
-            pass
+            for i in range(2):
+                self.obstaculo_list.append('')
+            for i in range(2):
+                self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
         else:
-            pass
+            for i in range(3):
+                self.obstaculo_list.append('')
+            for i in range(3):
+                self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 Game(sys.argv[1], bool(sys.argv[2]))
 
 # Finalizacion del juego
