@@ -396,6 +396,16 @@ class Tablero:
                             self.game_matrix[n][m] = False
                 self.screen()
                 pygame.display.update()
+        elif spec == 1:
+            self.level = spec
+            self.update_paleta()
+            self.update_velocity()
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix)):
+                    if n % 2 == 0 and m == 19 and n != 0 and n != 24:
+                        self.game_matrix[n][m] = False
+            self.screen()
+            pygame.display.update()
         elif self.pc:
             return False
         else:
@@ -407,6 +417,7 @@ class Tablero:
     # Metodos de actualizacion
     def update_paleta(self):
         self.paleta_length = 9 - 3*(self.level-1)
+        self.paleta_length_e = 9 - 3*(self.level-1)
 
     def update_velocity(self):
         self.ball_velocity = 30 + 3*self.level
@@ -615,7 +626,7 @@ class Game:
                 self.game_field.levelup_animation()
                 self.message_to_screen('Level Up!!', white, size = 'large')
                 self.player1_1y = 1
-                self.player2_2y = 1
+                self.player2_1y = 1
                 self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                 self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length_e-1
                 start_boring_timer = time.time()
