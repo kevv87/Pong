@@ -91,7 +91,7 @@ class Tablero:
         if self.level == 1:
             music_file = 'sounds/lvl1.ogg'
         elif self.level == 2:
-            music_file = 'sounds/Shadowblaze-ChampionBattle.ogg'
+            music_file = 'sounds/lvl2.ogg'
         elif self.level == 3:
             music_file = 'sounds/NDY.ogg'
         sample_rate = mutagen.oggvorbis.OggVorbis(music_file).info.sample_rate
