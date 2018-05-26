@@ -67,7 +67,7 @@ class Tablero:
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
-        self.practice = True
+        self.practice = False
         self.paleta_length = 9 - (3*(self.level-1))
         if not self.practice:
             self.paleta_length_e = self.paleta_length
@@ -1251,9 +1251,15 @@ class Game:
             for i in range(1):
                 self.obstaculo_list[i] = Obstaculo(random.randint(1,23), random.randint(1,38), 2, 2)
         elif self.game_field.level == 2:
-            pass
+            for i in range(2):
+                self.obstaculo_list.append('')
+            for i in range(2):
+                self.obstaculo_list[i] = Obstaculo(random.randint(1,23), random.randint(1,38), 2, 2)
         else:
-            pass
+            for i in range(3):
+                self.obstaculo_list.append('')
+            for i in range(3):
+                self.obstaculo_list[i] = Obstaculo(random.randint(1,23), random.randint(1,38), 2, 2)
 Game(sys.argv[1], bool(sys.argv[2]))
 
 # Finalizacion del juego
