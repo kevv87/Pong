@@ -57,7 +57,7 @@ def startup():
     global client
     global setups
     msg, port = conn.recv()
-    print(port)
+
     while msg != 'server-client':
         pass
     client = Client(('localhost', int(port)))
@@ -85,7 +85,7 @@ def pause():
         pygame.display.update()
         client.send(msg_tosend)
         cmd = conn.recv()
-        print(cmd)
+    print('Unpause')
 
 startup()
 
@@ -97,24 +97,24 @@ while True:
         if event.type == pygame.QUIT:
             msg_tosend[2].append('QUIT')
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP and setups[0] == 1:
                 msg_tosend[0].append('UP')
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN and setups[0] == 1:
                 msg_tosend[0].append('DOWN')
-            elif event.key == pygame.K_w:
+            elif event.key == pygame.K_w and setups[0] == 2:
                 msg_tosend[0].append('W')
-            elif event.key == pygame.K_s:
+            elif event.key == pygame.K_s and setups[0] == 2:
                 msg_tosend[0].append('S')
             elif event.key == pygame.K_p:
                 msg_tosend[0].append('P')
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP and setups[0] == 1:
                 msg_tosend[1].append('UP')
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN and setups[0] == 1:
                 msg_tosend[1].append('DOWN')
-            elif event.key == pygame.K_w:
+            elif event.key == pygame.K_w and setups[0] == 2:
                 msg_tosend[1].append('W')
-            elif event.key == pygame.K_s:
+            elif event.key == pygame.K_s and setups[0] == 2:
                 msg_tosend[1].append('S')
     print(msg_tosend)
     client.send(msg_tosend)
@@ -124,9 +124,13 @@ while True:
         break
     elif matriz == 'pause':
         pause()
-
-    if isinstance(matriz, list) and isinstance(matriz[0], list):
+    elif isinstance(matriz, list) and isinstance(matriz[0], list):
         screen(matriz)
+    elif matriz == 'sincronize':
+        client.send('sincronize')
+        sinc = conn.recv()
+        while sinc != 'sincronize':
+            sinc = conn.recv()
 
 
 print("Adios.")

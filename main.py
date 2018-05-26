@@ -563,26 +563,32 @@ class Game:
                 if by == 1:
                     cmd1 = self.conn1.recv()[2]
                     for comando in cmd1:
-                        print(comando)
                         if comando == 'P':
-                            print('unpausing')
                             self.client2.send('unpause')
                             self.client1.send('unpause')
                             pause = False
-                        else:
-                            self.client1.send('still')
-                            self.client2.send('still')
+                            sinc = self.conn2.recv()
+                            while sinc != 'sincronize':
+                                print(sinc)
+                                self.client2.send('sincronize')
+                                sinc = self.conn2.recv()
+                            return
+                    self.client1.send('still')
+                    self.client2.send('still')
                 else:
-                    print('2')
                     cmd2 = self.conn2.recv()[2]
-                    if cmd2[0] == 'P':
-                        print('unpausing')
-                        self.client1.send('unpause')
-                        self.client2.send('unpause')
-                        pause = False
-                    else:
-                        self.client2.send('still')
-                        self.client1.send('still')
+                    for comando in cmd2:
+                        if comando == 'P':
+                            self.client2.send('unpause')
+                            self.client1.send('unpause')
+                            pause = False
+                            sinc = self.conn1.recv()
+                            while sinc != 'sincronize':
+                                self.client1.send('sincronize')
+                                sinc = self.conn1.recv()
+                            return
+                    self.client1.send('still')
+                    self.client2.send('still')
 
 
     def singles(self):
@@ -625,7 +631,10 @@ class Game:
             else:
                 eventos1er = self.conn1.recv()
                 eventos2do = self.conn2.recv()
+                print(eventos2do)
+                print(eventos1er)
                 eventos = self.juntar(eventos1er, eventos2do)
+
                 for keydown in eventos[0]:
                     if keydown == 'UP':
                         self.player1_1up_y = True
@@ -633,6 +642,7 @@ class Game:
                         self.player1_1down_y = True
                     elif keydown == 'P':
                         self.pause(1)
+                        break
                 for keyup in eventos[1]:
                     if keyup == 'UP':
                         self.player1_1up_y = False
@@ -645,11 +655,13 @@ class Game:
                         self.player2_1down_y = True
                     elif keydown == 'P':
                         self.pause(2)
+                        break
                 for keyup in eventos[4]:
                     if keyup == 'W':
                         self.player2_1up_y = False
                     elif keyup == 'S':
                         self.player2_1down_y = False
+
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -1351,7 +1363,7 @@ class Game:
         msg = self.conn1.recv()
         while msg != 'client-server':
             pass
-        setups = ['1', self.mode, self.pc]
+        setups = [1, self.mode, self.pc]
         self.client1.send(setups)
         print('Connected to first player')
         self.client2 = Client(('localhost', 1237))
@@ -1361,7 +1373,7 @@ class Game:
         msg = self.conn2.recv()
         while msg != 'client-server':
             pass
-        setups = ['2', self.mode, self.pc]
+        setups = [2, self.mode, self.pc]
         self.client2.send(setups)
         print('Connected to second player')
         print('Connection stablished')
