@@ -32,6 +32,9 @@ pausa=False
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
+green = (0,255,0)
+
+current_color = white
 
 
 # Fuentes predeterminadas
@@ -139,7 +142,7 @@ class Tablero:
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix[n])):
                 if self.game_matrix[n][m]:
-                    pygame.draw.rect(self.gameDisplay,white,[m*self.block_width, n*self.block_height,
+                    pygame.draw.rect(self.gameDisplay,current_color,[m*self.block_width, n*self.block_height,
                                                              self.block_width, self.block_height])
                 else:
                     pygame.draw.rect(self.gameDisplay, black, [m * self.block_width, n * self.block_height,
@@ -333,8 +336,8 @@ class Tablero:
 
         while pause:
             pygame.mixer.music.pause()
-            self.message_to_screen('Juego pausado', white, size='large')
-            self.message_to_screen('Presione p para reanudar', white, y_displace=80)
+            self.message_to_screen('Juego pausado',current_color, size='large')
+            self.message_to_screen('Presione p para reanudar', current_color, y_displace=80)
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -364,8 +367,8 @@ class Tablero:
             self.screen()
             clock.tick(1)
             if i%2 == 0:
-                self.message_to_screen('A new challenger', white, size='medium')
-                self.message_to_screen('has arrived', white, size='medium', y_displace=40)
+                self.message_to_screen('A new challenger', current_color, size='medium')
+                self.message_to_screen('has arrived', current_color, size='medium', y_displace=40)
             pygame.display.update()
 
     # Devuelve los marcadores a 0
@@ -564,6 +567,7 @@ class Game:
     def singles(self):
         global start_boring_timer
         global choosed
+        global current_color
         while self.game:
 
             # Reconocimiento de eventos
@@ -588,6 +592,10 @@ class Game:
                        self.player2_1down_y = True
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
+                    elif event.key == pygame.K_b:
+                        current_color = white
+                    elif event.key == pygame.K_v:
+                        current_color = green
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -615,7 +623,7 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not self.game_field.pc and not self.game_field.practice:
                 self.game_field.levelup_animation()
-                self.message_to_screen('Level Up!!', white, size = 'large')
+                self.message_to_screen('Level Up!!', current_color, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
                 self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -695,7 +703,7 @@ class Game:
             self.game_field.set_matrix(matrix)
             self.game_field.screen()
             if self.game_field.pc and not self.game_field.practice:
-                self.message_to_screen('Press w to add a new player', white, 200, 250)
+                self.message_to_screen('Press w to add a new player', current_color, 200, 250)
             pygame.display.update()
 
             # Controla la velocidad
@@ -768,7 +776,7 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not self.game_field.pc and not self.game_field.practice:
                 self.game_field.levelup_animation()
-                self.message_to_screen('Level Up!!', white, size = 'large')
+                self.message_to_screen('Level Up!!', current_color, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
                 self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -900,7 +908,7 @@ class Game:
             self.game_field.set_matrix(matrix)
             self.game_field.screen()
             if self.game_field.pc:
-                self.message_to_screen('Press w to add a new player', white, 200, 250)
+                self.message_to_screen('Press w to add a new player', current_color, 200, 250)
             pygame.display.update()
 
             # Se controla la velocidad
@@ -1018,7 +1026,7 @@ class Game:
                     self.game_field.reset_scores()
                     lvlup = self.game_field.levelup_animation()
                     if lvlup:
-                        self.message_to_screen('Level Up!!', white, size='large')
+                        self.message_to_screen('Level Up!!', current_color, size='large')
                         self.player1_1y = 1
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -1179,7 +1187,7 @@ class Game:
                     self.game_field.reset_scores()
                     lvlup = self.game_field.levelup_animation()
                     if lvlup:
-                        self.message_to_screen('Level Up!!', white, size='large')
+                        self.message_to_screen('Level Up!!', current_color, size='large')
                         self.player1_1y = 1
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -1264,12 +1272,12 @@ class Game:
                     if i != 0 and i != 24 and i % 2 == 0 and j == 19:
                         self.game_field.game_matrix[i][j] = False
             self.game_field.screen()
-            self.message_to_screen('You', white, size='large', x_displace=-x_displace_fromcenter, y_displace=-50)
-            self.message_to_screen('won!', white, size='large', x_displace=-x_displace_fromcenter, y_displace=40)
-            self.message_to_screen('You', white, size='large', x_displace=x_displace_fromcenter, y_displace=-50)
-            self.message_to_screen('lose!', white, size='large', x_displace=x_displace_fromcenter, y_displace=40)
-            self.message_to_screen('Press enter to play again', white, y_displace=200)
-            self.message_to_screen('or space to return to main menu', white, y_displace=250)
+            self.message_to_screen('You', current_color, size='large', x_displace=-x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('won!', current_color, size='large', x_displace=-x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('You', current_color, size='large', x_displace=x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('lose!',current_color, size='large', x_displace=x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('Press enter to play again', current_color, y_displace=200)
+            self.message_to_screen('or space to return to main menu', current_color, y_displace=250)
 
             # Reconocimiento de eventos
             for event in pygame.event.get():
