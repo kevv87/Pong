@@ -73,8 +73,17 @@ class Tablero:
         else:
             self.paleta_length_e = 37
         self.lvl_music()
+        self.tiempo()
 
     # Metodos
+    def tiempo(self):
+        aux = 1
+        while True:
+            time = pygame.time.get_ticks() // 1000
+            if aux == time:
+                aux += 1
+                print(time)
+
 
     # Constructor de la matriz
     def matrix_constructor(self):
@@ -456,17 +465,6 @@ class Tablero:
         textRect.center = (self.width/2) + x_displace, (self.height/2) + y_displace
         self.gameDisplay.blit(textSurf, textRect)
 
-    def tiempo(self):
-        aux = 1
-        while True:
-            time = pygame.time.get_ticks() / 1000
-            if aux == time:
-                aux += 1
-                print(time)
-
-        contador = smallfont.render("Tiempo:" +str(time),0,white)
-        self.gameDisplay.blit(contador,(100,100))
-        pygame.display.update()
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
 class Bola:
@@ -568,7 +566,6 @@ class Game:
         self.pc = bool(PC)
 
         self.gameloop(MODE)
-
     def gameloop(self, mode):
         global start_boring_timer
         global choosed
@@ -582,7 +579,6 @@ class Game:
             return 'Err'
 
     def singles(self):
-
         global start_boring_timer
         global choosed
         while self.game:
@@ -1254,7 +1250,6 @@ class Game:
         win_screen = True
         x_displace_fromcenter = winner*200
         while win_screen:
-            self.tiempo()
             for i in range(len(self.game_field.game_matrix)):
                 for j in range(len(self.game_field.game_matrix[0])):
                     if i != 0 and i != 24 and i % 2 == 0 and j == 19:
@@ -1302,6 +1297,8 @@ class Game:
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 Game(sys.argv[1], bool(sys.argv[2]))
+
+
 
 
 # Finalizacion del juego
