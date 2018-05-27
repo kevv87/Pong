@@ -26,7 +26,7 @@ import random
 import mutagen.oggvorbis
 import time
 
-
+aux=1
 pausa=False
 
 # Colores importantes
@@ -73,16 +73,8 @@ class Tablero:
         else:
             self.paleta_length_e = 37
         self.lvl_music()
-        self.tiempo()
 
     # Metodos
-    def tiempo(self):
-        aux = 1
-        while True:
-            time = pygame.time.get_ticks() // 1000
-            if aux == time:
-                aux += 1
-                print(time)
 
     # Constructor de la matriz
     def matrix_constructor(self):
@@ -580,7 +572,16 @@ class Game:
     def singles(self):
         global start_boring_timer
         global choosed
+        global aux
         while self.game:
+            #Timer
+            sec = pygame.time.get_ticks() // 1000
+            if aux == sec:
+                aux += 1
+                print(sec)
+                sec = str(sec)
+                pygame.display.set_caption("Timer: "+sec +" segundos")
+
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1297,6 +1298,7 @@ class Game:
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 Game(sys.argv[1], bool(sys.argv[2]))
 
+kk = pygame.display.set_mode((50,50))
 
 
 
