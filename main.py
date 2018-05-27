@@ -46,7 +46,6 @@ block_width = 24
 # Reloj
 clock = pygame.time.Clock()
 
-
 # Clase tablero, encargada de guardar algunas variables importantes para el desarrollo de cualquier modalidad del juego
 # asi como metodos que se usan en todas las modalidades del juego.
 
@@ -457,6 +456,17 @@ class Tablero:
         textRect.center = (self.width/2) + x_displace, (self.height/2) + y_displace
         self.gameDisplay.blit(textSurf, textRect)
 
+    def tiempo(self):
+        aux = 1
+        while True:
+            time = pygame.time.get_ticks() / 1000
+            if aux == time:
+                aux += 1
+                print(time)
+
+        contador = smallfont.render("Tiempo:" +str(time),0,white)
+        self.gameDisplay.blit(contador,(100,100))
+        pygame.display.update()
 
 # Clase encargada de guardar la posicion de la bola y modificar la matriz del juego conforme a la misma
 class Bola:
@@ -508,13 +518,14 @@ class Obstaculo:
                     matrix[n][m] == True
         return matrix
 
+
+
 class Game:
     global mode
     def __init__(self, MODE, PC):
         global choosed
         global start_boring_timer
         print(PC)
-
         # Instancia del Tablero
         self.game_field = Tablero(bool(PC), block_height, block_width)
         # Posiciones iniciales de los jugadores
@@ -571,12 +582,11 @@ class Game:
             return 'Err'
 
     def singles(self):
+
         global start_boring_timer
         global choosed
         while self.game:
-
             # Reconocimiento de eventos
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.game = False
@@ -1244,6 +1254,7 @@ class Game:
         win_screen = True
         x_displace_fromcenter = winner*200
         while win_screen:
+            self.tiempo()
             for i in range(len(self.game_field.game_matrix)):
                 for j in range(len(self.game_field.game_matrix[0])):
                     if i != 0 and i != 24 and i % 2 == 0 and j == 19:
@@ -1291,6 +1302,7 @@ class Game:
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 Game(sys.argv[1], bool(sys.argv[2]))
+
 
 # Finalizacion del juego
 pygame.quit()
