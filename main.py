@@ -84,7 +84,6 @@ class Tablero:
                 aux += 1
                 print(time)
 
-
     # Constructor de la matriz
     def matrix_constructor(self):
         for n in range(25):
