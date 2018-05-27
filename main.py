@@ -291,6 +291,13 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
 
+
+    # Llama a las funciones que modifican la matriz segun el tablero
+    def scores(self):
+        self.score_e()
+        self.score_f()
+
+    def clean_matrix(self):
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix[0])):
                 if n != 0 and n != 24:
@@ -299,6 +306,7 @@ class Tablero:
                     else:
                         self.game_matrix[n][m] = False
         self.scores()
+
 
     # Pausa el juego
     def pause(self):
