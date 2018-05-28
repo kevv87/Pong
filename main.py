@@ -549,6 +549,9 @@ class Game:
 
         self.obstaculo_list = []
 
+        self.timer_clock = pygame.time.Clock()
+        self.time_playing = 0
+
         # Controlan el juego
         self.game = True
         self.pause = False
@@ -562,6 +565,7 @@ class Game:
         global choosed
         self.choosed = False
         start_boring_timer = time.time()
+        self.timer_clock.tick()
         if mode == 'singles':
             self.singles()
         elif mode == 'doubles':
@@ -572,16 +576,8 @@ class Game:
     def singles(self):
         global start_boring_timer
         global choosed
-        global aux
         while self.game:
-            #Timer
-            sec = pygame.time.get_ticks() // 1000
-            if aux == sec:
-                aux += 1
-                print(sec)
-                sec = str(sec)
-                pygame.display.set_caption("Timer: "+sec +" segundos")
-
+            self.timer_clock.tick()
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -603,6 +599,7 @@ class Game:
                        self.player2_1down_y = True
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
+                        self.timer_clock.tick()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -713,6 +710,8 @@ class Game:
 
             # Controla la velocidad
             clock.tick(self.game_field.get_ball_velocity())
+
+            self.time_playing += self.timer_clock.tick()/1000
 
     def doubles(self):
         global start_boring_timer
