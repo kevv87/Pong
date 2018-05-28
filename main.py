@@ -196,11 +196,6 @@ class Tablero:
                 for m in range(len(self.game_matrix[0])):
                     if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4) or (m == 14 and n == 2):
                         self.game_matrix[n][m] = True
-        elif self.friend_score == 10:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix)):
-                    if (m == 11 and 2 <= n <= 6) or (m == 15 and 2 <= n <= 6) or (n == 2 and 13 <= m <= 15) or (m == 13 and 2 <= n <= 5) or (n == 6 and 13 <= m <= 15):
-                        self.game_matrix[n][m] = True
 
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_e(self):
@@ -294,22 +289,13 @@ class Tablero:
                         self.game_matrix[n][m] = True
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
-        elif self.enemy_score == 10:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if (m == 23 and 2 <= n <= 6) or (m == 25 and 2 <= n <= 6) or (n == 2 and 25 <= m <= 27) or (m == 27 and 2 <= n <= 6) or (n == 6 and 25 <= m <= 27):
-                        self.game_matrix[n][m] = True
-                    if n == 24 or n == 0:
-                        self.game_matrix[n][m] = True
-                    elif n % 2 == 0 and m == 19:
-                        self.game_matrix[n][m] = True
+
 
     # Llama a las funciones que modifican la matriz segun el tablero
     def scores(self):
         self.score_e()
         self.score_f()
 
-    # Pone cada espacio de la matriz en False, excepto el marcador y la cancha
     def clean_matrix(self):
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix[0])):
@@ -319,6 +305,7 @@ class Tablero:
                     else:
                         self.game_matrix[n][m] = False
         self.scores()
+
 
     # Pausa el juego
     def pause(self):
@@ -1041,7 +1028,7 @@ class Game:
                 # Ping
                 ping_sound.play()
         elif self.game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(self.game_field.get_matrix()[0]) + 2:
-            if self.game_field.get_friend_score() < 10:
+            if self.game_field.get_friend_score() < 9:
                 self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
@@ -1067,7 +1054,7 @@ class Game:
             else:
                 self.win(1)
         elif self.game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
-            if self.game_field.get_enemy_score() < 10:
+            if self.game_field.get_enemy_score() < 9:
                 self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
                 start_boring_timer = time.time()
                 if self.game_field.pc:
@@ -1180,7 +1167,7 @@ class Game:
                 ping_sound.play()
 
         elif self.game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(self.game_field.get_matrix()[0]) + 1:
-            if self.game_field.get_friend_score() < 10:
+            if self.game_field.get_friend_score() < 9:
                 self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
@@ -1208,7 +1195,7 @@ class Game:
                 ball_x = 19
                 ball_y = 12
         elif self.game_field.get_ball_direction()[0] < 0 and ball_x - 1 == -1:
-            if self.game_field.get_enemy_score() < 10:
+            if self.game_field.get_enemy_score() < 9:
                 self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
                 if self.game_field.pc:
                     fail_sound.play()
