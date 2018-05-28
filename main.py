@@ -51,8 +51,9 @@ clock = pygame.time.Clock()
 # asi como metodos que se usan en todas las modalidades del juego.
 
 class Tablero:
-    def __init__(self, PC, block_width, block_height):
+    def __init__(self, PC, block_width, block_height, MUTE, PT):
         # Atributos
+        self.mut = MUTE
         self.width = 800
         self.height = 600
         self.gameDisplay = pygame.display.set_mode((self.width, self.height))
@@ -67,7 +68,7 @@ class Tablero:
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
-        self.practice = False
+        self.practice = PT
         self.paleta_length = 9 - (3*(self.level-1))
         if not self.practice:
             self.paleta_length_e = self.paleta_length
@@ -88,18 +89,21 @@ class Tablero:
 
     # Musica
     def lvl_music(self):
-        if self.level == 1:
-            music_file = 'sounds/lvl1.ogg'
+        if self.mut == True:
+            music_file = 'sounds/blank.ogg'
         elif self.level == 2:
             music_file = 'sounds/lvl2.ogg'
         elif self.level == 3:
             music_file = 'sounds/NDY.ogg'
+        elif self.level == 1:
+            music_file = 'sounds/lvl1.ogg'
         sample_rate = mutagen.oggvorbis.OggVorbis(music_file).info.sample_rate
         pygame.mixer.quit()
         pygame.mixer.pre_init(sample_rate, -16, 1, 512)
         pygame.mixer.init()
         pygame.mixer.music.load(music_file)
         pygame.mixer.music.play(-1)
+
 
     # Metodos set y get
     def get_matrix(self):
@@ -510,13 +514,13 @@ class Obstaculo:
 
 class Game:
     global mode
-    def __init__(self, MODE, PC, mute):
+    def __init__(self, MODE, PC, MUTE, PT):
         global choosed
         global start_boring_timer
         print(PC)
 
         # Instancia del Tablero
-        self.game_field = Tablero(bool(PC), block_height, block_width)
+        self.game_field = Tablero(bool(PC), block_height, block_width, bool(MUTE), bool(PT))
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -555,6 +559,8 @@ class Game:
 
         self.mode = MODE
         self.pc = bool(PC)
+        self.mute = bool(MUTE)
+        self.practice = bool(PT)
 
         self.gameloop(MODE)
 
@@ -1266,7 +1272,7 @@ class Game:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_RETURN:
-                        self.__init__(self.mode, self.pc)
+                        self.__init__(self.mode, self.pc, self.mute)
                     elif event.key == pygame.K_SPACE:
                         pygame.quit()
                         quit()
@@ -1290,7 +1296,7 @@ class Game:
                 self.obstaculo_list.append('')
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
-Game(sys.argv[1], bool(sys.argv[2]),sys.argv[3])
+Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]))
 
 # Finalizacion del juego
 pygame.quit()

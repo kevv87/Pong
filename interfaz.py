@@ -3,7 +3,7 @@ import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
 
-mute= True
+MUTE= True
 #inicia pygame
 pygame.init()
 
@@ -16,7 +16,7 @@ fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 #Función que crea el root con todas sus modificaciones
 def root():
-    mute = False
+    MUTE= False
     pygame.init()
     root = Tk() #Hacer la ventana
 
@@ -50,10 +50,12 @@ def root():
     canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="#FFFFFF", width=9 )
     canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="white", width=1 )
     canvas.create_rectangle(30,220,50,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(750,220,770,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,272,240,292,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,332,240,352,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,392,240,412,fill="white",outline="white", width=5)
+    canvas.create_rectangle(750,200,770,360,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,252,240,272,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,312,240,332,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,372,240,392,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,432,240,452,fill="white",outline="white", width=5)
+
 
     #Label con la imagen del título de pong
     pong = PhotoImage(file="Images/PONG.png")
@@ -179,45 +181,61 @@ def root():
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir3():
         global ver
-        global mute
+        global MUTE
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, True, mute))
+        os.system('python3 main.py %s %r %r' %(MODE, True, MUTE, False))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
         global ver
-        global mute
+        global MUTE
+        global PT
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, '', mute))
+        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, False))
+        pygame.mixer.music.play(-1)
+        root.deiconify()
+
+    def unir5():
+        global ver
+        global MUTE
+        global PT
+        MODE = ver
+        pygame.mixer.music.stop()
+        root.withdraw()
+        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
 
     # botón que ejecuta el juego en modo pvp mediante unir4
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvp.place(x=260, y=260)
+    pvp.place(x=260, y=240)
 
     # botón que ejeucta el juego en modo pvpc mediante unir3
     pvpc = Button(canvas, command=unir3, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvpc.place(x=260, y=320)
+    pvpc.place(x=260, y=300)
 
     # botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1 = Button(canvas,command=unir2, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
-    help1.place(x=260, y=380)
+    help1.place(x=260, y=360)
+
+    # botón que ejeucta el juego en práctica
+    pract = Button(canvas, command=unir5, text="Práctica", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
+    pract.place(x=260, y=420)
 
     def muteF():
-        global mute
-        if mute== False:
-            mute = True
+        global MUTE
+        if MUTE== False:
+            MUTE = True
             pygame.mixer.music.unpause()
         else:
-            mute = False
+            MUTE = False
             pygame.mixer.music.pause()
 
 
