@@ -26,7 +26,7 @@ import random
 import mutagen.oggvorbis
 import time
 
-
+aux=1
 pausa=False
 
 # Colores importantes
@@ -46,7 +46,6 @@ block_width = 24
 # Reloj
 clock = pygame.time.Clock()
 
-
 # Clase tablero, encargada de guardar algunas variables importantes para el desarrollo de cualquier modalidad del juego
 # asi como metodos que se usan en todas las modalidades del juego.
 
@@ -63,7 +62,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 1
+        self.level = 3
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -508,13 +507,14 @@ class Obstaculo:
                     matrix[n][m] == True
         return matrix
 
+
+
 class Game:
     global mode
     def __init__(self, MODE, PC):
         global choosed
         global start_boring_timer
         print(PC)
-
         # Instancia del Tablero
         self.game_field = Tablero(bool(PC), block_height, block_width)
         # Posiciones iniciales de los jugadores
@@ -549,6 +549,9 @@ class Game:
 
         self.obstaculo_list = []
 
+        self.timer_clock = pygame.time.Clock()
+        self.time_playing = 0
+
         # Controlan el juego
         self.game = True
         self.pause = False
@@ -556,13 +559,35 @@ class Game:
         self.mode = MODE
         self.pc = bool(PC)
 
-        self.gameloop(MODE)
+        # Abriendo el archivo de highscores y guardando los datos en una lista
+        self.path = 'highscores.txt'
 
+        self.file = open(self.path, 'r')
+
+        contents = []
+
+        for line in self.file:
+            contents.append(line[:len(line) - 1])
+
+        self.final = []
+
+        k = 0
+
+        for i in contents:
+            self.final.append(i.split('%'))
+            self.final[k][1] = int(self.final[k][1])
+            k += 1
+
+        self.file.close()
+
+
+        self.gameloop(MODE)
     def gameloop(self, mode):
         global start_boring_timer
         global choosed
         self.choosed = False
         start_boring_timer = time.time()
+        self.timer_clock.tick()
         if mode == 'singles':
             self.singles()
         elif mode == 'doubles':
@@ -574,9 +599,8 @@ class Game:
         global start_boring_timer
         global choosed
         while self.game:
-
+            self.timer_clock.tick()
             # Reconocimiento de eventos
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.game = False
@@ -597,6 +621,7 @@ class Game:
                        self.player2_1down_y = True
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
+                        self.timer_clock.tick()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -708,11 +733,13 @@ class Game:
             # Controla la velocidad
             clock.tick(self.game_field.get_ball_velocity())
 
+            self.time_playing += self.timer_clock.tick()/1000
+
     def doubles(self):
         global start_boring_timer
         global choosed
         while self.game:
-
+            self.timer_clock.tick()
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -735,6 +762,7 @@ class Game:
                         self.player2_1down_y = True
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
+                        self.timer_clock.tick()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -910,6 +938,9 @@ class Game:
 
             # Se controla la velocidad
             clock.tick(self.game_field.get_ball_velocity())
+
+            self.time_playing += self.timer_clock.tick()
+
 
     # Funcion recursiva encargada de simular el movimiento de la bola dadas una pos inicial en x y y y una direccion hacia
     # donde se mueve la misma. Retorna la posicion en y donde va a pegar la bola al lado derecho. Se utiliza para la inteligencia
@@ -1243,6 +1274,7 @@ class Game:
     def win(self, winner):
         win_screen = True
         x_displace_fromcenter = winner*200
+        cont = False
         while win_screen:
             for i in range(len(self.game_field.game_matrix)):
                 for j in range(len(self.game_field.game_matrix[0])):
@@ -1255,6 +1287,9 @@ class Game:
             self.message_to_screen('lose!', white, size='large', x_displace=x_displace_fromcenter, y_displace=40)
             self.message_to_screen('Press enter to play again', white, y_displace=200)
             self.message_to_screen('or space to return to main menu', white, y_displace=250)
+            if self.pc and winner == 1 and not cont:
+                self.verify()
+                cont = True
 
             # Reconocimiento de eventos
             for event in pygame.event.get():
@@ -1272,6 +1307,18 @@ class Game:
                         quit()
 
             pygame.display.update()
+
+
+    def verify(self):
+        self.file = open(self.path, 'w')
+        name = 'alv'
+        cont = False
+        for line in self.final:
+            if int(self.time_playing/1000) < int(line[1]) and not cont:
+                self.file.write(name+'%'+str(self.time_playing/1000)+'\n')
+                cont = True
+            else:
+                self.file.write(line[0]+'%'+str(line[1])+'\n')
 
     def obstaculos(self):
         matrix = self.game_field.get_matrix()
@@ -1291,6 +1338,10 @@ class Game:
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 Game(sys.argv[1], bool(sys.argv[2]))
+
+kk = pygame.display.set_mode((50,50))
+
+
 
 # Finalizacion del juego
 pygame.quit()
