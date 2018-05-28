@@ -185,7 +185,7 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r %r' %(MODE, True, MUTE, False))
+        os.system('python3 main.py %s %r %r' %(MODE, True, MUTE, ''))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
@@ -197,7 +197,7 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, False))
+        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, ''))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
