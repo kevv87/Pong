@@ -173,6 +173,7 @@ def root():
     doubles.pack()
     doubles.place(x=480,y=540)
 
+
     # función  que abre el toplevelHelp y oculta el root, además de ejecutar el sonido de select
     def unir2():
         select_sound.play()
@@ -188,6 +189,7 @@ def root():
         os.system('python3 main.py %s %r %r' %(MODE, True, MUTE, ''))
         pygame.mixer.music.play(-1)
         root.deiconify()
+
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
