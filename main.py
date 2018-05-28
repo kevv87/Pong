@@ -62,7 +62,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 3
+        self.level = 1
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -598,7 +598,15 @@ class Game:
     def singles(self):
         global start_boring_timer
         global choosed
+        global aux
         while self.game:
+            # Timer
+            sec = pygame.time.get_ticks() // 1000
+            if aux == sec:
+                aux += 1
+                print(sec)
+                sec = str(sec)
+                pygame.display.set_caption("Timer: " + sec + " segundos")
             self.timer_clock.tick()
             # Reconocimiento de eventos
             for event in pygame.event.get():
@@ -738,7 +746,16 @@ class Game:
     def doubles(self):
         global start_boring_timer
         global choosed
+        global aux
         while self.game:
+            # Timer
+            sec = pygame.time.get_ticks() // 1000
+            if aux == sec:
+                aux += 1
+                print(sec)
+                sec = str(sec)
+                pygame.display.set_caption("Timer: " + sec + " segundos")
+
             self.timer_clock.tick()
             # Reconocimiento de eventos
             for event in pygame.event.get():
