@@ -717,7 +717,7 @@ class Game:
         global start_boring_timer
         global choosed
         while self.game:
-
+            self.timer_clock.tick()
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -740,6 +740,7 @@ class Game:
                         self.player2_1down_y = True
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
+                        self.timer_clock.tick()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -915,6 +916,9 @@ class Game:
 
             # Se controla la velocidad
             clock.tick(self.game_field.get_ball_velocity())
+
+            self.time_playing += self.timer_clock.tick()
+
 
     # Funcion recursiva encargada de simular el movimiento de la bola dadas una pos inicial en x y y y una direccion hacia
     # donde se mueve la misma. Retorna la posicion en y donde va a pegar la bola al lado derecho. Se utiliza para la inteligencia
