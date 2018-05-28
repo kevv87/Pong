@@ -717,7 +717,15 @@ class Game:
     def doubles(self):
         global start_boring_timer
         global choosed
+        global aux
         while self.game:
+            # Timer
+            sec = pygame.time.get_ticks() // 1000
+            if aux == sec:
+                aux += 1
+                print(sec)
+                sec = str(sec)
+                pygame.display.set_caption("Timer: " + sec + " segundos")
 
             # Reconocimiento de eventos
             for event in pygame.event.get():
