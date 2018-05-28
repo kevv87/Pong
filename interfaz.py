@@ -3,6 +3,7 @@ import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
 
+mute= True
 #inicia pygame
 pygame.init()
 
@@ -15,6 +16,7 @@ fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 #Función que crea el root con todas sus modificaciones
 def root():
+    mute = False
     pygame.init()
     root = Tk() #Hacer la ventana
 
@@ -177,20 +179,22 @@ def root():
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir3():
         global ver
+        global mute
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, True))
+        os.system('python3 main.py %s %r' %(MODE, True, mute))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
         global ver
+        global mute
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, ''))
+        os.system('python3 main.py %s %r' %(MODE, '', mute))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
@@ -206,6 +210,23 @@ def root():
     # botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1 = Button(canvas,command=unir2, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1.place(x=260, y=380)
+
+    def muteF():
+        global mute
+        if mute== False:
+            mute = True
+            pygame.mixer.music.unpause()
+        else:
+            mute = False
+            pygame.mixer.music.pause()
+
+
+    #boton que mutea el sonido
+    muteP = PhotoImage(file="Images/mute.png")
+    muteR = muteP.subsample(x=11,y=11)
+
+    muteB = Button(canvas,command=muteF, bg="black",image=muteR ,fg="white", bd=0, activebackground="black",relief=FLAT)
+    muteB.place(x=738, y=12)
 
     # mainloop del root
     root.mainloop()

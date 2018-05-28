@@ -510,7 +510,7 @@ class Obstaculo:
 
 class Game:
     global mode
-    def __init__(self, MODE, PC):
+    def __init__(self, MODE, PC, mute):
         global choosed
         global start_boring_timer
         print(PC)
@@ -1290,7 +1290,7 @@ class Game:
                 self.obstaculo_list.append('')
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
-Game(sys.argv[1], bool(sys.argv[2]))
+Game(sys.argv[1], bool(sys.argv[2]),sys.argv[3])
 
 # Finalizacion del juego
 pygame.quit()
