@@ -418,7 +418,7 @@ class Tablero:
     def update_paleta(self):
         self.paleta_length = 9 - 3*(self.level-1)
         if not self.practice:
-        self.paleta_length_e = 9 - 3*(self.level-1)
+            self.paleta_length_e = 9 - 3*(self.level-1)
 
     def update_velocity(self):
         self.ball_velocity = 30 + 3*self.level
