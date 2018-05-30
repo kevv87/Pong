@@ -3,7 +3,7 @@ import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
 
-MUTE= True
+MUTE= ''
 #inicia pygame
 pygame.init()
 
@@ -16,7 +16,6 @@ fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 #Función que crea el root con todas sus modificaciones
 def root():
-    MUTE= False
     pygame.init()
     root = Tk() #Hacer la ventana
 
@@ -186,7 +185,8 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r %r' %(MODE, True, MUTE, ''))
+        print(MUTE)
+        os.system('python3 main.py %s %r %r %r' %(MODE, True, MUTE, ''))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
@@ -199,6 +199,7 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
+        print(MUTE)
         os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, ''))
         pygame.mixer.music.play(-1)
         root.deiconify()
@@ -233,11 +234,11 @@ def root():
 
     def muteF():
         global MUTE
-        if MUTE== False:
+        if MUTE== '':
             MUTE = True
             pygame.mixer.music.unpause()
         else:
-            MUTE = False
+            MUTE = ''
             pygame.mixer.music.pause()
 
 

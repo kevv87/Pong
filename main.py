@@ -1331,11 +1331,9 @@ class Game:
                 self.obstaculo_list.append('')
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
+
+
 Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]))
-
-kk = pygame.display.set_mode((50,50))
-
-
 
 # Finalizacion del juego
 pygame.quit()
