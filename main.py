@@ -1295,7 +1295,7 @@ class Game:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_RETURN:
-                        self.__init__(self.mode, self.pc, self.mute)
+                        self.__init__(self.mode, self.pc, self.mute, self.practice)
                     elif event.key == pygame.K_SPACE:
                         pygame.quit()
                         quit()
