@@ -407,7 +407,8 @@ class Tablero:
     # Metodos de actualizacion
     def update_paleta(self):
         self.paleta_length = 9 - 3*(self.level-1)
-        self.paleta_length_e = 9 - 3*(self.level-1)
+        if not self.practice:
+            self.paleta_length_e = 9 - 3*(self.level-1)
 
     def update_velocity(self):
         self.ball_velocity = 30 + 3*self.level
@@ -1294,7 +1295,7 @@ class Game:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_RETURN:
-                        self.__init__(self.mode, self.pc, self.mute)
+                        self.__init__(self.mode, self.pc, self.mute, self.practice)
                     elif event.key == pygame.K_SPACE:
                         pygame.quit()
                         quit()
@@ -1330,11 +1331,9 @@ class Game:
                 self.obstaculo_list.append('')
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
+
+
 Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]))
-
-kk = pygame.display.set_mode((50,50))
-
-
 
 # Finalizacion del juego
 pygame.quit()
