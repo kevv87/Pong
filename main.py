@@ -326,6 +326,7 @@ class Tablero:
 
     # Pausa el juego
     def pause(self):
+        global current_color
         pause = True
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix)):
@@ -336,17 +337,20 @@ class Tablero:
 
         while pause:
             pygame.mixer.music.pause()
-            self.message_to_screen('Juego pausado',current_color, size='large')
-            self.message_to_screen('Presione p para reanudar', current_color, y_displace=80)
-
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_p:
                         pygame.mixer.music.unpause()
                         pause = False
+                    elif event.key == pygame.K_b:
+                        current_color = white
+                    elif event.key == pygame.K_v:
+                        current_color = green
                 elif event.type == pygame.QUIT:
                     quit()
-
+            self.screen()
+            self.message_to_screen('Juego pausado',current_color, size='large')
+            self.message_to_screen('Presione p para reanudar', current_color, y_displace=80)
             pygame.display.update()
 
         for n in range(len(self.game_matrix)):
