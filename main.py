@@ -553,26 +553,7 @@ class Game:
         self.mute = bool(MUTE)
         self.practice = bool(PT)
 
-        # Abriendo el archivo de highscores y guardando los datos en una lista
-        self.path = 'highscores.txt'
-
-        self.file = open(self.path, 'r')
-
-        contents = []
-
-        for line in self.file:
-            contents.append(line[:len(line) - 1])
-
-        self.final = []
-
-        k = 0
-
-        for i in contents:
-            self.final.append(i.split('%'))
-            self.final[k][1] = int(self.final[k][1])
-            k += 1
-
-        self.file.close()
+       
 
 
         self.gameloop(MODE)
