@@ -1,7 +1,7 @@
 import pygame
 import mutagen.oggvorbis
 import os
-from tkinter import *  #Importa todo de tkinter}
+from tkinter import *  #Importa todo de tkinter
 
 MUTE= ''
 #inicia pygame
@@ -50,10 +50,6 @@ def root():
     canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="white", width=1 )
     canvas.create_rectangle(30,220,50,380,fill="white",outline="white", width=5)
     canvas.create_rectangle(750,200,770,360,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,252,240,272,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,312,240,332,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,372,240,392,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,432,240,452,fill="white",outline="white", width=5)
 
 
     #Label con la imagen del título de pong
@@ -159,18 +155,18 @@ def root():
     #Radiobutton que indica que se va a jugar en singles
     singlesL = Label(canvas, text="singles", bg="black", fg="white", font="courier 18")
     singlesL.pack()
-    singlesL.place(x=250, y=500)
-    singles = Radiobutton(canvas,command=modeS, bg="black", value=1, variable=1)
+    singlesL.place(x=440, y=500)
+    singles = Checkbutton(canvas,command=modeS, bg="black", variable=1)
     singles.pack()
-    singles.place(x=290, y=540)
+    singles.place(x=480, y=540)
 
     #Radiobutton que indica que se va a jugar en doubles
     doublesL= Label(canvas, text="doubles",bg="black", fg="white", font="courier 18")
     doublesL.pack()
-    doublesL.place(x=440,y=500)
-    doubles = Radiobutton(canvas, command=modeD,bg="black", value=2,variable=1)
+    doublesL.place(x=250,y=500)
+    doubles = Checkbutton(canvas, command=modeD, bg="black", variable=1)
     doubles.pack()
-    doubles.place(x=480,y=540)
+    doubles.place(x=290,y=540)
 
 
     # función  que abre el toplevelHelp y oculta el root, además de ejecutar el sonido de select
@@ -217,20 +213,28 @@ def root():
 
 
     # botón que ejecuta el juego en modo pvp mediante unir4
-    pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvp.place(x=260, y=240)
+    pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 16", activebackground="white",relief=FLAT)
+    pvp.place(x=145, y=275)
 
     # botón que ejeucta el juego en modo pvpc mediante unir3
-    pvpc = Button(canvas, command=unir3, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvpc.place(x=260, y=300)
+    pvpc = Button(canvas, command=unir3, text="  Player vs PC  ",bg="black", fg="white", bd=0, font="courier 16", activebackground="white",relief=FLAT)
+    pvpc.place(x=145, y=340)
 
     # botón que ejecuta la ventana de toplevelHelp mediante unir2
-    help1 = Button(canvas,command=unir2, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
-    help1.place(x=260, y=360)
+    help1 = Button(canvas,command=unir2, text="      Help      ",bg="black", fg="white", bd=0, font="courier 16", activebackground="white",relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
+    help1.place(x=145, y=405)
 
     # botón que ejeucta el juego en práctica
-    pract = Button(canvas, command=unir5, text="Práctica", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
-    pract.place(x=260, y=420)
+    pract = Button(canvas, command=unir5, text="    Práctica    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)
+    pract.place(x=405, y=340)
+
+    # bontón que ejecuta la ventana de highscores
+    hs = Button(canvas, command=unir2, text="   Highscores   ", bg="black", fg="white", bd=0, font="courier 16", activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
+    hs.place(x=405, y=275)
+
+    # bontón que ejecuta la ventana de el modo lan
+    lan = Button(canvas, command=unir2, text="    LAN Mode    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
+    lan.place(x=405, y=405)
 
     def muteF():
         global MUTE
