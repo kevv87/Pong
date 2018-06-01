@@ -331,6 +331,9 @@ class Tablero:
                     if event.key == pygame.K_p:
                         pygame.mixer.music.unpause()
                         pause = False
+                    elif event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        quit()
                 elif event.type == pygame.QUIT:
                     quit()
 
