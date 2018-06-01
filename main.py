@@ -735,7 +735,12 @@ class Game:
                         self.game_field.new_player()
                         self.game_field.reset_scores()
                         start_boring_timer = time.time()
-
+                    elif event.key == pygame.K_b:
+                        self.color = white
+                        self.game_field.current_color = white
+                    elif event.key == pygame.K_v:
+                        self.color = green
+                        self.game_field.current_color = green
                     elif event.key == pygame.K_s and not self.game_field.pc:
                         self.player2_1down_y = True
                     elif event.key == pygame.K_p:
@@ -1293,7 +1298,7 @@ class Game:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_RETURN:
-                        self.__init__(self.mode, self.pc)
+                        self.__init__(self.mode, self.pc, self.color)
                     elif event.key == pygame.K_SPACE:
                         pygame.quit()
                         quit()
