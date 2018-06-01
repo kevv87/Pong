@@ -245,9 +245,9 @@ def root():
         pongL.config(image=pong)
 
     def update_color():
-        pvp.config(fg=current_color)
-        help1.config(fg=current_color)
-        pvpc.config(fg=current_color)
+        pvp.config(fg=current_color, activebackground=current_color)
+        help1.config(fg=current_color, activebackground=current_color)
+        pvpc.config(fg=current_color, activebackground=current_color)
         canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=9 )
         canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=1 )
         canvas.create_rectangle(30,220,50,380,fill=current_color,outline=current_color, width=5)
