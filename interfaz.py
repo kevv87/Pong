@@ -58,7 +58,10 @@ def root():
     canvas.create_rectangle(220,392,240,412,fill=current_color,outline=current_color, width=5)
 
     #Label con la imagen del título de pong
-    pong = PhotoImage(file="Images/PONG.png")
+    pong_white = PhotoImage(file="Images/PONG.png")
+    pong_green = PhotoImage(file="Images/PONG_GREEN.png")
+    pong = pong_green
+
     pongL = Label(canvas, image=pong, highlightbackground=current_color)
     pongL.pack()
     pongL.place(x=170,y=50)
@@ -181,22 +184,27 @@ def root():
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir3():
         global ver
+        global current_color
+        print(current_color)
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, True))
+        os.system('python3 main.py %s %s %r' %(MODE, current_color, True))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
         global ver
+        global current_color
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, ''))
+        os.system('python3 main.py %s %s, %r' %(MODE, current_color, ''))
         pygame.mixer.music.play(-1)
         root.deiconify()
+
+
 
 
     # botón que ejecuta el juego en modo pvp mediante unir4
@@ -210,6 +218,43 @@ def root():
     # botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1 = Button(canvas,command=unir2, text="Help",bg="black", fg=current_color, bd=0, font="courier 18", activebackground=current_color,relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1.place(x=260, y=380)
+
+    def color_w(*args):
+        global current_color
+        global pong
+        current_color = 'white'
+        pong = pong_white
+        update_color()
+        pongL.config(image=pong)
+
+
+    def color_g(*args):
+        global current_color
+        global pong
+        current_color = '#000fff000'
+        pong = pong_green
+        update_color()
+        pongL.config(image=pong)
+
+    def update_color():
+        pvp.config(fg=current_color)
+        help1.config(fg=current_color)
+        pvpc.config(fg=current_color)
+        canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=9 )
+        canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=1 )
+        canvas.create_rectangle(30,220,50,380,fill=current_color,outline=current_color, width=5)
+        canvas.create_rectangle(750,220,770,380,fill=current_color,outline=current_color, width=5)
+        canvas.create_rectangle(220,272,240,292,fill=current_color,outline=current_color, width=5)
+        canvas.create_rectangle(220,332,240,352,fill=current_color,outline=current_color, width=5)
+        canvas.create_rectangle(220,392,240,412,fill=current_color,outline=current_color, width=5)
+        doubles.config(highlightbackground=current_color)
+        singles.config(highlightbackground=current_color)
+        doublesL.config(fg=current_color)
+        singlesL.config(fg=current_color)
+
+
+    root.bind('b', color_w)
+    root.bind('v', color_g)
 
     # mainloop del root
     root.mainloop()

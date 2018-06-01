@@ -20,21 +20,12 @@ ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
 point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
-
-white = (255,255,255)
-import random
-import mutagen.oggvorbis
-import time
-
-
 pausa=False
 
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
 green = (0,255,0)
-
-current_color = white
 
 
 # Fuentes predeterminadas
@@ -54,7 +45,7 @@ clock = pygame.time.Clock()
 # asi como metodos que se usan en todas las modalidades del juego.
 
 class Tablero:
-    def __init__(self, PC, block_width, block_height):
+    def __init__(self, PC, block_width, block_height, color):
         # Atributos
         self.width = 800
         self.height = 600
@@ -71,6 +62,7 @@ class Tablero:
         self.ball_direction = (-1, 0)
         self.pc = PC
         self.practice = False
+        self.current_color = color
         self.paleta_length = 9 - (3*(self.level-1))
         if not self.practice:
             self.paleta_length_e = self.paleta_length
@@ -142,7 +134,7 @@ class Tablero:
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix[n])):
                 if self.game_matrix[n][m]:
-                    pygame.draw.rect(self.gameDisplay,current_color,[m*self.block_width, n*self.block_height,
+                    pygame.draw.rect(self.gameDisplay,self.current_color,[m*self.block_width, n*self.block_height,
                                                              self.block_width, self.block_height])
                 else:
                     pygame.draw.rect(self.gameDisplay, black, [m * self.block_width, n * self.block_height,
@@ -507,13 +499,15 @@ class Obstaculo:
 
 class Game:
     global mode
-    def __init__(self, MODE, PC):
+    def __init__(self, MODE, PC, color):
         global choosed
         global start_boring_timer
-        print(PC)
+
+        self.color = color
+        print(self.color)
 
         # Instancia del Tablero
-        self.game_field = Tablero(bool(PC), block_height, block_width)
+        self.game_field = Tablero(bool(PC), block_height, block_width, color)
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -556,6 +550,8 @@ class Game:
 
         self.gameloop(MODE)
 
+        self.current_color = color
+
     def gameloop(self, mode):
         global start_boring_timer
         global choosed
@@ -597,9 +593,9 @@ class Game:
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
                     elif event.key == pygame.K_b:
-                        current_color = white
+                        self.current_color = white
                     elif event.key == pygame.K_v:
-                        current_color = green
+                        self.current_color = green
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -627,7 +623,7 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not self.game_field.pc and not self.game_field.practice:
                 self.game_field.levelup_animation()
-                self.message_to_screen('Level Up!!', current_color, size = 'large')
+                self.message_to_screen('Level Up!!', self.current_color, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
                 self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -707,7 +703,7 @@ class Game:
             self.game_field.set_matrix(matrix)
             self.game_field.screen()
             if self.game_field.pc and not self.game_field.practice:
-                self.message_to_screen('Press w to add a new player', current_color, 200, 250)
+                self.message_to_screen('Press w to add a new player', self.current_color, 200, 250)
             pygame.display.update()
 
             # Controla la velocidad
@@ -780,7 +776,7 @@ class Game:
             # Sube la dificultad si no hay goles
             if time.time() - start_boring_timer > 10 and not self.game_field.pc and not self.game_field.practice:
                 self.game_field.levelup_animation()
-                self.message_to_screen('Level Up!!', current_color, size = 'large')
+                self.message_to_screen('Level Up!!', self.current_color, size = 'large')
                 self.player1_1y = 1
                 self.player2_2y = 1
                 self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -912,7 +908,7 @@ class Game:
             self.game_field.set_matrix(matrix)
             self.game_field.screen()
             if self.game_field.pc:
-                self.message_to_screen('Press w to add a new player', current_color, 200, 250)
+                self.message_to_screen('Press w to add a new player', self.current_color, 200, 250)
             pygame.display.update()
 
             # Se controla la velocidad
@@ -1030,7 +1026,7 @@ class Game:
                     self.game_field.reset_scores()
                     lvlup = self.game_field.levelup_animation()
                     if lvlup:
-                        self.message_to_screen('Level Up!!', current_color, size='large')
+                        self.message_to_screen('Level Up!!', self.current_color, size='large')
                         self.player1_1y = 1
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -1191,7 +1187,7 @@ class Game:
                     self.game_field.reset_scores()
                     lvlup = self.game_field.levelup_animation()
                     if lvlup:
-                        self.message_to_screen('Level Up!!', current_color, size='large')
+                        self.message_to_screen('Level Up!!', self.current_color, size='large')
                         self.player1_1y = 1
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
@@ -1276,12 +1272,12 @@ class Game:
                     if i != 0 and i != 24 and i % 2 == 0 and j == 19:
                         self.game_field.game_matrix[i][j] = False
             self.game_field.screen()
-            self.message_to_screen('You', current_color, size='large', x_displace=-x_displace_fromcenter, y_displace=-50)
-            self.message_to_screen('won!', current_color, size='large', x_displace=-x_displace_fromcenter, y_displace=40)
-            self.message_to_screen('You', current_color, size='large', x_displace=x_displace_fromcenter, y_displace=-50)
-            self.message_to_screen('lose!',current_color, size='large', x_displace=x_displace_fromcenter, y_displace=40)
-            self.message_to_screen('Press enter to play again', current_color, y_displace=200)
-            self.message_to_screen('or space to return to main menu', current_color, y_displace=250)
+            self.message_to_screen('You', self.current_color, size='large', x_displace=-x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('won!', self.current_color, size='large', x_displace=-x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('You', self.current_color, size='large', x_displace=x_displace_fromcenter, y_displace=-50)
+            self.message_to_screen('lose!',self.current_color, size='large', x_displace=x_displace_fromcenter, y_displace=40)
+            self.message_to_screen('Press enter to play again', self.current_color, y_displace=200)
+            self.message_to_screen('or space to return to main menu', self.current_color, y_displace=250)
 
             # Reconocimiento de eventos
             for event in pygame.event.get():
@@ -1317,7 +1313,9 @@ class Game:
                 self.obstaculo_list.append('')
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
-Game(sys.argv[1], bool(sys.argv[2]))
+
+print(sys.argv)
+Game(sys.argv[1], bool(sys.argv[2]), sys.argv[3])
 
 # Finalizacion del juego
 pygame.quit()
