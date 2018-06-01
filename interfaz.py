@@ -3,6 +3,7 @@ import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
 
+MUTE= ''
 #inicia pygame
 pygame.init()
 
@@ -26,9 +27,21 @@ def root():
     pygame.mixer.music.load("sounds/start_menu.ogg")
     pygame.mixer.music.play(-1)
 
+
     root.title() #título de la ventana
-    root.minsize(800,600) #Tamaño mínimo de la ventana
+
+    # configuracion de la pantalla
+    width = 800
+    height = 600
+
+    ws = root.winfo_screenwidth()  # largo de la pantalla
+    hs = root.winfo_screenheight() # Anchura de la pantalla
+
+    x = (ws / 2) - (width / 2)
+    y = (hs / 2) - (height / 2)
+
     root.resizable(width = NO, height = NO) #Que el tamaño de la ventana no cambie
+    root.geometry("%dx%d+%d+%d" %(width, height, x, y))
 
     # Se crea el canvas y se configura
     canvas = Canvas(root, width=800, height=600, bg="#000000")
@@ -36,16 +49,19 @@ def root():
     canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="#FFFFFF", width=9 )
     canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="white", width=1 )
     canvas.create_rectangle(30,220,50,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(750,220,770,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,272,240,292,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,332,240,352,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,392,240,412,fill="white",outline="white", width=5)
+    canvas.create_rectangle(750,200,770,360,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,252,240,272,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,312,240,332,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,372,240,392,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,432,240,452,fill="white",outline="white", width=5)
+
 
     #Label con la imagen del título de pong
-    pong = PhotoImage(file="images/PONG.png")
+    pong = PhotoImage(file="Images/PONG.png")
     pongL = Label(canvas, image=pong)
     pongL.pack()
     pongL.place(x=170,y=50)
+
 
     #inicializa el mixer de pygame
     pygame.mixer.init()
@@ -55,8 +71,14 @@ def root():
         root.withdraw()
         toplevel_help= Toplevel()
         toplevel_help.title("Help")
-        toplevel_help.minsize(800,600)
-        toplevel_help.resizable(width=NO, height=NO)
+        ws = toplevel_help.winfo_screenwidth()  # largo de la pantalla
+        hs = toplevel_help.winfo_screenheight()  # Anchura de la pantalla
+
+        x = (ws / 2) - (width / 2)
+        y = (hs / 2) - (height / 2)
+
+        toplevel_help.resizable(width=NO, height=NO)  # Que el tamaño de la ventana no cambie
+        toplevel_help.geometry("%dx%d+%d+%d" % (width, height, x, y))
         toplevel_help.configure(bg="Black")
 
         canvas2 = Canvas(toplevel_help, width=800, height=600, bg="#000000")  # Se crea el canvas2 y se configura
@@ -67,14 +89,14 @@ def root():
         canvas2.create_rectangle(750, 220, 770, 380, fill="white", outline="white", width=5)
 
         # Label con la imagen de los controles del player2
-        ws = PhotoImage(file="images/ws.png")
+        ws = PhotoImage(file="Images/ws.png")
         wsL = Label(canvas2, image=ws)
         wsL.image = ws
         wsL.pack()
         wsL.place(x=500, y=370)
 
         #Label con la imagen de los controles del player1
-        ab = PhotoImage(file="images/ab.png")
+        ab = PhotoImage(file="Images/ab.png")
         abL = Label(canvas2, image=ab)
         abL.image = ab
         abL.pack()
@@ -150,47 +172,84 @@ def root():
     doubles.pack()
     doubles.place(x=480,y=540)
 
+
     # función  que abre el toplevelHelp y oculta el root, además de ejecutar el sonido de select
     def unir2():
         select_sound.play()
         toplevelHelp()
 
-    # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
+    # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir3():
         global ver
+        global MUTE
         MODE = ver
-        root.destroy()
-        os.system('python3 main.py %s %r' %(MODE, False))
-        print('Finish')
+        pygame.mixer.music.stop()
+        root.withdraw()
+        print(MUTE)
+        os.system('python3 main.py %s %r %r %r' %(MODE, True, MUTE, ''))
+        pygame.mixer.music.play(-1)
+        root.deiconify()
 
-    # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
+
+    # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
         global ver
+        global MUTE
+        global PT
         MODE = ver
-        root.destroy()
-        os.system('python3 main.py %s %r' %(MODE, True))
-        print('Finish')
+        pygame.mixer.music.stop()
+        root.withdraw()
+        print(MUTE)
+        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, ''))
+        pygame.mixer.music.play(-1)
+        root.deiconify()
+
+    def unir5():
+        global ver
+        global MUTE
+        global PT
+        MODE = ver
+        pygame.mixer.music.stop()
+        root.withdraw()
+        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
+        pygame.mixer.music.play(-1)
+        root.deiconify()
+
 
     # botón que ejecuta el juego en modo pvp mediante unir4
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvp.place(x=260, y=260)
+    pvp.place(x=260, y=240)
 
     # botón que ejeucta el juego en modo pvpc mediante unir3
     pvpc = Button(canvas, command=unir3, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvpc.place(x=260, y=320)
-    # botón que ejecuta laventana de toplevelHelp mediante unir2
+    pvpc.place(x=260, y=300)
+
+    # botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1 = Button(canvas,command=unir2, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
-    help1.place(x=260, y=380)
+    help1.place(x=260, y=360)
+
+    # botón que ejeucta el juego en práctica
+    pract = Button(canvas, command=unir5, text="Práctica", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
+    pract.place(x=260, y=420)
+
+    def muteF():
+        global MUTE
+        if MUTE== '':
+            MUTE = True
+            pygame.mixer.music.unpause()
+        else:
+            MUTE = ''
+            pygame.mixer.music.pause()
 
 
     #boton que mutea el sonido
     muteP = PhotoImage(file="Images/mute.png")
+    muteR = muteP.subsample(x=11,y=11)
 
-    muteB = Button(canvas,command=unir2, bg="black",image=muteP ,fg="white", bd=0, activebackground="black",relief=FLAT)
-    muteB.place(x=0, y=0)
+    muteB = Button(canvas,command=muteF, bg="black",image=muteR ,fg="white", bd=0, activebackground="black",relief=FLAT)
+    muteB.place(x=738, y=12)
 
-    
     # mainloop del root
     root.mainloop()
 
-root()
+root()#botón que ejecuta la ventan#botón que ejecuta la ventana de toplevelHelp mediante unir2a de toplevelHelp mediante unir2
