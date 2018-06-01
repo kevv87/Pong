@@ -13,7 +13,8 @@ ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
 point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
-current_color = '#000fff000'
+green = '#000fff000'
+current_color = green
 
 #Función que crea el root con todas sus modificaciones
 def root():
@@ -189,7 +190,10 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %s %r' %(MODE, current_color, True))
+        if current_color != '#000fff000':
+            os.system('python3 main.py %s %r %s' %(MODE, True, 'white'))
+        else:
+            os.system('python3 main.py %s %r %s' %(MODE, True, 'green'))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
@@ -200,7 +204,11 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %s, %r' %(MODE, current_color, ''))
+        print(current_color)
+        if current_color != '#000fff000':
+            os.system('python3 main.py %s %r %s' %(MODE, True, 'white'))
+        else:
+            os.system('python3 main.py %s %r %s' %(MODE, True, 'green'))
         pygame.mixer.music.play(-1)
         root.deiconify()
 
