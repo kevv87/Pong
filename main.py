@@ -4,6 +4,7 @@ import mutagen.oggvorbis
 import time
 import sys
 import os
+from tkinter import *
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -312,7 +313,7 @@ class Tablero:
 
 
     # Pausa el juego
-    def pause(self):
+    def pause(self, ins=False):
         pause = True
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix)):
@@ -320,6 +321,10 @@ class Tablero:
                     self.game_matrix[n][m] = False
             self.screen()
             pygame.display.update()
+        print(self.game_matrix)
+
+        if ins:
+            self.inspector()
 
         while pause:
             pygame.mixer.music.pause()
@@ -343,6 +348,31 @@ class Tablero:
             for m in range(len(self.game_matrix)):
                 if n % 2  == 0:
                     self.game_matrix[n][m] = True
+
+
+    def inspector(self):
+        root = Tk()
+
+        t = Text(root, width=41, height=26,)
+        i = 0
+        for x in self.game_matrix:
+            for y in self.game_matrix[i]:
+                if y:
+                    t.insert(END, 1)
+                else:
+                    t.insert(END, 0)
+            t.insert(END, '\n')
+            i += 1
+        t.config(state=DISABLED)
+        t.pack()
+        ins = True
+
+        quit = lambda *args: root.destroy()
+
+        root.bind('<Escape>', quit)
+        root.bind('i', quit)
+
+        root.mainloop()
 
     # Presenta la animacion de un nuevo jugador
     def new_player(self):
@@ -618,6 +648,9 @@ class Game:
                        self.player2_1down_y = True
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
+                        self.timer_clock.tick()
+                    elif event.key == pygame.K_i:
+                        self.game_field.pause(True)
                         self.timer_clock.tick()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
@@ -1334,6 +1367,8 @@ class Game:
                 self.obstaculo_list.append('')
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
+
+
 
 
 Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]))
