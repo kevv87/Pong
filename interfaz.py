@@ -5,6 +5,7 @@ from tkinter import *  #Importa todo de tkinter}
 import threading
 import random
 import pyfirmata
+import time
 
 pygame.init()
 
@@ -13,6 +14,8 @@ placa = pyfirmata.Arduino('/dev/ttyACM0')
 MUTE= ''
 #inicia pygame
 pygame.init()
+
+selected = 0
 
 #Sonidos
 select_sound = pygame.mixer.Sound('sounds/select.ogg')
@@ -23,6 +26,8 @@ fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 #Función que crea el root con todas sus modificaciones
 def root(*args):
+    global selected
+    global select
     pygame.init()
     root = Tk() #Hacer la ventana
 
@@ -256,33 +261,97 @@ def root(*args):
     muteB = Button(canvas,command=muteF, bg="black",image=muteR ,fg="white", bd=0, activebackground="black",relief=FLAT)
     muteB.place(x=738, y=12)
 
-    # mainloop del root
-    root.mainloop()
+
+
+    while True:
+        if selected == 0:
+            pvp.config(state=ACTIVE)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            if select:
+                unir4()
+        elif selected == 1:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=ACTIVE)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            if select:
+                unir3()
+        elif selected == 2:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=ACTIVE)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            if select:
+                unir2()
+        elif selected == 3:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=ACTIVE)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            if select:
+                unir5()
+        elif selected == 4:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=ACTIVE)
+            doubles.config(state=NORMAL)
+            if select:
+                singles.select()
+        elif selected == 5:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=ACTIVE)
+            if select:
+                doubles.select()
+        root.update_idletasks()
+        root.update()
+        time.sleep(0.01)
+
 
 
 def arduino1(*args):
+    global selected
+    global select
     pyfirmata.util.Iterator(placa).start()
-    entrada1 = placa.get_pin('d:7:i')
+    entrada1 = placa.get_pin('d:9:i')
     entrada1.enable_reporting()
 
     entrada2 = placa.get_pin('d:8:i')
     entrada2.enable_reporting()
 
-    entrada3 = placa.get_pin('d:9:i')
+    entrada3 = placa.get_pin('d:7:i')
     entrada3.enable_reporting()
 
     try:
         while True:
             x = random.randint(0, 600)
             y = random.randint(0, 400)
-            if entrada1.read() == 1.0:
-                print("HOLA1")
-
-            elif entrada2.read():
-                print("HOLA2")
-
+            if entrada1.read():
+                if selected > 0:
+                    selected -= 1
             elif entrada3.read():
-                print("HOLA3")
+                if selected < 5:
+                    selected += 1
+
+            if entrada2.read():
+                select = True
+            else:
+                select = False
             placa.pass_time(0.2)
     finally:
         placa.exit()
