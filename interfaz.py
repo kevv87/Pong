@@ -3,7 +3,7 @@ import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
 
-MUTE= ''
+MUTE= ""
 #inicia pygame
 pygame.init()
 
@@ -236,10 +236,10 @@ def root():
         global MUTE
         if MUTE== '':
             MUTE = True
-            pygame.mixer.music.unpause()
+            pygame.mixer.music.pause()
         else:
             MUTE = ''
-            pygame.mixer.music.pause()
+            pygame.mixer.music.unpause()
 
 
     #boton que mutea el sonido

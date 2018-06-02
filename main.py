@@ -53,7 +53,7 @@ clock = pygame.time.Clock()
 class Tablero:
     def __init__(self, PC, block_width, block_height, MUTE, PT):
         # Atributos
-        self.mut = MUTE
+        self.mute = MUTE
         self.width = 800
         self.height = 600
         self.gameDisplay = pygame.display.set_mode((self.width, self.height))
@@ -89,8 +89,16 @@ class Tablero:
 
     # Musica
     def lvl_music(self):
-        if self.mut == True:
+        global pong_sound
+        global fail_sound
+        global point_sound
+        global ping_sound
+        if self.mute == True:
             music_file = 'sounds/blank.ogg'
+            pong_sound = pygame.mixer.Sound('sounds/blank.ogg')
+            ping_sound = pygame.mixer.Sound('sounds/blank.ogg')
+            point_sound = pygame.mixer.Sound('sounds/blank.ogg')
+            fail_sound = pygame.mixer.Sound('sounds/blank.ogg')
         elif self.level == 2:
             music_file = 'sounds/lvl2.ogg'
         elif self.level == 3:
@@ -652,6 +660,10 @@ class Game:
                     elif event.key == pygame.K_i:
                         self.game_field.pause(True)
                         self.timer_clock.tick()
+                    elif event.key == pygame.K_m:
+                        self.game_field.mute = not self.mute
+                        self.mute = not self.mute
+                        self.game_field.music_update()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -793,6 +805,13 @@ class Game:
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
                         self.timer_clock.tick()
+                    elif event.key == pygame.K_i:
+                        self.game_field.pause(True)
+                        self.timer_clock.tick()
+                    elif event.key == pygame.K_m:
+                        self.game_field.mute = not self.mute
+                        self.mute = not self.mute
+                        self.game_field.music_update()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
