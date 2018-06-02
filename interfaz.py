@@ -3,7 +3,7 @@ import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
 
-MUTE= ""
+MUTE= ''
 #inicia pygame
 pygame.init()
 
@@ -185,9 +185,9 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        print(MUTE)
         os.system('python3 main.py %s %r %r %r' %(MODE, True, MUTE, ''))
         pygame.mixer.music.play(-1)
+        muteI()
         root.deiconify()
 
 
@@ -199,9 +199,10 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        print(MUTE)
         os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, ''))
         pygame.mixer.music.play(-1)
+        muteI()
+
         root.deiconify()
 
     def unir5():
@@ -213,6 +214,8 @@ def root():
         root.withdraw()
         os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
         pygame.mixer.music.play(-1)
+        muteI()
+
         root.deiconify()
 
 
@@ -241,6 +244,15 @@ def root():
             MUTE = ''
             pygame.mixer.music.unpause()
 
+    def muteI():
+        global MUTE
+        print('Will')
+        print(MUTE)
+        if MUTE== '':
+            pygame.mixer.music.unpause()
+        else:
+            pygame.mixer.music.pause()
+
 
     #boton que mutea el sonido
     muteP = PhotoImage(file="Images/mute.png")
@@ -248,6 +260,8 @@ def root():
 
     muteB = Button(canvas,command=muteF, bg="black",image=muteR ,fg="white", bd=0, activebackground="black",relief=FLAT)
     muteB.place(x=738, y=12)
+
+    muteI()
 
     # mainloop del root
     root.mainloop()
