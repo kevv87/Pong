@@ -2,6 +2,13 @@ import pygame
 import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
+import threading
+import random
+import pyfirmata
+
+pygame.init()
+
+placa = pyfirmata.Arduino('/dev/ttyACM0')
 
 MUTE= ''
 #inicia pygame
@@ -15,7 +22,7 @@ point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
 #Función que crea el root con todas sus modificaciones
-def root():
+def root(*args):
     pygame.init()
     root = Tk() #Hacer la ventana
 
@@ -252,4 +259,62 @@ def root():
     # mainloop del root
     root.mainloop()
 
-root()#botón que ejecuta la ventan#botón que ejecuta la ventana de toplevelHelp mediante unir2a de toplevelHelp mediante unir2
+
+def arduino1(*args):
+    pyfirmata.util.Iterator(placa).start()
+    entrada1 = placa.get_pin('d:7:i')
+    entrada1.enable_reporting()
+
+    entrada2 = placa.get_pin('d:8:i')
+    entrada2.enable_reporting()
+
+    entrada3 = placa.get_pin('d:9:i')
+    entrada3.enable_reporting()
+
+    try:
+        while True:
+            x = random.randint(0, 600)
+            y = random.randint(0, 400)
+            if entrada1.read() == 1.0:
+                print("HOLA1")
+
+            elif entrada2.read():
+                print("HOLA2")
+
+            elif entrada3.read():
+                print("HOLA3")
+            placa.pass_time(0.2)
+    finally:
+        placa.exit()
+
+threadLock = threading.Lock()
+
+class rootThread(threading.Thread):
+   def __init__(self, threadID, name, counter):
+      threading.Thread.__init__(self)
+      self.threadID = threadID
+      self.name = name
+      self.counter = counter
+   def run(self):
+      print ("Starting " + self.name)
+      root()
+
+
+
+class arduino1Thread(threading.Thread):
+    def __init__(self, threadID, name, counter):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.counter = counter
+
+    def run(self):
+        print("Starting " + self.name)
+        arduino1()
+
+thread1 = rootThread(1, 'Root', 1)
+thread2 = arduino1Thread(2, 'Arduino', 2)
+
+thread2.start()
+thread1.start()
+

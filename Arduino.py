@@ -104,13 +104,13 @@ def numeros(num):
         DP.write(True)
 '''
 
-entrada1 = placa.get_pin('a:0:i')
+entrada1 = placa.get_pin('d:8:i')
 entrada1.enable_reporting()
 
 entrada2 = placa.get_pin('d:9:i')
 entrada2.enable_reporting()
 
-entrada3 = placa.get_pin('d:8:i')
+entrada3 = placa.get_pin('d:10:i')
 entrada3.enable_reporting()
 
 white = (255,255,255)

@@ -5,9 +5,11 @@ import time
 import sys
 import os
 
+
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
+
 
 # Colores importantes
 white = (255, 255, 255)
