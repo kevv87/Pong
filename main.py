@@ -329,7 +329,7 @@ class Tablero:
                     self.game_matrix[n][m] = False
             self.screen()
             pygame.display.update()
-        print(self.game_matrix)
+
 
         if ins:
             self.inspector()
@@ -547,7 +547,7 @@ class Game:
     def __init__(self, MODE, PC, MUTE, PT):
         global choosed
         global start_boring_timer
-        print(PC)
+
         # Instancia del Tablero
         self.game_field = Tablero(bool(PC), block_height, block_width, bool(MUTE), bool(PT))
         # Posiciones iniciales de los jugadores
@@ -1278,7 +1278,7 @@ class Game:
                 ball_y = 12
         for i in self.obstaculo_list:
                 if i.y == ball_y and i.x == ball_x:
-                    print('here')
+
                 if (self.game_field.get_ball_direction()[
                 0] > 0 and ball_x + 1 == i.x and (
                     i.y <= ball_y <= i.y + i.height or (

@@ -246,8 +246,7 @@ def root():
 
     def muteI():
         global MUTE
-        print('Will')
-        print(MUTE)
+
         if MUTE== '':
             pygame.mixer.music.unpause()
         else:
