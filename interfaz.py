@@ -145,11 +145,13 @@ def root():
         player2.place(x=500, y=480)
 
     def lan_win():
-        lan = Tk()
+        global isserver
+        global isclient
+        root.withdraw()
+        lan = Toplevel()
         # configuracion de la pantalla
         width = 800
         height = 600
-
         ws = lan.winfo_screenwidth()  # largo de la pantalla
         hs = lan.winfo_screenheight()  # Anchura de la pantalla
 
