@@ -2,7 +2,9 @@ import pygame
 import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
+import time
 
+MUTE= ''
 #inicia pygame
 pygame.init()
 
@@ -48,16 +50,19 @@ def root():
     canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="#FFFFFF", width=9 )
     canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="white", width=1 )
     canvas.create_rectangle(30,220,50,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(750,220,770,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,272,240,292,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,332,240,352,fill="white",outline="white", width=5)
-    canvas.create_rectangle(220,392,240,412,fill="white",outline="white", width=5)
+    canvas.create_rectangle(750,200,770,360,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,252,240,272,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,312,240,332,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,372,240,392,fill="white",outline="white", width=5)
+    canvas.create_rectangle(220,432,240,452,fill="white",outline="white", width=5)
+
 
     #Label con la imagen del título de pong
     pong = PhotoImage(file="Images/PONG.png")
     pongL = Label(canvas, image=pong)
     pongL.pack()
     pongL.place(x=170,y=50)
+
 
     #inicializa el mixer de pygame
     pygame.mixer.init()
@@ -139,6 +144,152 @@ def root():
         player2.pack()
         player2.place(x=500, y=480)
 
+    def lan_win():
+        global isserver
+        global isclient
+        root.withdraw()
+        lan = Toplevel()
+        # configuracion de la pantalla
+        width = 800
+        height = 600
+        ws = lan.winfo_screenwidth()  # largo de la pantalla
+        hs = lan.winfo_screenheight()  # Anchura de la pantalla
+
+        x = (ws / 2) - (width / 2)
+        y = (hs / 2) - (height / 2)
+
+        lan.resizable(width=NO, height=NO)  # Que el tamaño de la ventana no cambie
+        lan.geometry("%dx%d+%d+%d" % (width, height, x, y))
+
+        canvas = Canvas(lan, width=800, height=600, bg="#000000")
+        canvas.place(x=0, y=0)
+
+        canvas.create_rectangle(5, 5, 795, 595, fill="#000000", outline="#FFFFFF", width=9)
+
+        canvas.create_rectangle(5, 5, 795, 595, fill="#000000", outline="white", width=1)
+        canvas.create_line(300, 0, 300, 600, fill='white')
+        canvas.create_line(300, 300, 800, 300, fill='white')
+
+        isserver = True
+        isclient = False
+
+        def beserver():
+            global isserver
+            global isclient
+            isserver = True
+            isclient = False
+
+        def beclient():
+            global isclient
+            global isserver
+            isclient = True
+            isserver = False
+
+        # Radiobutton que indica que se va a ser el server
+        serverL = Label(canvas, text="Servidor", bg="black", fg="white", font="courier 30")
+        serverL.pack()
+        serverL.place(x=20, y=90)
+        server = Radiobutton(canvas, bg="black", value=1, variable=1, command=beserver)
+        server.pack()
+        server.place(x=100, y=150)
+
+        # Radiobutton que indica que se va a ser un cliente
+        clientL = Label(canvas, text="Cliente", bg="black", fg="white", font="courier 30")
+        clientL.pack()
+        clientL.place(x=20, y=390)
+        client = Radiobutton(canvas, bg="black", value=2, variable=1, command=beclient)
+        client.pack()
+        client.place(x=100, y=450)
+
+        serverT = Label(canvas, text="Servidor", bg="black", fg="white", font="courier 30")
+        serverT.pack()
+        serverT.place(x=445, y=20)
+
+        clientT = Label(canvas, text="Cliente", bg="black", fg="white", font="courier 30")
+        clientT.pack()
+        clientT.place(x=450, y=320)
+
+        client1_ip_L = Label(canvas, text='Ip de cliente 1:', fg='white', bg='black', font='courier')
+        client2_ip_L = Label(canvas, text='Ip de cliente 2:', fg='white', bg='black', font='courier')
+        client1_ip_L.pack()
+        client2_ip_L.pack()
+        client1_ip_L.place(x=320, y=100)
+        client2_ip_L.place(x=320, y=175)
+
+        client1_ip = Entry(canvas)
+        client2_ip = Entry(canvas)
+        client2_ip.pack()
+        client1_ip.pack()
+        client2_ip.place(x=520, y=120)
+        client1_ip.place(x=520, y=195)
+
+        server_button = Button(canvas, text="Start", bg="black", fg="white", bd=0,
+                               font="courier 18", activebackground="white", relief=FLAT)
+        server_button.pack()
+        server_button.place(x=480, y=240)
+
+        jugador_L = Label(canvas, text='Jugador:', bg='black', fg='white', font='courier 22')
+        jugador_L.pack()
+        jugador_L.place(x=320, y=380)
+
+        jugador1_r = Radiobutton(canvas, bg="black", value=2, variable=2)
+        jugador2_r = Radiobutton(canvas, bg="black", value=1, variable=2)
+        jugador1_r.pack()
+        jugador2_r.pack()
+        jugador1_r.place(x=530, y=390)
+        jugador2_r.place(x=650, y=390)
+        jugador1_r.select()
+
+        jugador1_r_L = Label(canvas, bg='black', fg='white', text='1', font='courier 16')
+        jugador2_r_L = Label(canvas, bg='black', fg='white', text='2', font='courier 16')
+        jugador1_r_L.pack()
+        jugador2_r_L.pack()
+        jugador1_r_L.place(x=570, y=387)
+        jugador2_r_L.place(x=690, y=387)
+
+        server_ip_L = Label(canvas, bg='black', fg='white', text='Ip del servidor:', font='courier 18')
+        server_ip_L.pack()
+        server_ip_L.place(x=320, y=450)
+        server_ip = Entry(canvas)
+        server_ip.pack()
+        server_ip.place(x=520, y=490)
+
+        client_button = Button(canvas, text="Start", bg="black", fg="white", bd=0,
+                               font="courier 18", activebackground="white", relief=FLAT)
+        client_button.pack()
+        client_button.place(x=480, y=530)
+
+        boton_v = Button(canvas, text="<volver>", bg="black", fg="white", bd=0, font="courier 18",
+                         activebackground="white", relief=FLAT)
+        boton_v.pack()  # botón para la función mostrar4
+        boton_v.place(x=20, y=540)
+
+        while True:
+            global isserver
+            global isclient
+            if isserver:
+                server.select()
+                client1_ip.config(state=NORMAL)
+                client2_ip.config(state=NORMAL)
+                server_button.config(state=NORMAL)
+                jugador1_r.config(state=DISABLED)
+                jugador2_r.config(state=DISABLED)
+                server_ip.config(state=DISABLED)
+                client_button.config(state=DISABLED)
+            elif isclient:
+                client.select()
+                client1_ip.config(state=DISABLED)
+                client2_ip.config(state=DISABLED)
+                server_button.config(state=DISABLED)
+                jugador1_r.config(state=NORMAL)
+                jugador2_r.config(state=NORMAL)
+                server_ip.config(state=NORMAL)
+                client_button.config(state=NORMAL)
+            lan.update_idletasks()
+            lan.update()
+            time.sleep(0.01)
+
+
     #función para cambiar el valor de ver a 'singles'
     def modeS():
         global ver
@@ -168,6 +319,7 @@ def root():
     doubles.pack()
     doubles.place(x=480,y=540)
 
+
     # función  que abre el toplevelHelp y oculta el root, además de ejecutar el sonido de select
     def unir2():
         select_sound.play()
@@ -176,36 +328,88 @@ def root():
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir3():
         global ver
+        global MUTE
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, True))
+        os.system('python3 main.py %s %r %r %r' %(MODE, True, MUTE, ''))
         pygame.mixer.music.play(-1)
+        muteI()
         root.deiconify()
+
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
         global ver
+        global MUTE
+        global PT
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r' %(MODE, ''))
+        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, ''))
         pygame.mixer.music.play(-1)
+        muteI()
+
+        root.deiconify()
+
+    def unir5():
+        global ver
+        global MUTE
+        global PT
+        MODE = ver
+        pygame.mixer.music.stop()
+        root.withdraw()
+        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
+        pygame.mixer.music.play(-1)
+        muteI()
+
         root.deiconify()
 
 
     # botón que ejecuta el juego en modo pvp mediante unir4
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvp.place(x=260, y=260)
+    pvp.place(x=260, y=240)
 
     # botón que ejeucta el juego en modo pvpc mediante unir3
     pvpc = Button(canvas, command=unir3, text="Player vs PC",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
-    pvpc.place(x=260, y=320)
+    pvpc.place(x=260, y=300)
+
     # botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1 = Button(canvas,command=unir2, text="Help",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
-    help1.place(x=260, y=380)
+    help1.place(x=260, y=360)
+
+    # botón que ejeucta el juego en práctica
+    pract = Button(canvas, command=unir5, text="Práctica", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
+    pract.place(x=260, y=420)
+
+    def muteF():
+        global MUTE
+        if MUTE== '':
+            MUTE = True
+            pygame.mixer.music.pause()
+        else:
+            MUTE = ''
+            pygame.mixer.music.unpause()
+
+    def muteI():
+        global MUTE
+
+        if MUTE== '':
+            pygame.mixer.music.unpause()
+        else:
+            pygame.mixer.music.pause()
+
+
+    #boton que mutea el sonido
+    muteP = PhotoImage(file="Images/mute.png")
+    muteR = muteP.subsample(x=11,y=11)
+
+    muteB = Button(canvas,command=muteF, bg="black",image=muteR ,fg="white", bd=0, activebackground="black",relief=FLAT)
+    muteB.place(x=738, y=12)
+
+    muteI()
 
     # mainloop del root
     root.mainloop()
 
-root()
+root()#botón que ejecuta la ventan#botón que ejecuta la ventana de toplevelHelp mediante unir2a de toplevelHelp mediante unir2
