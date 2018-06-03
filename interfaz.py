@@ -65,7 +65,7 @@ def root():
     #Función que crea y modifica el toplevel_help
     def toplevelHelp():
         root.withdraw()
-        toplevel_help= Toplevel()
+        toplevel_help = Toplevel()
         toplevel_help.title("Help")
         ws = toplevel_help.winfo_screenwidth()  # largo de la pantalla
         hs = toplevel_help.winfo_screenheight()  # Anchura de la pantalla
@@ -139,6 +139,41 @@ def root():
         player2.pack()
         player2.place(x=500, y=480)
 
+    def toplevelHS():
+        root.withdraw()
+        toplevel_hs = Toplevel()
+        toplevel_hs.title("Highscores")
+
+        ws = toplevel_hs.winfo_screenwidth()  # largo de la pantalla
+        hs = toplevel_hs.winfo_screenheight()  # Anchura de la pantalla
+
+        x = (ws / 2) - (width / 2)
+        y = (hs / 2) - (height / 2)
+
+        toplevel_hs.resizable(width=NO, height=NO)  # Que el tamaño de la ventana no cambie
+        toplevel_hs.geometry("%dx%d+%d+%d" % (width, height, x, y))
+        toplevel_hs.configure(bg="Black")
+
+        canvas2 = Canvas(toplevel_hs, width=800, height=600, bg="#000000")  # Se crea el canvas2 y se configura
+        canvas2.place(x=0, y=0)
+        canvas2.create_rectangle(5, 5, 795, 595, fill="#000000", outline="#FFFFFF", width=9)
+        canvas2.create_rectangle(5, 5, 795, 595, fill="#000000", outline="white", width=1)
+        canvas2.create_rectangle(30, 220, 50, 380, fill="white", outline="white", width=5)
+        canvas2.create_rectangle(750, 220, 770, 380, fill="white", outline="white", width=5)
+
+        # función que muestra el root y destruye el toplevel
+        def unir1():
+            root.deiconify()
+            toplevel_hs.destroy()
+            select_sound.play()
+
+        #Botón para volver a el root mediante la función unir1
+        boton_v = Button(toplevel_hs, command=unir1 , text="<volver>",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
+        boton_v.pack() #botón para la función mostrar4
+        boton_v.place(x=325,y=530)
+
+
+
     #función para cambiar el valor de ver a 'singles'
     def modeS():
         global ver
@@ -152,22 +187,47 @@ def root():
         global ver
         ver = 'doubles'
 
-    #Radiobutton que indica que se va a jugar en singles
-    singlesL = Label(canvas, text="singles", bg="black", fg="white", font="courier 18")
+    #Radiobutton que indica si se va a jugar en doubles o no
+    doublesL2 = Label(canvas, text="Doubles", bg="black", fg="white", font="courier 14")
+    doublesL2.pack()
+    doublesL2.place(x=220,y=460)
+
+    singlesL = Label(canvas, text="OFF", bg="black", fg="white", font="courier 14")
     singlesL.pack()
-    singlesL.place(x=440, y=500)
-    singles = Checkbutton(canvas,command=modeS, bg="black", variable=1)
+    singlesL.place(x=173, y=490)
+
+    singles = Radiobutton(canvas,command=modeS, bg="black", value=1, variable=1)
     singles.pack()
-    singles.place(x=480, y=540)
+    singles.place(x=175, y=530)
 
-    #Radiobutton que indica que se va a jugar en doubles
-    doublesL= Label(canvas, text="doubles",bg="black", fg="white", font="courier 18")
+    doublesL= Label(canvas, text="ON",bg="black", fg="white", font="courier 14")
     doublesL.pack()
-    doublesL.place(x=250,y=500)
-    doubles = Checkbutton(canvas, command=modeD, bg="black", variable=1)
-    doubles.pack()
-    doubles.place(x=290,y=540)
+    doublesL.place(x=318,y=490)
 
+    doubles = Radiobutton(canvas, command=modeD, bg="black", value=2, variable=1)
+    doubles.pack()
+    doubles.place(x=315,y=530)
+
+    #Radiobuttons que indican si se va a jugar con trampolines y sus labels
+    trampolinesL = Label(canvas, text="Trampolines", bg="black", fg="white", font="courier 14")
+    trampolinesL.pack()
+    trampolinesL.place(x=460,y=460)
+
+    tOnL = Label(canvas, text="ON", bg="black", fg="white", font="courier 14")
+    tOnL.pack()
+    tOnL.place(x=578,y=490)
+
+    tOn = Radiobutton(canvas, bg="black", value=2, variable=2)
+    tOn.pack()
+    tOn.place(x=575, y=530)
+
+    tOffL = Label(canvas, text="OFF", bg="black", fg="white", font="courier 14")
+    tOffL.pack()
+    tOffL.place(x=433, y=490)
+
+    tOff = Radiobutton(canvas, bg="black", value=1, variable=2)
+    tOff.pack()
+    tOff.place(x=435, y=530)
 
     # función  que abre el toplevelHelp y oculta el root, además de ejecutar el sonido de select
     def unir2():
@@ -211,30 +271,34 @@ def root():
         pygame.mixer.music.play(-1)
         root.deiconify()
 
+    def unir6():
+        select_sound.play()
+        toplevelHS()
+
 
     # botón que ejecuta el juego en modo pvp mediante unir4
     pvp = Button(canvas, command= unir4, text="Player vs Player",bg="black", fg="white", bd=0, font="courier 16", activebackground="white",relief=FLAT)
-    pvp.place(x=145, y=275)
+    pvp.place(x=145, y=255)
 
     # botón que ejeucta el juego en modo pvpc mediante unir3
     pvpc = Button(canvas, command=unir3, text="  Player vs PC  ",bg="black", fg="white", bd=0, font="courier 16", activebackground="white",relief=FLAT)
-    pvpc.place(x=145, y=340)
+    pvpc.place(x=145, y=320)
 
     # botón que ejecuta la ventana de toplevelHelp mediante unir2
     help1 = Button(canvas,command=unir2, text="      Help      ",bg="black", fg="white", bd=0, font="courier 16", activebackground="white",relief=FLAT) #botón que ejecuta la ventana de toplevelHelp mediante unir2
-    help1.place(x=145, y=405)
+    help1.place(x=145, y=385)
 
     # botón que ejeucta el juego en práctica
     pract = Button(canvas, command=unir5, text="    Práctica    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)
-    pract.place(x=405, y=340)
+    pract.place(x=405, y=320)
 
     # bontón que ejecuta la ventana de highscores
-    hs = Button(canvas, command=unir2, text="   Highscores   ", bg="black", fg="white", bd=0, font="courier 16", activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
-    hs.place(x=405, y=275)
+    hs = Button(canvas, command=unir6, text="   Highscores   ", bg="black", fg="white", bd=0, font="courier 16", activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
+    hs.place(x=405, y=255)
 
     # bontón que ejecuta la ventana de el modo lan
     lan = Button(canvas, command=unir2, text="    LAN Mode    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
-    lan.place(x=405, y=405)
+    lan.place(x=405, y=385)
 
     def muteF():
         global MUTE
