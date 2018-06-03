@@ -502,7 +502,7 @@ def root(*args):
                 selected -= 1
         elif entrada3.read():
             print('2')
-            if selected < 5:
+            if selected < 8:
                 selected += 1
         if entrada2.read():
             print('3')
@@ -517,26 +517,35 @@ def root(*args):
             pract.config(state=NORMAL)
             singles.config(state=NORMAL)
             doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
             if select:
                 unir4()
         elif selected == 1:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=ACTIVE)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                pass
+        elif selected == 2:
             pvp.config(state=NORMAL)
             pvpc.config(state=ACTIVE)
             help1.config(state=NORMAL)
             pract.config(state=NORMAL)
             singles.config(state=NORMAL)
             doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
             if select:
                 unir3()
-        elif selected == 2:
-            pvp.config(state=NORMAL)
-            pvpc.config(state=NORMAL)
-            help1.config(state=ACTIVE)
-            pract.config(state=NORMAL)
-            singles.config(state=NORMAL)
-            doubles.config(state=NORMAL)
-            if select:
-                unir2()
         elif selected == 3:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -544,28 +553,60 @@ def root(*args):
             pract.config(state=ACTIVE)
             singles.config(state=NORMAL)
             doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            lan.config(state=NORMAL)
             if select:
-                unir5()
+                pass
         elif selected == 4:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
-            help1.config(state=NORMAL)
+            help1.config(state=ACTIVE)
             pract.config(state=NORMAL)
-            singles.config(state=ACTIVE)
+            singles.config(state=NORMAL)
             doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
             if select:
-                singles.select()
-                modeS()
+                unir2()
         elif selected == 5:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
             help1.config(state=NORMAL)
             pract.config(state=NORMAL)
             singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=ACTIVE)
+            if select:
+                lan_win()
+        elif selected == 6:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
             doubles.config(state=ACTIVE)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
             if select:
                 doubles.select()
                 modeD()
+        elif selected == 7:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=ACTIVE)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                singles.select()
+                modeS()
         root.update_idletasks()
         root.update()
         time.sleep(0.01)

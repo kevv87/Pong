@@ -950,12 +950,12 @@ class Game:
                     elif event.key == pygame.K_s:
                         self.player2_1down_y = False
 
-            if botones1[0].read():
-                self.player1_1y += 1
-                self.player1_2y -= 1
-            elif botones1[2].read():
+            if botones1[0].read() and self.player1_1y-1 > 2:
                 self.player1_1y -= 1
                 self.player1_2y += 1
+            elif botones1[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
+                self.player1_1y += 1
+                self.player1_2y -= 1
             elif botones1[3].read() == 1.0:
                 self.color = white
                 self.game_field.current_color = white
@@ -973,7 +973,7 @@ class Game:
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
                 self.player1_2y -= 1
-            elif self.player1_1up_y and self.player1_1y+1 > 2:
+            elif self.player1_1up_y and self.player1_1y-1 > 2:
                 self.player1_1y -= 1
                 self.player1_2y += 1
 
