@@ -683,7 +683,7 @@ class Game:
     def singles(self):
         global start_boring_timer
         global choosed
-        global arriba_b, abajo_b, select_b
+        global botones1
         while self.game:
             self.timer_clock.tick()
             # Reconocimiento de eventos
@@ -725,9 +725,9 @@ class Game:
                     elif event.key == pygame.K_s:
                         self.player2_1down_y = False
 
-            if abajo_b.read():
+            if botones1[0].read():
                 self.player1_1y += 1
-            elif arriba_b.read():
+            elif botones1[2].read():
                 self.player1_1y -= 1
 
             # Movimiento de las paletas del primer jugador
@@ -1448,18 +1448,24 @@ class Game:
 
 
 def arduino1_setup():
-    global placa1, arriba_b, abajo_b, select_b, display1_leds
+    global placa1, botones1, display1_leds
     placa1 = pyfirmata.Arduino('/dev/ttyACM0')
     pyfirmata.util.Iterator(placa1).start()
 
-    arriba_b = placa1.get_pin('d:10:i')
-    arriba_b.enable_reporting()
+    botones1 = []
 
-    abajo_b = placa1.get_pin('d:12:i')
-    abajo_b.enable_reporting()
+    botones1.append(placa1.get_pin('d:10:i')) # boton arriba
+    botones1.append(placa1.get_pin('d:11:i')) # boton select
+    botones1.append(placa1.get_pin('d:12:i')) # boton abajo
+    botones1.append(placa1.get_pin('d:9:i')) # boton verde
+    botones1.append(placa1.get_pin('a:3:i')) # boton blanco
+    botones1.append(placa1.get_pin('a:3:i')) # boton pausa
+    botones1.append(placa1.get_pin('a:3:i')) # boton back
+    botones1.append(placa1.get_pin('a:3:i')) # boton inspector
 
-    select_b = placa1.get_pin('d:11:i')
-    select_b.enable_reporting()
+
+    for i in botones1:
+        i.enable_reporting()
 
     display1_leds = [0,1,2,3,4,5,6,7,8]
 
