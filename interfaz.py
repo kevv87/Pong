@@ -185,6 +185,31 @@ def root():
             isclient = True
             isserver = False
 
+        def back():
+            root.deiconify()
+            lan.destroy()
+
+        def start_client():
+            if player == 1:
+                port = 1235
+            else:
+                port = 1237
+            pygame.mixer.music.pause()
+            os.system('python3 cliente.py %d %s' % (int(port), str(server_ip.get())))
+            pygame.mixer.music.unpause()
+
+        def start_server():
+            global ver
+            global MUTE
+            MODE = ver
+            pygame.mixer.music.stop()
+            lan.withdraw()
+            os.system('python3 main.py %s %r %r %r %r %s %s' % (MODE, '', MUTE, '', True, client1_ip, client2_ip))
+            pygame.mixer.music.play(-1)
+            muteI()
+
+            root.deiconify()
+
         # Radiobutton que indica que se va a ser el server
         serverL = Label(canvas, text="Servidor", bg="black", fg="white", font="courier 30")
         serverL.pack()
@@ -209,6 +234,9 @@ def root():
         clientT.pack()
         clientT.place(x=450, y=320)
 
+        client2_ip = StringVar()
+        client1_ip = StringVar()
+
         client1_ip_L = Label(canvas, text='Ip de cliente 1:', fg='white', bg='black', font='courier')
         client2_ip_L = Label(canvas, text='Ip de cliente 2:', fg='white', bg='black', font='courier')
         client1_ip_L.pack()
@@ -216,15 +244,15 @@ def root():
         client1_ip_L.place(x=320, y=100)
         client2_ip_L.place(x=320, y=175)
 
-        client1_ip = Entry(canvas)
-        client2_ip = Entry(canvas)
-        client2_ip.pack()
-        client1_ip.pack()
-        client2_ip.place(x=520, y=120)
-        client1_ip.place(x=520, y=195)
+        client1_ip_e = Entry(canvas)
+        client2_ip_e = Entry(canvas)
+        client2_ip_e.pack()
+        client1_ip_e.pack()
+        client2_ip_e.place(x=520, y=120)
+        client1_ip_e.place(x=520, y=195)
 
         server_button = Button(canvas, text="Start", bg="black", fg="white", bd=0,
-                               font="courier 18", activebackground="white", relief=FLAT)
+                               font="courier 18", activebackground="white", relief=FLAT, command=start_server)
         server_button.pack()
         server_button.place(x=480, y=240)
 
@@ -232,8 +260,18 @@ def root():
         jugador_L.pack()
         jugador_L.place(x=320, y=380)
 
-        jugador1_r = Radiobutton(canvas, bg="black", value=2, variable=2)
-        jugador2_r = Radiobutton(canvas, bg="black", value=1, variable=2)
+        player = 1
+
+        def change_player1():
+            global player
+            player = 1
+
+        def change_player2():
+            global player
+            player = 2
+
+        jugador1_r = Radiobutton(canvas, bg="black", value=2, variable=2, command=change_player1)
+        jugador2_r = Radiobutton(canvas, bg="black", value=1, variable=2, command=change_player2)
         jugador1_r.pack()
         jugador2_r.pack()
         jugador1_r.place(x=530, y=390)
@@ -247,43 +285,46 @@ def root():
         jugador1_r_L.place(x=570, y=387)
         jugador2_r_L.place(x=690, y=387)
 
+
+        server_ip = StringVar()
         server_ip_L = Label(canvas, bg='black', fg='white', text='Ip del servidor:', font='courier 18')
         server_ip_L.pack()
         server_ip_L.place(x=320, y=450)
-        server_ip = Entry(canvas)
-        server_ip.pack()
-        server_ip.place(x=520, y=490)
+        server_ip_e = Entry(canvas, textvariable=server_ip)
+        server_ip_e.pack()
+        server_ip_e.place(x=520, y=490)
 
         client_button = Button(canvas, text="Start", bg="black", fg="white", bd=0,
-                               font="courier 18", activebackground="white", relief=FLAT)
+                               font="courier 18", activebackground="white", relief=FLAT, command=start_client)
         client_button.pack()
         client_button.place(x=480, y=530)
 
         boton_v = Button(canvas, text="<volver>", bg="black", fg="white", bd=0, font="courier 18",
-                         activebackground="white", relief=FLAT)
+                         activebackground="white", relief=FLAT, command=back)
         boton_v.pack()  # botón para la función mostrar4
         boton_v.place(x=20, y=540)
+
 
         while True:
             global isserver
             global isclient
             if isserver:
                 server.select()
-                client1_ip.config(state=NORMAL)
-                client2_ip.config(state=NORMAL)
+                client1_ip_e.config(state=NORMAL)
+                client2_ip_e.config(state=NORMAL)
                 server_button.config(state=NORMAL)
                 jugador1_r.config(state=DISABLED)
                 jugador2_r.config(state=DISABLED)
-                server_ip.config(state=DISABLED)
+                server_ip_e.config(state=DISABLED)
                 client_button.config(state=DISABLED)
             elif isclient:
                 client.select()
-                client1_ip.config(state=DISABLED)
-                client2_ip.config(state=DISABLED)
+                client1_ip_e.config(state=DISABLED)
+                client2_ip_e.config(state=DISABLED)
                 server_button.config(state=DISABLED)
                 jugador1_r.config(state=NORMAL)
                 jugador2_r.config(state=NORMAL)
-                server_ip.config(state=NORMAL)
+                server_ip_e.config(state=NORMAL)
                 client_button.config(state=NORMAL)
             lan.update_idletasks()
             lan.update()
@@ -332,7 +373,7 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r %r %r' %(MODE, True, MUTE, ''))
+        os.system('python3 main.py %s %r %r %r %r' %(MODE, True, MUTE, '', ''))
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()
@@ -346,7 +387,7 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, ''))
+        os.system('python3 main.py %s %r %r %r %r' %(MODE, '', MUTE, '', ''))
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -359,11 +400,13 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
+        os.system('python3 main.py %s %r %r %r %r' %(MODE, '', MUTE, True, ''))
         pygame.mixer.music.play(-1)
         muteI()
 
         root.deiconify()
+
+
 
 
     # botón que ejecuta el juego en modo pvp mediante unir4
@@ -381,6 +424,9 @@ def root():
     # botón que ejeucta el juego en práctica
     pract = Button(canvas, command=unir5, text="Práctica", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
     pract.place(x=260, y=420)
+
+    lan = Button(canvas, command=lan_win, text="Práctica", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
+    lan.place(x=520, y=420)
 
     def muteF():
         global MUTE

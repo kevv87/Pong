@@ -546,7 +546,7 @@ class Obstaculo:
 
 class Game:
     global mode
-    def __init__(self, MODE, PC, MUTE, PT):
+    def __init__(self, MODE, PC, MUTE, PT, SERVER=False):
         global choosed
         global start_boring_timer
 
@@ -623,9 +623,9 @@ class Game:
             k += 1
 
         self.file.close()
-
-
-        self.start_server()
+        self.server = SERVER
+        if self.server:
+            self.start_server(sys.argv[6], sys.argv[7])
         self.gameloop(MODE)
 
 
@@ -656,7 +656,7 @@ class Game:
                         if event.key == pygame.K_UP:
                             self.player1_1up_y = True
                         elif event.key == pygame.K_DOWN:
-                            self.player1_1up_y = True
+                            self.player1_1down_y = True
                         elif event.key == pygame.K_w and not self.pc:
                             self.player2_1up_y = True
                         elif event.key == pygame.K_w:
@@ -668,7 +668,7 @@ class Game:
                         elif event.key == pygame.K_s and not self.pc:
                             self.player2_1down_y = True
                         elif event.key == pygame.K_p:
-                            self.pause()
+                            self.game_field.pause()
                         elif event.key == pygame.K_i:
                             self.game_field.pause(True)
                             self.timer_clock.tick()
@@ -725,6 +725,8 @@ class Game:
                 self.player1_1y += 1
             elif self.player1_1up_y and self.player1_1y+1 > 2:
                 self.player1_1y -= 1
+            else:
+                print('nope')
 
             # Movimiento de las paletas del segundo jugador
             if self.player2_1down_y and self.player2_1y + self.game_field.paleta_length_e + 1 < len(self.game_field.get_matrix()):
@@ -817,7 +819,8 @@ class Game:
             if self.game_field.pc and not self.game_field.practice:
                 self.message_to_screen('Press w to add a new player', white, 200, 250)
 
-            self.send_matrix(matrix)
+            if self.server:
+                self.send_matrix(matrix)
             pygame.display.update()
 
             # Controla la velocidad
@@ -1465,8 +1468,8 @@ class Game:
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 
-    def start_server(self):
-        self.client1 = Client(('localhost', 1235))
+    def start_server(self, client1_ip, client2_ip):
+        self.client1 = Client((client1_ip, 1235))
         self.client1.send(['server-client', 1234])
         self.listener1 = Listener(('', 1234))
         self.conn1 = self.listener1.accept()
@@ -1476,7 +1479,7 @@ class Game:
         setups = [1, self.mode, self.pc]
         self.client1.send(setups)
         print('Connected to first player')
-        self.client2 = Client(('localhost', 1237))
+        self.client2 = Client((client2_ip, 1237))
         self.client2.send(['server-client',1236])
         self.listener2 = Listener(('', 1236))
         self.conn2 = self.listener2.accept()
@@ -1498,7 +1501,7 @@ class Game:
             lista1.append(i)
         return lista1
 
-Game(sys.argv[1], bool(sys.argv[2]))
+Game(sys.argv[1], bool(sys.argv[2]), sys.argv[3], sys.argv[4], sys.argv[5])
 
 # Finalizacion del juego
 pygame.quit()

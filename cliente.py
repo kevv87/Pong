@@ -1,7 +1,10 @@
 import pygame
 from multiprocessing.connection import Listener, Client
+import sys
 
-port = int(input('Puerto:'))
+port = int(sys.argv[1])
+server_ip = str(sys.argv[2])
+print(port)
 
 pygame.init()
 width = 800
@@ -54,13 +57,14 @@ def message_to_screen(msg, color,x_displace=0, y_displace=0, size='small'):
     gameDisplay.blit(textSurf, textRect)
 
 def startup():
+    global server_ip
     global client
     global setups
     msg, port = conn.recv()
 
     while msg != 'server-client':
         pass
-    client = Client(('localhost', int(port)))
+    client = Client((server_ip, int(port)))
     client.send('client-server')
     setups = conn.recv()
 
@@ -133,4 +137,4 @@ while True:
             sinc = conn.recv()
 
 
-print("Adios.")
+
