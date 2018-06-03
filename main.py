@@ -443,6 +443,7 @@ class Tablero:
             self.message_to_screen('Juego pausado',self.current_color, size='large')
             self.message_to_screen('Presione p para reanudar', self.current_color, y_displace=80)
             pygame.display.update()
+            placa1.pass_time(0.2)
 
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix)):
@@ -451,6 +452,7 @@ class Tablero:
 
 
     def inspector(self):
+        global botones1
         root = Tk()
 
         t = Text(root, width=41, height=26,)
@@ -472,7 +474,19 @@ class Tablero:
         root.bind('<Escape>', quit)
         root.bind('i', quit)
 
-        root.mainloop()
+        stay = True
+
+        while stay:
+            if botones1[6].read() == 1.0:
+                stay = False
+            elif botones1[7].read() == 1.0:
+                stay = False
+            root.update_idletasks()
+            root.update()
+            time.sleep(0.01)
+            placa1.pass_time(0.2)
+
+        quit()
 
     # Presenta la animacion de un nuevo jugador
     def new_player(self):
@@ -764,9 +778,9 @@ class Game:
                     elif event.key == pygame.K_s:
                         self.player2_1down_y = False
 
-            if botones1[0].read():
+            if botones1[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
-            elif botones1[2].read():
+            elif botones1[0].read() and self.player1_1y-1 > 2:
                 self.player1_1y -= 1
             elif botones1[3].read() == 1.0:
                 self.color = white
@@ -935,6 +949,25 @@ class Game:
                         self.player2_1up_y = False
                     elif event.key == pygame.K_s:
                         self.player2_1down_y = False
+
+            if botones1[0].read():
+                self.player1_1y += 1
+                self.player1_2y -= 1
+            elif botones1[2].read():
+                self.player1_1y -= 1
+                self.player1_2y += 1
+            elif botones1[3].read() == 1.0:
+                self.color = white
+                self.game_field.current_color = white
+            elif botones1[4].read() == 1.0:
+                self.color = green
+                self.game_field.current_color = green
+            elif botones1[5].read() == 1.0:
+                self.game_field.pause()
+                self.timer_clock.tick()
+            elif botones1[7].read() == 1.0:
+                self.game_field.pause(True)
+                self.timer_clock.tick()
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):

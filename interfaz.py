@@ -331,7 +331,7 @@ def root(*args):
     singlesL.pack()
 
     singlesL.place(x=440, y=500)
-    singles = Checkbutton(canvas,command=modeS, bg="black", variable=1, highlightbackground=current_color)
+    singles = Radiobutton(canvas,command=modeS, bg="black", variable=1, value=1, highlightbackground=current_color)
     singles.pack()
     singles.place(x=480, y=540)
 
@@ -340,7 +340,7 @@ def root(*args):
     doublesL.pack()
 
     doublesL.place(x=250,y=500)
-    doubles = Checkbutton(canvas, command=modeD, bg="black", variable=1,  highlightbackground=current_color)
+    doubles = Radiobutton(canvas, command=modeD, bg="black", variable=1,  value=2,highlightbackground=current_color)
 
     doubles.pack()
     doubles.place(x=290,y=540)
@@ -555,6 +555,7 @@ def root(*args):
             doubles.config(state=NORMAL)
             if select:
                 singles.select()
+                modeS()
         elif selected == 5:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -564,6 +565,7 @@ def root(*args):
             doubles.config(state=ACTIVE)
             if select:
                 doubles.select()
+                modeD()
         root.update_idletasks()
         root.update()
         time.sleep(0.01)
