@@ -354,14 +354,16 @@ def root(*args):
         global ver
         global current_color
         global MUTE
+        global placa1
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
+        placa1.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
-
+        arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()

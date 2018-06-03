@@ -655,7 +655,7 @@ class Game:
 
         arduino1_setup()
 
-        if color == 'white':
+        if color == 'white' or (255,255,255):
             self.color = (255,255,255)
         else:
             self.color = (0,255,0)
@@ -949,8 +949,8 @@ class Game:
                         self.player2_1up_y = False
                     elif event.key == pygame.K_s:
                         self.player2_1down_y = False
-
-            if botones1[0].read() and self.player1_1y-1 > 2:
+            print('jelou')
+            if botones1[0].read() and self.player1_1y-1 > 0:
                 self.player1_1y -= 1
                 self.player1_2y += 1
             elif botones1[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -973,7 +973,7 @@ class Game:
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
                 self.player1_2y -= 1
-            elif self.player1_1up_y and self.player1_1y-1 > 2:
+            elif self.player1_1up_y and self.player1_1y-1 > 0:
                 self.player1_1y -= 1
                 self.player1_2y += 1
 
