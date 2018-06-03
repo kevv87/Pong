@@ -1519,6 +1519,8 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
+                        pygame.quit()
+                        quit()
                     elif event.key == pygame.K_SPACE:
                         placa1.exit()
                         pygame.quit()
