@@ -4,6 +4,7 @@ import mutagen.oggvorbis
 import time
 import sys
 import os
+from tkinter import *
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -52,7 +53,7 @@ clock = pygame.time.Clock()
 class Tablero:
     def __init__(self, PC, block_width, block_height, MUTE, PT):
         # Atributos
-        self.mut = MUTE
+        self.mute = MUTE
         self.width = 800
         self.height = 600
         self.gameDisplay = pygame.display.set_mode((self.width, self.height))
@@ -88,8 +89,16 @@ class Tablero:
 
     # Musica
     def lvl_music(self):
-        if self.mut == True:
+        global pong_sound
+        global fail_sound
+        global point_sound
+        global ping_sound
+        if self.mute == True:
             music_file = 'sounds/blank.ogg'
+            pong_sound = pygame.mixer.Sound('sounds/blank.ogg')
+            ping_sound = pygame.mixer.Sound('sounds/blank.ogg')
+            point_sound = pygame.mixer.Sound('sounds/blank.ogg')
+            fail_sound = pygame.mixer.Sound('sounds/blank.ogg')
         elif self.level == 2:
             music_file = 'sounds/lvl2.ogg'
         elif self.level == 3:
@@ -312,7 +321,7 @@ class Tablero:
 
 
     # Pausa el juego
-    def pause(self):
+    def pause(self, ins=False):
         pause = True
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix)):
@@ -320,6 +329,10 @@ class Tablero:
                     self.game_matrix[n][m] = False
             self.screen()
             pygame.display.update()
+
+
+        if ins:
+            self.inspector()
 
         while pause:
             pygame.mixer.music.pause()
@@ -331,6 +344,9 @@ class Tablero:
                     if event.key == pygame.K_p:
                         pygame.mixer.music.unpause()
                         pause = False
+                    elif event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        quit()
                 elif event.type == pygame.QUIT:
                     quit()
 
@@ -340,6 +356,31 @@ class Tablero:
             for m in range(len(self.game_matrix)):
                 if n % 2  == 0:
                     self.game_matrix[n][m] = True
+
+
+    def inspector(self):
+        root = Tk()
+
+        t = Text(root, width=41, height=26,)
+        i = 0
+        for x in self.game_matrix:
+            for y in self.game_matrix[i]:
+                if y:
+                    t.insert(END, 1)
+                else:
+                    t.insert(END, 0)
+            t.insert(END, '\n')
+            i += 1
+        t.config(state=DISABLED)
+        t.pack()
+        ins = True
+
+        quit = lambda *args: root.destroy()
+
+        root.bind('<Escape>', quit)
+        root.bind('i', quit)
+
+        root.mainloop()
 
     # Presenta la animacion de un nuevo jugador
     def new_player(self):
@@ -506,7 +547,7 @@ class Game:
     def __init__(self, MODE, PC, MUTE, PT):
         global choosed
         global start_boring_timer
-        print(PC)
+
         # Instancia del Tablero
         self.game_field = Tablero(bool(PC), block_height, block_width, bool(MUTE), bool(PT))
         # Posiciones iniciales de los jugadores
@@ -597,6 +638,13 @@ class Game:
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
                         self.timer_clock.tick()
+                    elif event.key == pygame.K_i:
+                        self.game_field.pause(True)
+                        self.timer_clock.tick()
+                    elif event.key == pygame.K_m:
+                        self.game_field.mute = not self.mute
+                        self.mute = not self.mute
+                        self.game_field.music_update()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -738,6 +786,13 @@ class Game:
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
                         self.timer_clock.tick()
+                    elif event.key == pygame.K_i:
+                        self.game_field.pause(True)
+                        self.timer_clock.tick()
+                    elif event.key == pygame.K_m:
+                        self.game_field.mute = not self.mute
+                        self.mute = not self.mute
+                        self.game_field.music_update()
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
                         self.player1_1up_y = False
@@ -1203,25 +1258,25 @@ class Game:
                 ball_x = 19
                 ball_y = 12
         for i in self.obstaculo_list:
-                if i.y == ball_y and i.x == ball_x:
-                    print('here')
-                if (self.game_field.get_ball_direction()[
-                0] > 0 and ball_x + 1 == i.x and (
-                    i.y <= ball_y <= i.y + i.height or (
+            if i.y == ball_y and i.x == ball_x:
+                print('here')
+            if (self.game_field.get_ball_direction()[
+                    0] > 0 and ball_x + 1 == i.x and (
+                        i.y <= ball_y <= i.y + i.height or (
+                        self.game_field.get_ball_direction()[
+                            1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
+                                self.game_field.get_ball_direction()[
+                                    1] < 0 and i.y <= ball_y - 1 <= i.y + i.height))) or (
+                    self.game_field.get_ball_direction()[
+                        0] < 0 and ball_x - 1 == i.x and (i.y <= ball_y <= i.y + i.height or (
                     self.game_field.get_ball_direction()[
                         1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
-                            self.game_field.get_ball_direction()[
-                                1] < 0 and i.y <= ball_y - 1 <= i.y + i.height))) or (
-                self.game_field.get_ball_direction()[
-                    0] < 0 and ball_x - 1 == i.x and (i.y <= ball_y <= i.y + i.height or (
-                self.game_field.get_ball_direction()[
-                    1] > 0 and i.y <= ball_y + 1 <= i.y + i.height) or (
-                                                            self.game_field.get_ball_direction()[
-                                                                1] > 0 and i.y <= ball_y + 1 <= i.y + i.height)
-                )):
-                    self.game_field.set_ball_direction(
-                        (self.game_field.get_ball_direction()[0] * -1, random.randint(-1,1)))
-                    break
+                                                                  self.game_field.get_ball_direction()[
+                                                                      1] > 0 and i.y <= ball_y + 1 <= i.y + i.height)
+                    )):
+                self.game_field.set_ball_direction(
+                    (self.game_field.get_ball_direction()[0] * -1, random.randint(-1, 1)))
+                break
         if (self.game_field.get_ball_direction()[1] > 0 and ball_y + 1 == len(self.game_field.get_matrix()) - 1) or (
                 self.game_field.get_ball_direction()[1] < 0 and ball_y - 1 == 1):
             self.game_field.set_ball_direction((self.game_field.get_ball_direction()[0], self.game_field.get_ball_direction()[1] * -1))
@@ -1312,6 +1367,8 @@ class Game:
                 self.obstaculo_list.append('')
             for i in range(3):
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
+
+
 
 
 Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]))
