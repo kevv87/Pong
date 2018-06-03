@@ -1,11 +1,19 @@
 import pygame
 import mutagen.oggvorbis
 import os
-from tkinter import *  #Importa todo de tkinter
+from tkinter import *  #Importa todo de tkinter}
+import random
+import pyfirmata
+import time
+
+pygame.init()
+
 
 MUTE= ''
 #inicia pygame
 pygame.init()
+
+selected = 0
 
 #Sonidos
 select_sound = pygame.mixer.Sound('sounds/select.ogg')
@@ -14,8 +22,14 @@ ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
 point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
+
+
+green = '#000fff000'
+current_color = 'white'
+
 #Función que crea el root con todas sus modificaciones
 def root():
+
     pygame.init()
     root = Tk() #Hacer la ventana
 
@@ -25,7 +39,6 @@ def root():
     pygame.mixer.pre_init(sample_rate, -16, 1, 512)
     pygame.mixer.init()
     pygame.mixer.music.load("sounds/start_menu.ogg")
-    pygame.mixer.music.play(-1)
 
 
     root.title() #título de la ventana
@@ -46,15 +59,22 @@ def root():
     # Se crea el canvas y se configura
     canvas = Canvas(root, width=800, height=600, bg="#000000")
     canvas.place(x=0, y=0)
-    canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="#FFFFFF", width=9 )
-    canvas.create_rectangle(5,5,795,595, fill="#000000",  outline="white", width=1 )
-    canvas.create_rectangle(30,220,50,380,fill="white",outline="white", width=5)
-    canvas.create_rectangle(750,200,770,360,fill="white",outline="white", width=5)
+
+
+    canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=9 )
+    canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=1 )
+    canvas.create_rectangle(30,220,50,380,fill=current_color,outline=current_color, width=5)
+    canvas.create_rectangle(750,220,770,380,fill=current_color,outline=current_color, width=5)
+
 
 
     #Label con la imagen del título de pong
-    pong = PhotoImage(file="Images/PONG.png")
-    pongL = Label(canvas, image=pong)
+    pong_white = PhotoImage(file="Images/PONG.png")
+    pong_green = PhotoImage(file="Images/PONG_GREEN.png")
+    pong = pong_white
+
+    pongL = Label(canvas, image=pong, highlightbackground=current_color)
+
     pongL.pack()
     pongL.place(x=170,y=50)
 
@@ -64,6 +84,7 @@ def root():
 
     #Función que crea y modifica el toplevel_help
     def toplevelHelp():
+        global toplevel_help
         root.withdraw()
         toplevel_help= Toplevel()
         toplevel_help.title("Help")
@@ -105,7 +126,9 @@ def root():
             select_sound.play()
 
         #Botón para volver a el root mediante la función unir1
-        boton_v = Button(toplevel_help, command=unir1 , text="<volver>",bg="black", fg="white", bd=0, font="courier 18", activebackground="white",relief=FLAT)
+
+        boton_v = Button(toplevel_help, command=unir1 , text="<volver>",bg="black", fg=current_color, bd=0, font="courier 18", activebackground=current_color,relief=FLAT,state=ACTIVE)
+
         boton_v.pack() #botón para la función mostrar4
         boton_v.place(x=325,y=530)
 
@@ -177,6 +200,7 @@ def root():
     def lan_win():
         global isserver
         global isclient
+        global lan
         root.withdraw()
         lan = Toplevel()
         # configuracion de la pantalla
@@ -347,7 +371,9 @@ def root():
     singlesL.pack()
     singlesL.place(x=173, y=490)
 
-    singles = Radiobutton(canvas,command=modeS, bg="black", value=1, variable=1)
+    singlesL.place(x=440, y=500)
+    singles = Radiobutton(canvas,command=modeS, bg="black", variable=1, value=1, highlightbackground=current_color)
+
     singles.pack()
     singles.place(x=175, y=530)
 
@@ -355,7 +381,10 @@ def root():
     doublesL.pack()
     doublesL.place(x=318,y=490)
 
-    doubles = Radiobutton(canvas, command=modeD, bg="black", value=2, variable=1)
+    doublesL.place(x=250,y=500)
+    doubles = Radiobutton(canvas, command=modeD, bg="black", variable=1,  value=2,highlightbackground=current_color)
+
+
     doubles.pack()
     doubles.place(x=315,y=530)
 
@@ -389,16 +418,17 @@ def root():
     def unir3():
         global ver
         global current_color
-        print(current_color)
+        global MUTE
+        global placa1
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-
+        placa1.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
-
+        arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()
@@ -406,16 +436,20 @@ def root():
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
         global ver
+        global MUTE
+        global PT
+        global placa1
+        global select, starting
         global current_color
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        print(current_color)
+        placa1.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
-
+        arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -446,14 +480,14 @@ def root():
         canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=1 )
         canvas.create_rectangle(30,220,50,380,fill=current_color,outline=current_color, width=5)
         canvas.create_rectangle(750,220,770,380,fill=current_color,outline=current_color, width=5)
-        canvas.create_rectangle(220,272,240,292,fill=current_color,outline=current_color, width=5)
-        canvas.create_rectangle(220,332,240,352,fill=current_color,outline=current_color, width=5)
-        canvas.create_rectangle(220,392,240,412,fill=current_color,outline=current_color, width=5)
+
         doubles.config(highlightbackground=current_color)
         singles.config(highlightbackground=current_color)
         doublesL.config(fg=current_color)
         singlesL.config(fg=current_color)
-
+        hs.config(fg=current_color)
+        pract.config(fg=current_color)
+        lan.config(fg=current_color)
 
     root.bind('b', color_w)
     root.bind('v', color_g)
@@ -527,10 +561,169 @@ def root():
     muteB = Button(canvas,command=muteF, bg="black",image=muteR ,fg="white", bd=0, activebackground="black",relief=FLAT)
     muteB.place(x=738, y=12)
 
-
     muteI()
 
-    # mainloop del root
-    root.mainloop()
+    update_color()
 
-root()#botón que ejecuta la ventan#botón que ejecuta la ventana de toplevelHelp mediante unir2a de toplevelHelp mediante unir2
+    singles.select()
+
+    arduino1_setup()
+
+    pygame.mixer.music.play(-1)
+
+
+    while True:
+        global stay, arriba_b, abajo_b, select_b, verde_b, blanco_b, mute_b
+        if arriba_b.read():
+            print('1')
+            if selected > 0:
+                selected -= 1
+        elif abajo_b.read():
+            print('2')
+            if selected < 8:
+                selected += 1
+        elif verde_b.read() == 1.0:
+            color_g()
+        elif blanco_b.read() == 1.0:
+            color_w()
+        elif mute_b == 1.0:
+            muteF()
+        if select_b.read():
+            print('3')
+            select = True
+        else:
+            select = False
+
+        if selected == 0:
+            pvp.config(state=ACTIVE)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                unir4()
+        elif selected == 1:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=ACTIVE)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                pass
+        elif selected == 2:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=ACTIVE)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                unir3()
+        elif selected == 3:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=ACTIVE)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                pass
+        elif selected == 4:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=ACTIVE)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                unir2()
+                selected = -1
+        elif selected == 5:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=ACTIVE)
+            if select:
+                lan_win()
+                selected = -2
+        elif selected == 6:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=ACTIVE)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                doubles.select()
+                modeD()
+        elif selected == 7:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=ACTIVE)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            if select:
+                singles.select()
+                modeS()
+        elif selected == -1:
+            if select:
+                global toplevel_help
+                toplevel_help.destroy()
+                root.deiconify()
+        root.update_idletasks()
+        root.update()
+        time.sleep(0.01)
+        placa1.pass_time(0.2)
+
+def arduino1_setup():
+    global placa1, arriba_b, select_b, abajo_b, blanco_b, verde_b, mute_b
+    placa1 = pyfirmata.Arduino('/dev/ttyACM0')
+    pyfirmata.util.Iterator(placa1).start()
+
+    arriba_b = placa1.get_pin('d:10:i')
+    arriba_b.enable_reporting()
+
+    select_b = placa1.get_pin('d:11:i')
+    select_b.enable_reporting()
+
+    abajo_b= placa1.get_pin('d:12:i')
+    abajo_b.enable_reporting()
+
+    blanco_b= placa1.get_pin('a:3:i')
+    blanco_b.enable_reporting()
+
+    verde_b= placa1.get_pin('a:4:i')
+    verde_b.enable_reporting()
+
+    mute_b = placa1.get_pin('a:5:i')
+    mute_b.enable_reporting()
+
+root()
