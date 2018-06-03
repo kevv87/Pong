@@ -255,8 +255,12 @@ def root():
         client_button.pack()
         client_button.place(x=480, y=530)
 
+        def back():
+            lan.withdraw()
+            root.deiconify()
+
         boton_v = Button(canvas, text="<volver>", bg="black", fg="white", bd=0, font="courier 18",
-                         activebackground="white", relief=FLAT)
+                         activebackground="white", relief=FLAT, command=back)
         boton_v.pack()  # botón para la función mostrar4
         boton_v.place(x=20, y=540)
 
@@ -284,6 +288,7 @@ def root():
             lan.update_idletasks()
             lan.update()
             time.sleep(0.01)
+
 
 
     #función para cambiar el valor de ver a 'singles'
@@ -383,7 +388,7 @@ def root():
     hs.place(x=405, y=275)
 
     # bontón que ejecuta la ventana de el modo lan
-    lan = Button(canvas, command=unir2, text="    LAN Mode    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
+    lan = Button(canvas, command=lan_win, text="    LAN Mode    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
     lan.place(x=405, y=405)
 
     def muteF():
