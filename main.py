@@ -630,7 +630,7 @@ class Game:
         else:
             self.color = (0,255,0)
         # Instancia del Tablero
-        self.game_field = Tablero(bool(PC), block_height, block_width, MUTE, PT, self.color)
+        self.game_field = Tablero(bool(PC), block_height, block_width, MUTE, PT, color)
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -752,13 +752,18 @@ class Game:
                 self.player1_1y += 1
             elif botones1[2].read():
                 self.player1_1y -= 1
-
-            if botones1[3].read() == 1.0:
+            elif botones1[3].read() == 1.0:
                 self.color = white
                 self.game_field.current_color = white
             elif botones1[4].read() == 1.0:
                 self.color = green
                 self.game_field.current_color = green
+            elif botones1[5].read() == 1.0:
+                self.game_field.pause()
+                self.timer_clock.tick()
+            elif botones1[7].read() == 1.0:
+                self.game_field.pause(True)
+                self.timer_clock.tick()
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
