@@ -570,6 +570,7 @@ def root():
     arduino1_setup()
 
     pygame.mixer.music.play(-1)
+    selected =0
 
 
     while True:
