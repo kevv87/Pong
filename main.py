@@ -426,14 +426,14 @@ class Tablero:
                     pygame.quit()
                     quit()
 
-            if botones1[5] == 1.0:
+            if botones1[5].read() == 1.0:
                 pygame.mixer.music.unpause()
                 pause = False
-            elif botones1[3] == 1.0:
+            elif botones1[3].read() == 1.0:
                 self.current_color = green
-            elif botones1[4] == 1.0:
+            elif botones1[4].read() == 1.0:
                 self.current_color = white
-            elif botones1[6] == 1.0:
+            elif botones1[6].read() == 1.0:
                 placa1.exit()
                 pygame.quit()
                 quit()
@@ -646,7 +646,7 @@ class Game:
         else:
             self.color = (0,255,0)
         # Instancia del Tablero
-        self.game_field = Tablero(bool(PC), block_height, block_width, MUTE, PT, color)
+        self.game_field = Tablero(bool(PC), block_height, block_width, MUTE, PT, self.color)
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -1457,6 +1457,7 @@ class Game:
         self.game_field.gameDisplay.blit(textSurf, textRect)
 
     def win(self, winner):
+        global botones1
         win_screen = True
         x_displace_fromcenter = winner*200
         cont = False
@@ -1483,16 +1484,24 @@ class Game:
                     pygame.quit()
                     quit()
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        placa1.exit()
-                        pygame.quit()
-                        quit()
-                    elif event.key == pygame.K_RETURN:
+                    if event.key == pygame.K_RETURN:
                         self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
                     elif event.key == pygame.K_SPACE:
                         placa1.exit()
                         pygame.quit()
                         quit()
+
+            if botones1[6].read() == 1.0:
+                placa1.exit()
+                pygame.quit()
+                quit()
+            elif botones1[1].read():
+                self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
+            elif botones1[2].read():
+                placa1.exit()
+                pygame.quit()
+                quit()
+
 
             pygame.display.update()
 
