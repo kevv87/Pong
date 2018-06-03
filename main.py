@@ -387,6 +387,7 @@ class Tablero:
     def pause(self, ins=False):
         global current_color
         global placa1
+        global botones1
 
         pause = True
         for n in range(len(self.game_matrix)):
@@ -422,7 +423,22 @@ class Tablero:
 
                 elif event.type == pygame.QUIT:
                     placa1.exit()
+                    pygame.quit()
                     quit()
+
+            if botones1[5] == 1.0:
+                pygame.mixer.music.unpause()
+                pause = False
+            elif botones1[3] == 1.0:
+                self.current_color = green
+            elif botones1[4] == 1.0:
+                self.current_color = white
+            elif botones1[6] == 1.0:
+                placa1.exit()
+                pygame.quit()
+                quit()
+
+
             self.screen()
             self.message_to_screen('Juego pausado',self.current_color, size='large')
             self.message_to_screen('Presione p para reanudar', self.current_color, y_displace=80)
