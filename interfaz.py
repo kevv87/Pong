@@ -2,14 +2,13 @@ import pygame
 import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
-import threading
 import random
 import pyfirmata
 import time
 
 pygame.init()
 
-placa = pyfirmata.Arduino('/dev/ttyACM0')
+
 
 MUTE= ''
 #inicia pygame
@@ -355,10 +354,14 @@ def root(*args):
         global ver
         global MUTE
         global PT
+        global placa1
+        global select, starting
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
+        placa1.exit()
         os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, ''))
+        arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -429,7 +432,24 @@ def root(*args):
 
     muteI()
 
+    arduino1_setup()
+
     while True:
+        global entrada1, entrada2, entrada3
+        if entrada1.read():
+            print('1')
+            if selected > 0:
+                selected -= 1
+        elif entrada3.read():
+            print('2')
+            if selected < 5:
+                selected += 1
+        if entrada2.read():
+            print('3')
+            select = True
+        else:
+            select = False
+
         if selected == 0:
             pvp.config(state=ACTIVE)
             pvpc.config(state=NORMAL)
@@ -487,69 +507,21 @@ def root(*args):
         root.update_idletasks()
         root.update()
         time.sleep(0.01)
+        placa1.pass_time(0.2)
 
+def arduino1_setup():
+    global placa1, entrada1, entrada2, entrada3
+    placa1 = pyfirmata.Arduino('/dev/ttyACM0')
+    pyfirmata.util.Iterator(placa1).start()
 
-
-def arduino1(*args):
-    global selected
-    global select
-    pyfirmata.util.Iterator(placa).start()
-    entrada1 = placa.get_pin('d:9:i')
+    entrada1 = placa1.get_pin('d:10:i')
     entrada1.enable_reporting()
 
-    entrada2 = placa.get_pin('d:8:i')
+    entrada2 = placa1.get_pin('d:11:i')
     entrada2.enable_reporting()
 
-    entrada3 = placa.get_pin('d:7:i')
+    entrada3 = placa1.get_pin('d:12:i')
     entrada3.enable_reporting()
 
-    try:
-        while True:
-            x = random.randint(0, 600)
-            y = random.randint(0, 400)
-            if entrada1.read():
-                if selected > 0:
-                    selected -= 1
-            elif entrada3.read():
-                if selected < 5:
-                    selected += 1
 
-            if entrada2.read():
-                select = True
-            else:
-                select = False
-            placa.pass_time(0.2)
-    finally:
-        placa.exit()
-
-threadLock = threading.Lock()
-
-class rootThread(threading.Thread):
-   def __init__(self, threadID, name, counter):
-      threading.Thread.__init__(self)
-      self.threadID = threadID
-      self.name = name
-      self.counter = counter
-   def run(self):
-      print ("Starting " + self.name)
-      root()
-
-
-
-class arduino1Thread(threading.Thread):
-    def __init__(self, threadID, name, counter):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.counter = counter
-
-    def run(self):
-        print("Starting " + self.name)
-        arduino1()
-
-thread1 = rootThread(1, 'Root', 1)
-thread2 = arduino1Thread(2, 'Arduino', 2)
-
-thread2.start()
-thread1.start()
-
+root()

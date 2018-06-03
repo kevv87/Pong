@@ -4,6 +4,7 @@ import mutagen.oggvorbis
 import time
 import sys
 import os
+import pyfirmata
 from tkinter import *
 
 
@@ -161,56 +162,118 @@ class Tablero:
 
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_f(self):
-        if self.friend_score == 0:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix)):
-                    if (m == 15 and 2 <= n <= 6) or (n == 2 and 13 <= m <= 15) or (m == 13 and 2 <= n <= 5) or (n == 6 and 13 <= m <= 15):
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 1:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix)):
-                    if (m == 15 and 2 <= n <= 6):
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 2:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 3) or (m == 13 and n == 5) :
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 3:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 5) or (m == 15 and n == 3):
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 4:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4):
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 5:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 5) or (m == 13 and n == 3):
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 6:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 13 and n == 5)or (m == 15 and n == 5) or (m == 13 and n == 3):
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 7:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if (m == 15 and 2 <= n <= 6) or ((m == 14 or m == 13) and n == 2):
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 8:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or ((m == 15 or m == 13) and (n == 3 or n == 5)):
-                        self.game_matrix[n][m] = True
-        elif self.friend_score == 9:
-            for n in range(len(self.game_matrix)):
-                for m in range(len(self.game_matrix[0])):
-                    if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4) or (m == 14 and n == 2):
-                        self.game_matrix[n][m] = True
+        global display1_leds
+        A = display1_leds[0]
+        B = display1_leds[1]
+        C = display1_leds[2]
+        D = display1_leds[3]
+        E = display1_leds[4]
+        F = display1_leds[5]
+        G = display1_leds[6]
+        DP = display1_leds[7]
+        num = self.friend_score
+
+        DP.write(False)
+        if num == 0:
+            A.write(False)
+            B.write(False)
+            C.write(False)
+            D.write(False)
+            E.write(False)
+            F.write(False)
+            G.write(True)
+            DP.write(True)
+        elif num == 1:
+            A.write(True)
+            B.write(False)
+            C.write(False)
+            D.write(True)
+            E.write(True)
+            F.write(True)
+            G.write(True)
+            DP.write(True)
+        elif num == 1:
+            A.write(True)
+            B.write(False)
+            C.write(False)
+            D.write(True)
+            E.write(True)
+            F.write(True)
+            G.write(True)
+            DP.write(True)
+
+        elif num == 2:
+            A.write(False)
+            B.write(False)
+            C.write(True)
+            G.write(False)
+            E.write(False)
+            D.write(False)
+            F.write(True)
+            DP.write(True)
+        elif num == 3:
+            B.write(False)
+            A.write(False)
+            G.write(False)
+            C.write(False)
+            D.write(False)
+            E.write(True)
+            F.write(True)
+            DP.write(True)
+        elif num == 4:
+            A.write(True)
+            B.write(False)
+            F.write(False)
+            G.write(False)
+            C.write(False)
+            D.write(True)
+            E.write(True)
+            DP.write(True)
+        elif num == 5:
+            A.write(False)
+            B.write(True)
+            C.write(False)
+            D.write(False)
+            E.write(True)
+            G.write(False)
+            F.write(False)
+            DP.write(True)
+        elif num == 6:
+            A.write(False)
+            B.write(True)
+            C.write(False)
+            D.write(False)
+            E.write(False)
+            G.write(False)
+            F.write(False)
+            DP.write(True)
+        elif num == 7:
+            A.write(False)
+            B.write(False)
+            C.write(False)
+            D.write(True)
+            E.write(True)
+            F.write(True)
+            G.write(True)
+            DP.write(True)
+        elif num == 8:
+            A.write(False)
+            B.write(False)
+            C.write(False)
+            D.write(False)
+            E.write(False)
+            G.write(False)
+            F.write(False)
+            DP.write(True)
+        elif num == 9:
+            A.write(False)
+            B.write(False)
+            C.write(False)
+            D.write(False)
+            E.write(True)
+            G.write(False)
+            F.write(False)
+            DP.write(True)
 
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_e(self):
@@ -347,9 +410,11 @@ class Tablero:
                         pygame.mixer.music.unpause()
                         pause = False
                     elif event.key == pygame.K_ESCAPE:
+                        placa1.exit()
                         pygame.quit()
                         quit()
                 elif event.type == pygame.QUIT:
+                    placa1.exit()
                     quit()
 
             pygame.display.update()
@@ -550,6 +615,8 @@ class Game:
         global choosed
         global start_boring_timer
 
+        arduino1_setup()
+
         # Instancia del Tablero
         self.game_field = Tablero(bool(PC), block_height, block_width, bool(MUTE), bool(PT))
         # Posiciones iniciales de los jugadores
@@ -616,6 +683,7 @@ class Game:
     def singles(self):
         global start_boring_timer
         global choosed
+        global arriba_b, abajo_b, select_b
         while self.game:
             self.timer_clock.tick()
             # Reconocimiento de eventos
@@ -656,6 +724,11 @@ class Game:
                         self.player2_1up_y = False
                     elif event.key == pygame.K_s:
                         self.player2_1down_y = False
+
+            if abajo_b.read():
+                self.player1_1y += 1
+            elif arriba_b.read():
+                self.player1_1y -= 1
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -1326,15 +1399,18 @@ class Game:
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    placa1.exit()
                     pygame.quit()
                     quit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        placa1.exit()
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_RETURN:
                         self.__init__(self.mode, self.pc, self.mute, self.practice)
                     elif event.key == pygame.K_SPACE:
+                        placa1.exit()
                         pygame.quit()
                         quit()
 
@@ -1371,10 +1447,35 @@ class Game:
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 
 
+def arduino1_setup():
+    global placa1, arriba_b, abajo_b, select_b, display1_leds
+    placa1 = pyfirmata.Arduino('/dev/ttyACM0')
+    pyfirmata.util.Iterator(placa1).start()
+
+    arriba_b = placa1.get_pin('d:10:i')
+    arriba_b.enable_reporting()
+
+    abajo_b = placa1.get_pin('d:12:i')
+    abajo_b.enable_reporting()
+
+    select_b = placa1.get_pin('d:11:i')
+    select_b.enable_reporting()
+
+    display1_leds = [0,1,2,3,4,5,6,7,8]
+
+    display1_leds[0] = placa1.get_pin('d:9:o')
+    display1_leds[1] = placa1.get_pin('d:8:o')
+    display1_leds[2] = placa1.get_pin('d:5:o')
+    display1_leds[3] = placa1.get_pin('d:6:o')
+    display1_leds[4] = placa1.get_pin('d:7:o')
+    display1_leds[5] = placa1.get_pin('d:2:o')
+    display1_leds[6] = placa1.get_pin('d:3:o')
+    display1_leds[7] = placa1.get_pin('d:13:o')
 
 
 Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]))
-
+global placa1
 # Finalizacion del juego
+placa1.exit()
 pygame.quit()
 quit()
