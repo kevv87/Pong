@@ -1584,6 +1584,7 @@ def arduino1_setup():
     botones1.append(placa1.get_pin('a:2:i')) # boton pausa
     botones1.append(placa1.get_pin('a:0:i')) # boton back
     botones1.append(placa1.get_pin('a:1:i')) # boton inspector
+    botones1.append(placa1.get_pin('a:5:i')) # boton mute
 
 
     for i in botones1:

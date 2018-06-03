@@ -41,7 +41,6 @@ def root(*args):
     pygame.mixer.pre_init(sample_rate, -16, 1, 512)
     pygame.mixer.init()
     pygame.mixer.music.load("sounds/start_menu.ogg")
-    pygame.mixer.music.play(-1)
 
 
     root.title() #título de la ventana
@@ -67,15 +66,13 @@ def root(*args):
     canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=1 )
     canvas.create_rectangle(30,220,50,380,fill=current_color,outline=current_color, width=5)
     canvas.create_rectangle(750,220,770,380,fill=current_color,outline=current_color, width=5)
-    canvas.create_rectangle(220,272,240,292,fill=current_color,outline=current_color, width=5)
-    canvas.create_rectangle(220,332,240,352,fill=current_color,outline=current_color, width=5)
-    canvas.create_rectangle(220,392,240,412,fill=current_color,outline=current_color, width=5)
+
 
 
     #Label con la imagen del título de pong
     pong_white = PhotoImage(file="Images/PONG.png")
     pong_green = PhotoImage(file="Images/PONG_GREEN.png")
-    pong = pong_green
+    pong = pong_white
 
     pongL = Label(canvas, image=pong, highlightbackground=current_color)
     pongL.pack()
@@ -87,6 +84,7 @@ def root(*args):
 
     #Función que crea y modifica el toplevel_help
     def toplevelHelp():
+        global toplevel_help
         root.withdraw()
         toplevel_help= Toplevel()
         toplevel_help.title("Help")
@@ -128,7 +126,7 @@ def root(*args):
             select_sound.play()
 
         #Botón para volver a el root mediante la función unir1
-        boton_v = Button(toplevel_help, command=unir1 , text="<volver>",bg="black", fg=current_color, bd=0, font="courier 18", activebackground=current_color,relief=FLAT)
+        boton_v = Button(toplevel_help, command=unir1 , text="<volver>",bg="black", fg=current_color, bd=0, font="courier 18", activebackground=current_color,relief=FLAT,state=ACTIVE)
         boton_v.pack() #botón para la función mostrar4
         boton_v.place(x=325,y=530)
 
@@ -165,6 +163,7 @@ def root(*args):
     def lan_win():
         global isserver
         global isclient
+        global lan
         root.withdraw()
         lan = Toplevel()
         # configuracion de la pantalla
@@ -414,14 +413,14 @@ def root(*args):
         canvas.create_rectangle(5,5,795,595, fill="#000000",  outline=current_color, width=1 )
         canvas.create_rectangle(30,220,50,380,fill=current_color,outline=current_color, width=5)
         canvas.create_rectangle(750,220,770,380,fill=current_color,outline=current_color, width=5)
-        canvas.create_rectangle(220,272,240,292,fill=current_color,outline=current_color, width=5)
-        canvas.create_rectangle(220,332,240,352,fill=current_color,outline=current_color, width=5)
-        canvas.create_rectangle(220,392,240,412,fill=current_color,outline=current_color, width=5)
+
         doubles.config(highlightbackground=current_color)
         singles.config(highlightbackground=current_color)
         doublesL.config(fg=current_color)
         singlesL.config(fg=current_color)
-
+        hs.config(fg=current_color)
+        pract.config(fg=current_color)
+        lan.config(fg=current_color)
 
     root.bind('b', color_w)
     root.bind('v', color_g)
@@ -489,22 +488,34 @@ def root(*args):
     muteB = Button(canvas,command=muteF, bg="black",image=muteR ,fg="white", bd=0, activebackground="black",relief=FLAT)
     muteB.place(x=738, y=12)
 
-
     muteI()
+
+    update_color()
+
+    singles.select()
 
     arduino1_setup()
 
+    pygame.mixer.music.play(-1)
+
+
     while True:
-        global entrada1, entrada2, entrada3
-        if entrada1.read():
+        global stay, arriba_b, abajo_b, select_b, verde_b, blanco_b, mute_b
+        if arriba_b.read():
             print('1')
             if selected > 0:
                 selected -= 1
-        elif entrada3.read():
+        elif abajo_b.read():
             print('2')
             if selected < 8:
                 selected += 1
-        if entrada2.read():
+        elif verde_b.read() == 1.0:
+            color_g()
+        elif blanco_b.read() == 1.0:
+            color_w()
+        elif mute_b == 1.0:
+            muteF()
+        if select_b.read():
             print('3')
             select = True
         else:
@@ -569,6 +580,7 @@ def root(*args):
             lan.config(state=NORMAL)
             if select:
                 unir2()
+                selected = -1
         elif selected == 5:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -581,6 +593,7 @@ def root(*args):
             lan.config(state=ACTIVE)
             if select:
                 lan_win()
+                selected = -2
         elif selected == 6:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -607,24 +620,37 @@ def root(*args):
             if select:
                 singles.select()
                 modeS()
+        elif selected == -1:
+            if select:
+                global toplevel_help
+                toplevel_help.destroy()
+                root.deiconify()
         root.update_idletasks()
         root.update()
         time.sleep(0.01)
         placa1.pass_time(0.2)
 
 def arduino1_setup():
-    global placa1, entrada1, entrada2, entrada3
+    global placa1, arriba_b, select_b, abajo_b, blanco_b, verde_b, mute_b
     placa1 = pyfirmata.Arduino('/dev/ttyACM0')
     pyfirmata.util.Iterator(placa1).start()
 
-    entrada1 = placa1.get_pin('d:10:i')
-    entrada1.enable_reporting()
+    arriba_b = placa1.get_pin('d:10:i')
+    arriba_b.enable_reporting()
 
-    entrada2 = placa1.get_pin('d:11:i')
-    entrada2.enable_reporting()
+    select_b = placa1.get_pin('d:11:i')
+    select_b.enable_reporting()
 
-    entrada3 = placa1.get_pin('d:12:i')
-    entrada3.enable_reporting()
+    abajo_b= placa1.get_pin('d:12:i')
+    abajo_b.enable_reporting()
 
+    blanco_b= placa1.get_pin('a:3:i')
+    blanco_b.enable_reporting()
+
+    verde_b= placa1.get_pin('a:4:i')
+    verde_b.enable_reporting()
+
+    mute_b = placa1.get_pin('a:5:i')
+    mute_b.enable_reporting()
 
 root()
