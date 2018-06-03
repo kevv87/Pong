@@ -64,7 +64,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 1
+        self.level = 2
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -1257,6 +1257,7 @@ class Game:
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                         self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length_e-1
+                        self.obstaculos()
                     else:
                         self.win(1)
                 clock.tick(3)
@@ -1418,6 +1419,7 @@ class Game:
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                         self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length_e-1
+                        self.obstaculos()
                     else:
                         self.win(1)
                 else:
