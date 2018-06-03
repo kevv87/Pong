@@ -619,7 +619,7 @@ class Obstaculo:
 
 class Game:
     global mode
-    def __init__(self, MODE, PC,MUTE, PT, color):
+    def __init__(self, MODE, PC, MUTE, PT, color):
         global choosed
         global start_boring_timer
 
@@ -630,7 +630,7 @@ class Game:
         else:
             self.color = (0,255,0)
         # Instancia del Tablero
-        self.game_field = Tablero(bool(PC), block_height, block_width, self.color)
+        self.game_field = Tablero(bool(PC), block_height, block_width, MUTE, PT, self.color)
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -752,6 +752,13 @@ class Game:
                 self.player1_1y += 1
             elif botones1[2].read():
                 self.player1_1y -= 1
+
+            if botones1[3].read() == 1.0:
+                self.color = white
+                self.game_field.current_color = white
+            elif botones1[4].read() == 1.0:
+                self.color = green
+                self.game_field.current_color = green
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -880,10 +887,10 @@ class Game:
                         self.game_field.new_player()
                         self.game_field.reset_scores()
                         start_boring_timer = time.time()
-                    elif event.key == pygame.K_b:
+                    elif event.key == pygame.K_b or botones1[3].read():
                         self.color = white
                         self.game_field.current_color = white
-                    elif event.key == pygame.K_v:
+                    elif event.key == pygame.K_v or botones1[4].read():
                         self.color = green
                         self.game_field.current_color = green
                     elif event.key == pygame.K_s and not self.game_field.pc:
@@ -1509,11 +1516,11 @@ def arduino1_setup():
     botones1.append(placa1.get_pin('d:10:i')) # boton arriba
     botones1.append(placa1.get_pin('d:11:i')) # boton select
     botones1.append(placa1.get_pin('d:12:i')) # boton abajo
-    botones1.append(placa1.get_pin('d:9:i')) # boton verde
+    botones1.append(placa1.get_pin('a:4:i')) # boton verde
     botones1.append(placa1.get_pin('a:3:i')) # boton blanco
-    botones1.append(placa1.get_pin('a:3:i')) # boton pausa
-    botones1.append(placa1.get_pin('a:3:i')) # boton back
-    botones1.append(placa1.get_pin('a:3:i')) # boton inspector
+    botones1.append(placa1.get_pin('a:2:i')) # boton pausa
+    botones1.append(placa1.get_pin('a:0:i')) # boton back
+    botones1.append(placa1.get_pin('a:1:i')) # boton inspector
 
 
     for i in botones1:

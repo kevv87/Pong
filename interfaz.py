@@ -9,7 +9,6 @@ import time
 pygame.init()
 
 
-
 MUTE= ''
 #inicia pygame
 pygame.init()
@@ -23,13 +22,13 @@ ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
 point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
 
+
 green = '#000fff000'
-current_color = green
+current_color = 'white'
 
 #Función que crea el root con todas sus modificaciones
-def root():
-    global current_color
 def root(*args):
+    global current_color
     global selected
     global select
     pygame.init()
@@ -356,11 +355,9 @@ def root(*args):
         global ver
         global current_color
         global MUTE
-        print(current_color)
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
