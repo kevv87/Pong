@@ -184,10 +184,6 @@ def root():
         canvas2.create_rectangle(30, 220, 50, 380, fill="white", outline="white", width=5)
         canvas2.create_rectangle(750, 220, 770, 380, fill="white", outline="white", width=5)
 
-        pp = StringVar()
-        ss = StringVar()
-        tt = StringVar()
-
         t = open("highscores.txt","r")
         var1 = t.readlines(1)
         var2 = t.readlines(2)
