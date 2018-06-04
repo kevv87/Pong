@@ -809,8 +809,6 @@ class Game:
             else:
                 eventos1er = self.conn1.recv()
                 eventos2do = self.conn2.recv()
-                print(eventos2do)
-                print(eventos1er)
                 eventos = self.juntar(eventos1er, eventos2do)
 
                 for keydown in eventos[0]:
@@ -819,8 +817,14 @@ class Game:
                     elif keydown == 'DOWN':
                         self.player1_1down_y = True
                     elif keydown == 'P':
-                        self.pause(1)
-                        break
+                        pausa = True
+                        while pausa:
+                            print('iniciando')
+                            eventos = self.conn1.recv()
+                            print(eventos)
+                            for keydown in eventos[0]:
+                                if keydown == 'P':
+                                    pausa = False
                 for keyup in eventos[1]:
                     if keyup == 'UP':
                         self.player1_1up_y = False
@@ -832,8 +836,15 @@ class Game:
                     elif keydown == 'S':
                         self.player2_1down_y = True
                     elif keydown == 'P':
-                        self.pause(2)
-                        break
+                        pausa = True
+                        while pausa:
+                            self.send_matrix(self.game_field.get_matrix())
+                            print('iniciando')
+                            eventotmp = self.conn2.recv()
+                            print(eventotmp)
+                            for keydown in eventotmp[0]:
+                                if keydown == 'P':
+                                    pausa = False
                 for keyup in eventos[4]:
                     if keyup == 'W':
                         self.player2_1up_y = False
@@ -1611,11 +1622,7 @@ class Game:
                     quit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
-                        pygame.quit()
-                        quit()
-                    elif event.key == pygame.K_RETURN:
-                        self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
+                        self.__init__(self.mode, self.pc, self.mute, self.practice, self.server, self.color)
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_SPACE:

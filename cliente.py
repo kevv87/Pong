@@ -69,28 +69,6 @@ def startup():
     setups = conn.recv()
 
 
-def pause():
-    global setups
-    cmd = 'pause'
-    msg_tosend = [[],[],[]]
-    while cmd != 'unpause':
-        #pygame.mixer.music.pause()
-        message_to_screen('Juego pausado', white, size='large')
-        message_to_screen('Presione p para reanudar', white, y_displace=80)
-
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    #pygame.mixer.music.unpause()
-                    msg_tosend[2].append('P')
-            elif event.type == pygame.QUIT:
-                quit()
-
-        pygame.display.update()
-        client.send(msg_tosend)
-        cmd = conn.recv()
-    print('Unpause')
-
 startup()
 
 while True:
@@ -120,14 +98,13 @@ while True:
                 msg_tosend[1].append('W')
             elif event.key == pygame.K_s and setups[0] == 2:
                 msg_tosend[1].append('S')
-    print(msg_tosend)
     client.send(msg_tosend)
+    print('waiting matrix')
     matriz = conn.recv()
+    print('matrix received')
     # Si el mensaje recibido es la palabra close se cierra la aplicacion
     if matriz == "close":
         break
-    elif matriz == 'pause':
-        pause()
     elif isinstance(matriz, list) and isinstance(matriz[0], list):
         screen(matriz)
     elif matriz == 'sincronize':
