@@ -244,21 +244,25 @@ def root():
             lan.destroy()
 
         def start_client():
+            global player
+            global server_ip_e
             if player == 1:
                 port = 1235
             else:
                 port = 1237
             pygame.mixer.music.pause()
-            os.system('python3 cliente.py %d %s' % (int(port), str(server_ip.get())))
+            os.system('python3 cliente.py %d %s' % (int(port), str(server_ip_e.get())))
             pygame.mixer.music.unpause()
 
         def start_server():
             global ver
             global MUTE
+            global current_color
+            global client2_ip_e, client1_ip_e
             MODE = ver
             pygame.mixer.music.stop()
             lan.withdraw()
-            os.system('python3 main.py %s %r %r %r %r %s %s' % (MODE, '', MUTE, '', True, client1_ip, client2_ip))
+            os.system('python3 main.py %s %r %r %r %r %s %s %s' % (MODE, '', MUTE, '', True, current_color, str(client1_ip_e.get()), str(client2_ip_e.get())))
             pygame.mixer.music.play(-1)
             muteI()
 
@@ -298,6 +302,7 @@ def root():
         client1_ip_L.place(x=320, y=100)
         client2_ip_L.place(x=320, y=175)
 
+        global client1_ip_e, client2_ip_e
         client1_ip_e = Entry(canvas)
         client2_ip_e = Entry(canvas)
         client2_ip_e.pack()
@@ -339,7 +344,7 @@ def root():
         jugador1_r_L.place(x=570, y=387)
         jugador2_r_L.place(x=690, y=387)
 
-
+        global server_ip_e
         server_ip = StringVar()
         server_ip_L = Label(canvas, bg='black', fg='white', text='Ip del servidor:', font='courier 18')
         server_ip_L.pack()

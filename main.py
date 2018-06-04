@@ -657,7 +657,9 @@ class Game:
         arduino1_setup()
 
         if color == 'white' or (255,255,255):
-
+            self.color = (255,255,255)
+        else:
+            self.color = (0,255,0)
         self.client1 = None
         self.listener1 = None
         self.conn1 = None
@@ -733,15 +735,17 @@ class Game:
 
         k = 0
 
-        for i in contents:
-            self.final.append(i.split('%'))
-            self.final[k][1] = int(self.final[k][1])
-            k += 1
+        #for i in contents:
+         #   self.final.append(i.split('%'))
+          #  self.final[k][1] = int(self.final[k][1])
+           # k += 1
 
         self.file.close()
         self.server = SERVER
         if self.server:
-            self.start_server(sys.argv[6], sys.argv[7])
+            print(sys.argv[7])
+            print(sys.argv[8])
+            self.start_server(sys.argv[7], sys.argv[8])
         self.gameloop(MODE)
 
 
@@ -1713,8 +1717,6 @@ def arduino1_setup():
     botones1.append(placa1.get_pin('a:5:i')) # boton mute
 
 
-Game(sys.argv[1], bool(sys.argv[2]), sys.argv[3], sys.argv[4], sys.argv[5])
-
     for i in botones1:
         i.enable_reporting()
 
@@ -1729,8 +1731,9 @@ Game(sys.argv[1], bool(sys.argv[2]), sys.argv[3], sys.argv[4], sys.argv[5])
     display1_leds[6] = placa1.get_pin('d:3:o')
     display1_leds[7] = placa1.get_pin('d:13:o')
 
-
-Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5])
+for i in sys.argv:
+    print(i)
+Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5], sys.argv[6])
 global placa
 # Finalizacion del juego
 placa1.exit()
