@@ -423,12 +423,12 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        placa1.exit()
+        #placa1.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
-        arduino1_setup()
+      #  arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()
@@ -444,12 +444,12 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        placa1.exit()
+        #placa1.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
-        arduino1_setup()
+       # arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -567,13 +567,14 @@ def root():
 
     singles.select()
 
-    arduino1_setup()
+    #arduino1_setup()
 
     pygame.mixer.music.play(-1)
     selected =0
 
 
     while True:
+        '''
         global stay, arriba_b, abajo_b, select_b, verde_b, blanco_b, mute_b
         if arriba_b.read():
             print('1')
@@ -699,11 +700,12 @@ def root():
                 global toplevel_help
                 toplevel_help.destroy()
                 root.deiconify()
+                '''
         root.update_idletasks()
         root.update()
         time.sleep(0.01)
-        placa1.pass_time(0.2)
-
+        #placa1.pass_time(0.2)
+'''
 def arduino1_setup():
     global placa1, arriba_b, select_b, abajo_b, blanco_b, verde_b, mute_b
     placa1 = pyfirmata.Arduino('/dev/ttyACM0')
@@ -726,5 +728,5 @@ def arduino1_setup():
 
     mute_b = placa1.get_pin('a:5:i')
     mute_b.enable_reporting()
-
+'''
 root()
