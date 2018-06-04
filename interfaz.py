@@ -184,6 +184,41 @@ def root():
         canvas2.create_rectangle(30, 220, 50, 380, fill="white", outline="white", width=5)
         canvas2.create_rectangle(750, 220, 770, 380, fill="white", outline="white", width=5)
 
+        pp = StringVar()
+        ss = StringVar()
+        tt = StringVar()
+
+        t = open("highscores.txt","r")
+        var1 = t.readlines(1)
+        var2 = t.readlines(2)
+        var3 = t.readlines(3)
+        t.close()
+
+        pp = str(var1).replace("\\n","").replace("{","").replace("'","").replace("[","").replace("]","").replace("%","   ")
+        ss = str(var2).replace("\\n","").replace("{","").replace("'","").replace("[","").replace("]","").replace("%","   ")
+        tt = str(var3).replace("\\n","").replace("{","").replace("'","").replace("[","").replace("]","").replace("%","   ")
+
+        nombres = Label(canvas2, text="Names", bg="black", fg="white", font="courier 30")
+        nombres.pack()
+        nombres.place(x=220,y=50)
+
+        scores = Label(canvas2, text="Scores", bg="black", fg="white", font="courier 30")
+        scores.pack()
+        scores.place(x=400,y=50)
+
+        hs1 = Label(canvas2, text=pp, bg="black", fg="white", font="courier 30")
+        hs1.pack()
+        hs1.place(x=240,y=130)
+
+        hs2 = Label(canvas2, text=ss, bg="black", fg="white", font="courier 30")
+        hs2.pack()
+        hs2.place(x=240, y=255)
+
+        hs3 = Label(canvas2, text=tt, bg="black", fg="white", font="courier 30")
+        hs3.pack()
+        hs3.place(x=240, y=380)
+
+
         # función que muestra el root y destruye el toplevel
         def unir1():
             root.deiconify()
