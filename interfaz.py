@@ -371,9 +371,7 @@ def root():
     singlesL.pack()
     singlesL.place(x=173, y=490)
 
-    singlesL.place(x=440, y=500)
     singles = Radiobutton(canvas,command=modeS, bg="black", variable=1, value=1, highlightbackground=current_color)
-
     singles.pack()
     singles.place(x=175, y=530)
 
@@ -381,7 +379,6 @@ def root():
     doublesL.pack()
     doublesL.place(x=318,y=490)
 
-    doublesL.place(x=250,y=500)
     doubles = Radiobutton(canvas, command=modeD, bg="black", variable=1,  value=2,highlightbackground=current_color)
 
 
@@ -531,10 +528,9 @@ def root():
     hs.place(x=405, y=255)
 
     # bontón que ejecuta la ventana de el modo lan
-    lan = Button(canvas, command=unir2, text="    LAN Mode    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
-    lan.place(x=405, y=385)
+
     lan = Button(canvas, command=lan_win, text="    LAN Mode    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)  # botón que ejecuta la ventana de toplevelHelp mediante unir2
-    lan.place(x=405, y=405)
+    lan.place(x=405, y=385)
 
     def muteF():
         global MUTE
