@@ -105,19 +105,15 @@ def root():
         canvas2.create_rectangle(30, 220, 50, 380, fill="white", outline="white", width=5)
         canvas2.create_rectangle(750, 220, 770, 380, fill="white", outline="white", width=5)
 
-        # Label con la imagen de los controles del player2
-        ws = PhotoImage(file="Images/ws.png")
-        wsL = Label(canvas2, image=ws)
-        wsL.image = ws
-        wsL.pack()
-        wsL.place(x=500, y=370)
 
-        #Label con la imagen de los controles del player1
-        ab = PhotoImage(file="Images/ab.png")
-        abL = Label(canvas2, image=ab)
-        abL.image = ab
-        abL.pack()
-        abL.place(x=220, y=370)
+
+        #Label con la imagen de los controles
+        controler = PhotoImage(file="Images/controller.png")
+        controlerR = controler.subsample(x=2,y=2)
+        controlerL = Label(canvas2,image=controlerR)
+        controlerL.image = controlerR
+        controlerL.pack()
+        controlerL.place(x=210,y=300)
 
         # función que muestra el root y destruye el toplevel
         def unir1():
@@ -130,37 +126,22 @@ def root():
         boton_v = Button(toplevel_help, command=unir1 , text="<volver>",bg="black", fg=current_color, bd=0, font="courier 18", activebackground=current_color,relief=FLAT,state=ACTIVE)
 
         boton_v.pack() #botón para la función mostrar4
-        boton_v.place(x=325,y=530)
+        boton_v.place(x=640,y=540)
 
         #Label con la descripción del juego
         descripcion = Label(canvas2, text="Descripción: \n PONG es un juego tanto para 1 como 2 jugadores, el juego consiste en evitar que la pelota \n pase  su paleta y anotar pasando la bola detrás de la paleta del  contrincante. El juego \n tiene la modalidad de 1 jugador contra la máquina y 2 jugadores que se enfrentan entre sí", font="courier 10",bg="black", fg="white")
         descripcion.pack()
-        descripcion.place(x=36, y=30)
+        descripcion.place(x=36, y=20)
 
         #Label que explica las dificultades
         dificultad = Label(canvas2, text="Dificultades: \n El juego consta de un sistema de dificultad el cual es diferente \n en el modo PvC (player vs computer) a el modo PvP (player vs player). \n En el modo PvC hay 3 rondas  de 10 puntos cada una con una dificultad \n mayor y en el modo PvP la dificultad aumenta mientras la \n pelota siga en juego, hasta que uno de los jugadores anote un punto", font="courier 10",bg="black", fg="white")
         dificultad.pack()
-        dificultad.place(x=110, y=115)
+        dificultad.place(x=110, y=105)
 
         #Label con las instrucciones de singles y doubles
         s_d = Label(canvas2,text="Singles y Doubles: \n Además el juego consta de una opción para diversificar la jugabilidad, elija \n singles para jugar con una paleta y doubles para jugar con dos paletas",font="courier 10", bg="black", fg="white")
         s_d.pack()
-        s_d.place(x=80, y=240)
-
-        #Label que indica los controles
-        controles = Label(canvas2, text="Controles:", font="courier 10",bg="black", fg="white")
-        controles.pack()
-        controles.place(x=350, y=320)
-
-        #Label de interfaz que indica cuáles son los controles del player1
-        player1 = Label(canvas2, text="Player1", font="courier 10",bg="black", fg="white")
-        player1.pack()
-        player1.place(x=220, y=480)
-
-        #Label de interfaz que indica cuáles son los controles del player2
-        player2 = Label(canvas2, text="Player2", font="courier 10",bg="black", fg="white")
-        player2.pack()
-        player2.place(x=500, y=480)
+        s_d.place(x=80, y=220)
 
     def toplevelHS():
         root.withdraw()
