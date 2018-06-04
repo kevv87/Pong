@@ -753,7 +753,6 @@ class Game:
                     elif event.key == pygame.K_p:
                         self.game_field.pause()
                         self.timer_clock.tick()
-
                     elif event.key == pygame.K_b:
                         self.color = white
                         self.game_field.current_color = white

@@ -323,8 +323,8 @@ def root():
         boton_v.place(x=20, y=540)
 
         while True:
-            global isserver
-            global isclient
+
+
             if isserver:
                 server.select()
                 client1_ip.config(state=NORMAL)
