@@ -419,16 +419,18 @@ def root():
         global ver
         global current_color
         global MUTE
-        global placa1
+        global placa1, placa2
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
         placa1.exit()
+        placa2.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
         arduino1_setup()
+        arduino2_setup()
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()
@@ -445,11 +447,13 @@ def root():
         pygame.mixer.music.stop()
         root.withdraw()
         placa1.exit()
+        placa2.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
         arduino1_setup()
+        arduino2_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -568,27 +572,28 @@ def root():
     singles.select()
 
     arduino1_setup()
+    arduino2_setup()
 
     pygame.mixer.music.play(-1)
 
 
     while True:
-        global stay, arriba_b, abajo_b, select_b, verde_b, blanco_b, mute_b
-        if arriba_b.read():
+        global stay, arriba_b1, abajo_b1, select_b1, verde_b1, blanco_b1, mute_b1, arriba_b2, abajo_b2, select_b2, verde_b2, blanco_b2, mute_b2
+        if arriba_b1.read() or arriba_b2.read():
             print('1')
             if selected > 0:
                 selected -= 1
-        elif abajo_b.read():
+        elif abajo_b1.read() or abajo_b2.read():
             print('2')
             if selected < 8:
                 selected += 1
-        elif verde_b.read() == 1.0:
+        elif verde_b1.read() == 1.0 or verde_b2.read() == 1.0:
             color_g()
-        elif blanco_b.read() == 1.0:
+        elif blanco_b1.read() == 1.0 or blanco_b2.read() == 1.0:
             color_w()
-        elif mute_b == 1.0:
+        elif mute_b1.read() == 1.0 or mute_b2.read() == 1.0:
             muteF()
-        if select_b.read():
+        if select_b1.read() or select_b2.read():
             print('3')
             select = True
         else:
@@ -702,28 +707,51 @@ def root():
         root.update()
         time.sleep(0.01)
         placa1.pass_time(0.2)
+        placa2.pass_time(0.2)
 
 def arduino1_setup():
-    global placa1, arriba_b, select_b, abajo_b, blanco_b, verde_b, mute_b
+    global placa1, arriba_b1, select_b1, abajo_b1, blanco_b1, verde_b1, mute_b1
     placa1 = pyfirmata.Arduino('/dev/ttyACM0')
     pyfirmata.util.Iterator(placa1).start()
 
-    arriba_b = placa1.get_pin('d:10:i')
-    arriba_b.enable_reporting()
+    arriba_b1 = placa1.get_pin('d:10:i')
+    arriba_b1.enable_reporting()
 
-    select_b = placa1.get_pin('d:11:i')
-    select_b.enable_reporting()
+    select_b1 = placa1.get_pin('d:11:i')
+    select_b1.enable_reporting()
 
-    abajo_b= placa1.get_pin('d:12:i')
-    abajo_b.enable_reporting()
+    abajo_b1= placa1.get_pin('d:12:i')
+    abajo_b1.enable_reporting()
 
-    blanco_b= placa1.get_pin('a:3:i')
-    blanco_b.enable_reporting()
+    blanco_b1= placa1.get_pin('a:3:i')
+    blanco_b1.enable_reporting()
 
-    verde_b= placa1.get_pin('a:4:i')
-    verde_b.enable_reporting()
+    verde_b1= placa1.get_pin('a:4:i')
+    verde_b1.enable_reporting()
 
-    mute_b = placa1.get_pin('a:5:i')
-    mute_b.enable_reporting()
+    mute_b1 = placa1.get_pin('a:5:i')
+    mute_b1.enable_reporting()
 
+def arduino2_setup():
+    global placa2, arriba_b2, select_b2, abajo_b2, blanco_b2, verde_b2, mute_b2
+    placa2 = pyfirmata.Arduino('/dev/ttyUSB0')
+    pyfirmata.util.Iterator(placa2).start()
+
+    arriba_b2 = placa2.get_pin('d:10:i')
+    arriba_b2.enable_reporting()
+
+    select_b2 = placa2.get_pin('d:11:i')
+    select_b2.enable_reporting()
+
+    abajo_b2= placa2.get_pin('d:12:i')
+    abajo_b2.enable_reporting()
+
+    blanco_b2= placa2.get_pin('a:3:i')
+    blanco_b2.enable_reporting()
+
+    verde_b2 = placa2.get_pin('a:4:i')
+    verde_b2.enable_reporting()
+
+    mute_b2 = placa2.get_pin('a:5:i')
+    mute_b2.enable_reporting()
 root()

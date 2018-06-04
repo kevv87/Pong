@@ -273,8 +273,176 @@ class Tablero:
             F.write(False)
             DP.write(True)
 
+        if self.friend_score == 0:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix)):
+                    if (m == 15 and 2 <= n <= 6) or (n == 2 and 13 <= m <= 15) or (m == 13 and 2 <= n <= 5) or (
+                            n == 6 and 13 <= m <= 15):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 1:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix)):
+                    if (m == 15 and 2 <= n <= 6):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 2:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 3) or (m == 13 and n == 5):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 3:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 5) or (m == 15 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 4:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 5:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 5) or (m == 13 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 6:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 13 and n == 5) or (m == 15 and n == 5) or (
+                            m == 13 and n == 3):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 7:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 15 and 2 <= n <= 6) or ((m == 14 or m == 13) and n == 2):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 8:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or ((m == 15 or m == 13) and (n == 3 or n == 5)):
+                        self.game_matrix[n][m] = True
+        elif self.friend_score == 9:
+            for n in range(len(self.game_matrix)):
+                for m in range(len(self.game_matrix[0])):
+                    if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4) or (
+                            m == 14 and n == 2):
+                        self.game_matrix[n][m] = True
+
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_e(self):
+        global display2_leds
+        A = display2_leds[0]
+        B = display2_leds[1]
+        C = display2_leds[2]
+        D = display2_leds[3]
+        E = display2_leds[4]
+        F = display2_leds[5]
+        G = display2_leds[6]
+        DP = display2_leds[7]
+        num = self.friend_score
+
+        DP.write(False)
+        if num == 0:
+            A.write(False)
+            B.write(False)
+            C.write(False)
+            D.write(False)
+            E.write(False)
+            F.write(False)
+            G.write(True)
+            DP.write(True)
+        elif num == 1:
+            A.write(True)
+            B.write(False)
+            C.write(False)
+            D.write(True)
+            E.write(True)
+            F.write(True)
+            G.write(True)
+            DP.write(True)
+        elif num == 1:
+            A.write(True)
+            B.write(False)
+            C.write(False)
+            D.write(True)
+            E.write(True)
+            F.write(True)
+            G.write(True)
+            DP.write(True)
+
+        elif num == 2:
+            A.write(False)
+            B.write(False)
+            C.write(True)
+            G.write(False)
+            E.write(False)
+            D.write(False)
+            F.write(True)
+            DP.write(True)
+        elif num == 3:
+            B.write(False)
+            A.write(False)
+            G.write(False)
+            C.write(False)
+            D.write(False)
+            E.write(True)
+            F.write(True)
+            DP.write(True)
+        elif num == 4:
+            A.write(True)
+            B.write(False)
+            F.write(False)
+            G.write(False)
+            C.write(False)
+            D.write(True)
+            E.write(True)
+            DP.write(True)
+        elif num == 5:
+            A.write(False)
+            B.write(True)
+            C.write(False)
+            D.write(False)
+            E.write(True)
+            G.write(False)
+            F.write(False)
+            DP.write(True)
+        elif num == 6:
+            A.write(False)
+            B.write(True)
+            C.write(False)
+            D.write(False)
+            E.write(False)
+            G.write(False)
+            F.write(False)
+            DP.write(True)
+        elif num == 7:
+            A.write(False)
+            B.write(False)
+            C.write(False)
+            D.write(True)
+            E.write(True)
+            F.write(True)
+            G.write(True)
+            DP.write(True)
+        elif num == 8:
+            A.write(False)
+            B.write(False)
+            C.write(False)
+            D.write(False)
+            E.write(False)
+            G.write(False)
+            F.write(False)
+            DP.write(True)
+        elif num == 9:
+            A.write(False)
+            B.write(False)
+            C.write(False)
+            D.write(False)
+            E.write(True)
+            G.write(False)
+            F.write(False)
+            DP.write(True)
+
+
         if self.enemy_score == 0:
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
@@ -384,10 +552,11 @@ class Tablero:
         self.scores()
 
     # Pausa el juego
-    def pause(self, ins=False):
+    def pause(self, player, ins=False):
         global current_color
         global placa1
-        global botones1
+        global placa2
+        global botones1, botones2
 
         pause = True
         for n in range(len(self.game_matrix)):
@@ -418,32 +587,48 @@ class Tablero:
 
                     elif event.key == pygame.K_ESCAPE:
                         placa1.exit()
+                        placa2.exit()
                         pygame.quit()
                         quit()
 
                 elif event.type == pygame.QUIT:
                     placa1.exit()
+                    placa2.exit()
                     pygame.quit()
                     quit()
 
-            if botones1[5].read() == 1.0:
+            if botones1[5].read() == 1.0 and player==1:
                 pygame.mixer.music.unpause()
                 pause = False
-            elif botones1[3].read() == 1.0:
+            elif botones1[3].read() == 1.0 and player==1:
                 self.current_color = green
-            elif botones1[4].read() == 1.0:
+            elif botones1[4].read() == 1.0 and player==1:
                 self.current_color = white
-            elif botones1[6].read() == 1.0:
+            elif botones1[6].read() == 1.0 and player==1:
                 placa1.exit()
+                placa2.exit()
                 pygame.quit()
                 quit()
 
+            if botones2[5].read() == 1.0 and player==2:
+                pygame.mixer.music.unpause()
+                pause = False
+            elif botones2[3].read() == 1.0 and player==2:
+                self.current_color = green
+            elif botones2[4].read() == 1.0 and player==2:
+                self.current_color = white
+            elif botones2[6].read() == 1.0 and player==2:
+                placa1.exit()
+                placa2.exit()
+                pygame.quit()
+                quit()
 
             self.screen()
             self.message_to_screen('Juego pausado',self.current_color, size='large')
             self.message_to_screen('Presione p para reanudar', self.current_color, y_displace=80)
             pygame.display.update()
             placa1.pass_time(0.2)
+            placa2.pass_time(0.2)
 
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix)):
@@ -452,7 +637,7 @@ class Tablero:
 
 
     def inspector(self):
-        global botones1
+        global botones1, botones2
         root = Tk()
 
         t = Text(root, width=41, height=26,)
@@ -481,10 +666,16 @@ class Tablero:
                 stay = False
             elif botones1[7].read() == 1.0:
                 stay = False
+
+            if botones2[6].read() == 1.0:
+                stay = False
+            elif botones2[7].read() == 1.0:
+                stay = False
             root.update_idletasks()
             root.update()
             time.sleep(0.01)
             placa1.pass_time(0.2)
+            placa2.pass_time(0.2)
 
         quit()
 
@@ -654,6 +845,7 @@ class Game:
         global start_boring_timer
 
         arduino1_setup()
+        arduino2_setup()
 
         if color == 'white' or (255,255,255):
             self.color = (255,255,255)
@@ -727,7 +919,7 @@ class Game:
     def singles(self):
         global start_boring_timer
         global choosed
-        global botones1
+        global botones1, botones2
         while self.game:
             self.timer_clock.tick()
             # Reconocimiento de eventos
@@ -751,7 +943,7 @@ class Game:
                     elif event.key == pygame.K_s and not self.pc:
                        self.player2_1down_y = True
                     elif event.key == pygame.K_p:
-                        self.game_field.pause()
+                        self.game_field.pause(1)
                         self.timer_clock.tick()
 
                     elif event.key == pygame.K_b:
@@ -789,10 +981,27 @@ class Game:
                 self.color = green
                 self.game_field.current_color = green
             elif botones1[5].read() == 1.0:
-                self.game_field.pause()
+                self.game_field.pause(1)
                 self.timer_clock.tick()
             elif botones1[7].read() == 1.0:
-                self.game_field.pause(True)
+                self.game_field.pause(1,True)
+                self.timer_clock.tick()
+
+            if botones2[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
+                self.player1_1y += 1
+            elif botones2[0].read() and self.player1_1y-1 > 2:
+                self.player1_1y -= 1
+            elif botones2[3].read() == 1.0:
+                self.color = white
+                self.game_field.current_color = white
+            elif botones2[4].read() == 1.0:
+                self.color = green
+                self.game_field.current_color = green
+            elif botones2[5].read() == 1.0:
+                self.game_field.pause(1)
+                self.timer_clock.tick()
+            elif botones2[7].read() == 1.0:
+                self.game_field.pause(2,True)
                 self.timer_clock.tick()
 
             # Movimiento de las paletas del primer jugador
@@ -922,16 +1131,16 @@ class Game:
                         self.game_field.new_player()
                         self.game_field.reset_scores()
                         start_boring_timer = time.time()
-                    elif event.key == pygame.K_b or botones1[3].read():
+                    elif event.key == pygame.K_b or botones1[3].read() or botones2[3].read():
                         self.color = white
                         self.game_field.current_color = white
-                    elif event.key == pygame.K_v or botones1[4].read():
+                    elif event.key == pygame.K_v or botones1[4].read() or botones2[4].read():
                         self.color = green
                         self.game_field.current_color = green
                     elif event.key == pygame.K_s and not self.game_field.pc:
                         self.player2_1down_y = True
                     elif event.key == pygame.K_p:
-                        self.game_field.pause()
+                        self.game_field.pause(1)
                         self.timer_clock.tick()
                     elif event.key == pygame.K_i:
                         self.game_field.pause(True)
@@ -949,7 +1158,7 @@ class Game:
                         self.player2_1up_y = False
                     elif event.key == pygame.K_s:
                         self.player2_1down_y = False
-            print('jelou')
+
             if botones1[0].read() and self.player1_1y-1 > 0:
                 self.player1_1y -= 1
                 self.player1_2y += 1
@@ -963,10 +1172,29 @@ class Game:
                 self.color = green
                 self.game_field.current_color = green
             elif botones1[5].read() == 1.0:
-                self.game_field.pause()
+                self.game_field.pause(2)
                 self.timer_clock.tick()
             elif botones1[7].read() == 1.0:
-                self.game_field.pause(True)
+                self.game_field.pause(1, True)
+                self.timer_clock.tick()
+
+            if botones2[0].read() and self.player1_1y-1 > 0:
+                self.player1_1y -= 1
+                self.player1_2y += 1
+            elif botones2[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
+                self.player1_1y += 1
+                self.player1_2y -= 1
+            elif botones2[3].read() == 1.0:
+                self.color = white
+                self.game_field.current_color = white
+            elif botones2[4].read() == 1.0:
+                self.color = green
+                self.game_field.current_color = green
+            elif botones2[5].read() == 1.0:
+                self.game_field.pause(2)
+                self.timer_clock.tick()
+            elif botones2[7].read() == 1.0:
+                self.game_field.pause(2,True)
                 self.timer_clock.tick()
 
             # Movimiento de las paletas del primer jugador
@@ -1490,7 +1718,7 @@ class Game:
         self.game_field.gameDisplay.blit(textSurf, textRect)
 
     def win(self, winner):
-        global botones1
+        global botones1, botones2
         win_screen = True
         x_displace_fromcenter = winner*200
         cont = False
@@ -1514,6 +1742,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     placa1.exit()
+                    placa2.exit()
                     pygame.quit()
                     quit()
                 elif event.type == pygame.KEYDOWN:
@@ -1523,17 +1752,37 @@ class Game:
                         quit()
                     elif event.key == pygame.K_SPACE:
                         placa1.exit()
+                        placa2.exit()
                         pygame.quit()
                         quit()
 
             if botones1[6].read() == 1.0:
                 placa1.exit()
+                placa2.exit()
                 pygame.quit()
                 quit()
             elif botones1[1].read():
                 self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
+                pygame.quit()
+                quit()
             elif botones1[2].read():
                 placa1.exit()
+                placa2.exiit()
+                pygame.quit()
+                quit()
+
+            if botones2[6].read() == 1.0:
+                placa1.exit()
+                placa2.exit()
+                pygame.quit()
+                quit()
+            elif botones2[1].read():
+                self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
+                pygame.quit()
+                quit()
+            elif botones2[2].read():
+                placa1.exit()
+                placa2.exiit()
                 pygame.quit()
                 quit()
 
@@ -1594,19 +1843,53 @@ def arduino1_setup():
 
     display1_leds = [0,1,2,3,4,5,6,7,8]
 
-    display1_leds[0] = placa1.get_pin('d:9:o')
-    display1_leds[1] = placa1.get_pin('d:8:o')
-    display1_leds[2] = placa1.get_pin('d:5:o')
-    display1_leds[3] = placa1.get_pin('d:6:o')
-    display1_leds[4] = placa1.get_pin('d:7:o')
-    display1_leds[5] = placa1.get_pin('d:2:o')
-    display1_leds[6] = placa1.get_pin('d:3:o')
-    display1_leds[7] = placa1.get_pin('d:13:o')
+    display1_leds[0] = placa1.get_pin('d:9:o') #display A
+    display1_leds[1] = placa1.get_pin('d:8:o') #display B
+    display1_leds[2] = placa1.get_pin('d:5:o') #display C
+    display1_leds[3] = placa1.get_pin('d:6:o') #display D
+    display1_leds[4] = placa1.get_pin('d:7:o') #display E
+    display1_leds[5] = placa1.get_pin('d:2:o') #display F
+    display1_leds[6] = placa1.get_pin('d:3:o') #display G
+    display1_leds[7] = placa1.get_pin('d:13:o') #display decimal point
+
+
+def arduino2_setup():
+    global placa2, botones2, display2_leds
+    placa2 = pyfirmata.Arduino('/dev/ttyUSB0')
+    pyfirmata.util.Iterator(placa2).start()
+
+    botones1 = []
+
+    botones2.append(placa2.get_pin('d:10:i')) # boton arriba
+    botones2.append(placa2.get_pin('d:11:i')) # boton select
+    botones2.append(placa2.get_pin('d:12:i')) # boton abajo
+    botones2.append(placa2.get_pin('a:4:i')) # boton verde
+    botones2.append(placa2.get_pin('a:3:i')) # boton blanco
+    botones2.append(placa2.get_pin('a:2:i')) # boton pausa
+    botones2.append(placa2.get_pin('a:0:i')) # boton back
+    botones2.append(placa2.get_pin('a:1:i')) # boton inspector
+    botones2.append(placa2.get_pin('a:5:i')) # boton mute
+
+
+    for i in botones1:
+        i.enable_reporting()
+
+    display2_leds = [0,1,2,3,4,5,6,7,8]
+
+    display2_leds[0] = placa2.get_pin('d:9:o') #display A
+    display2_leds[1] = placa2.get_pin('d:8:o') #display B
+    display2_leds[2] = placa2.get_pin('d:5:o') #display C
+    display2_leds[3] = placa2.get_pin('d:6:o') #display D
+    display2_leds[4] = placa2.get_pin('d:7:o') #display E
+    display2_leds[5] = placa2.get_pin('d:2:o') #display F
+    display2_leds[6] = placa2.get_pin('d:3:o') #display G
+    display2_leds[7] = placa2.get_pin('d:13:o') #display decimal point
 
 
 Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5])
-global placa
+
 # Finalizacion del juego
+placa2.exit()
 placa1.exit()
 pygame.quit()
 quit()
