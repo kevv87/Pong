@@ -13,24 +13,12 @@ pygame.init()
 selected = 0
 
 
-try:
-    arduino1 = serial.Serial('/dev/ttyACM1', 9600)
-except:
-    arduino1 = 0
-
-try:
-    arduino2 = serial.Serial('/dev/ttyUSB0', 4800)
-except:
-    arduino2 = 0
-
-
 #Sonidos
 select_sound = pygame.mixer.Sound('sounds/select.ogg')
 pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
 ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
 point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
-
 
 
 green = '#000fff000'
@@ -431,12 +419,16 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        placa1.exit()
-        placa2.exit()
+        if arduino1 != 0:
+            arduino1.close()
+
+        if arduino2 != 0:
+            arduino2.close()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
+        arduinos_setup()
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()
@@ -452,12 +444,16 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        placa1.exit()
-        placa2.exit()
+        if arduino1 != 0:
+            arduino1.close()
+
+        if arduino2 != 0:
+            arduino2.close()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
+        arduinos_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -507,7 +503,10 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
+        arduino1.close()
+        arduino2.close()
         os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
+        arduinos_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -597,8 +596,6 @@ def root():
         else:
             arduino2_cmd = 'x'
 
-        print(arduino2_cmd)
-        print(arduino1_cmd)
         if arduino1_cmd == 'u' or arduino2_cmd == 'u':
             if selected > 0:
                 selected -= 1
@@ -722,4 +719,17 @@ def root():
                 toplevel_help.destroy()
                 root.deiconify()
 
+def arduinos_setup():
+    global arduino2, arduino1
+    try:
+        arduino1 = serial.Serial('/dev/ttyACM0', 9600)
+    except:
+        arduino1 = 0
+
+    try:
+        arduino2 = serial.Serial('/dev/ttyUSB0', 4800)
+    except:
+        arduino2 = 0
+
+arduinos_setup()
 root()
