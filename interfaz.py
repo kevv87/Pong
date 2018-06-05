@@ -229,20 +229,20 @@ def root():
 
     def pra_dif_ele():
         root.withdraw()
-        toplevel_hs = Toplevel()
-        toplevel_hs.title("Dificultad de práctica")
+        toplevel_de = Toplevel()
+        toplevel_de.title("Dificultad de práctica")
 
-        ws = toplevel_hs.winfo_screenwidth()  # largo de la pantalla
-        hs = toplevel_hs.winfo_screenheight()  # Anchura de la pantalla
+        ws = toplevel_de.winfo_screenwidth()  # largo de la pantalla
+        hs = toplevel_de.winfo_screenheight()  # Anchura de la pantalla
 
         x = (ws / 2) - (450 / 2)
         y = (hs / 2) - (600 / 2)
 
-        toplevel_hs.resizable(width=NO, height=NO)  # Que el tamaño de la ventana no cambie
-        toplevel_hs.geometry("%dx%d+%d+%d" % (450, 600, x, y))
-        toplevel_hs.configure(bg="Black")
+        toplevel_de.resizable(width=NO, height=NO)  # Que el tamaño de la ventana no cambie
+        toplevel_de.geometry("%dx%d+%d+%d" % (450, 600, x, y))
+        toplevel_de.configure(bg="Black")
 
-        canvas3 = Canvas(toplevel_hs, width=800, height=600, bg="#000000")  # Se crea el canvas2 y se configura
+        canvas3 = Canvas(toplevel_de, width=800, height=600, bg="#000000")  # Se crea el canvas2 y se configura
         canvas3.place(x=0, y=0)
         canvas3.create_rectangle(5, 5, 445, 595, fill="#000000", outline="#FFFFFF", width=9)
         canvas3.create_rectangle(5, 5, 445, 595, fill="#000000", outline="white", width=1)
@@ -252,7 +252,7 @@ def root():
         # función que muestra el root y destruye el toplevel
         def unir1():
             root.deiconify()
-            toplevel_hs.destroy()
+            toplevel_de.destroy()
             select_sound.play()
 
         def unir2():
@@ -265,14 +265,15 @@ def root():
             pygame.mixer.music.stop()
             root.withdraw()
             if current_color != '#000fff000':
-                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'white', OBS))
+                os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'white', OBS, '1'))
             else:
-                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'green', OBS))
+                os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'green', OBS, '1'))
             pygame.mixer.music.play(-1)
             muteI()
             root.deiconify()
+            toplevel_de.destroy()
 
-        def uni3():
+        def unir3():
             global ver
             global MUTE
             global PT
@@ -282,12 +283,14 @@ def root():
             pygame.mixer.music.stop()
             root.withdraw()
             if current_color != '#000fff000':
-                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'white', OBS))
+                os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'white', OBS, '2'))
             else:
-                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'green', OBS))
+                os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'green', OBS, '2'))
             pygame.mixer.music.play(-1)
             muteI()
             root.deiconify()
+            toplevel_de.destroy()
+
 
         def unir4():
             global ver
@@ -299,28 +302,30 @@ def root():
             pygame.mixer.music.stop()
             root.withdraw()
             if current_color != '#000fff000':
-                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'white', OBS))
+                os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'white', OBS, '3'))
             else:
-                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'green', OBS))
+                os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'green', OBS, '3'))
             pygame.mixer.music.play(-1)
             muteI()
             root.deiconify()
+            toplevel_de.destroy()
 
-        boton_e = Button(toplevel_hs, command=unir2, text="    Easy    ", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
+
+        boton_e = Button(toplevel_de, command=unir2, text="    Easy    ", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
         boton_e.pack()  # botón para la función mostrar4
         boton_e.place(x=130, y=100)
 
-        boton_m = Button(toplevel_hs, command=unir3, text="   Medium   ", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
+        boton_m = Button(toplevel_de, command=unir3, text="   Medium   ", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
         boton_m.pack()  # botón para la función mostrar4
         boton_m.place(x=130, y=250)
 
-        boton_h = Button(toplevel_hs, command=unir4, text="    Hard    ", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
+        boton_h = Button(toplevel_de, command=unir4, text="    Hard    ", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
         boton_h.pack()  # botón para la función mostrar4
         boton_h.place(x=130, y=400)
 
 
         # Botón para volver a el root mediante la función unir1
-        boton_v = Button(toplevel_hs, command=unir1, text="<volver>", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
+        boton_v = Button(toplevel_de, command=unir1, text="<volver>", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
         boton_v.pack()  # botón para la función mostrar4
         boton_v.place(x=150, y=530)
 
@@ -565,9 +570,9 @@ def root():
         root.withdraw()
         #placa1.exit()
         if current_color != '#000fff000':
-            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, True, MUTE, '', 'white', OBS))
+            os.system('python3 main.py %s %r %r %r %s %r %s' %(MODE, True, MUTE, '', 'white', OBS, '1'))
         else:
-            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, True, MUTE, '', 'green', OBS))
+            os.system('python3 main.py %s %r %r %r %s %r %s' %(MODE, True, MUTE, '', 'green', OBS, '1'))
       #  arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
@@ -588,9 +593,9 @@ def root():
         root.withdraw()
         #placa1.exit()
         if current_color != '#000fff000':
-            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, '', MUTE, '', 'white', OBS))
+            os.system('python3 main.py %s %r %r %r %s %r %s' %(MODE, '', MUTE, '', 'white', OBS, '1'))
         else:
-            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, '',MUTE, '', 'green', OBS))
+            os.system('python3 main.py %s %r %r %r %s %r %s' %(MODE, '',MUTE, '', 'green', OBS, '1'))
        # arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()

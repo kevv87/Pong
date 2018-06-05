@@ -49,7 +49,7 @@ clock = pygame.time.Clock()
 # asi como metodos que se usan en todas las modalidades del juego.
 
 class Tablero:
-    def __init__(self, PC, block_width, block_height, MUTE,PT, color):
+    def __init__(self, PC, block_width, block_height, MUTE,PT, color,lvl):
         # Atributos
 
         self.mute = MUTE
@@ -64,7 +64,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 1
+        self.level = lvl
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -640,7 +640,7 @@ class Obstaculo:
 
 class Game:
     global mode
-    def __init__(self, MODE, PC, MUTE, PT, color, OBS):
+    def __init__(self, MODE, PC, MUTE, PT, color, OBS, lvl):
         global choosed
         global start_boring_timer
 
@@ -651,7 +651,7 @@ class Game:
         else:
             self.color = (0,255,0)
         # Instancia del Tablero
-        self.game_field = Tablero(bool(PC), block_height, block_width, MUTE, PT, self.color)
+        self.game_field = Tablero(bool(PC), block_height, block_width, MUTE, PT, self.color, lvl)
         # Posiciones iniciales de los jugadores
 
         # Primeras paletas
@@ -1226,9 +1226,11 @@ class Game:
                 start_boring_timer = time.time()
                 if self.game_field.pc:
                     fail_sound.play()
-                else:
+                elif not self.practice:
                     self.game_field.levelup_animation(spec=1)
                     point_sound.play()
+                else:
+                    self.game_field.set_enemy_score(self.game_field.get_enemy_score() - 1)
                 ball_x = 19
                 ball_y = 12
             elif self.game_field.pc:
@@ -1387,10 +1389,12 @@ class Game:
                 self.game_field.set_enemy_score(self.game_field.get_enemy_score() + 1)
                 if self.game_field.pc:
                     fail_sound.play()
-                else:
+                elif not self.practice:
                     start_boring_timer = time.time()
                     self.game_field.levelup_animation(spec=1)
                     point_sound.play()
+                else:
+                    self.game_field.set_enemy_score(self.game_field.get_enemy_score() - 1)
                 start_boring_timer = time.time()
                 ball_x = 19
                 ball_y = 12
@@ -1551,7 +1555,7 @@ def arduino1_setup():
     display1_leds[7] = placa1.get_pin('d:13:o')
 '''
 
-Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5], bool(sys.argv[6]))
+Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5], bool(sys.argv[6]), int(sys.argv[7]))
 global placa
 # Finalizacion del juego
 #placa1.exit()
