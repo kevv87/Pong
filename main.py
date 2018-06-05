@@ -844,8 +844,9 @@ class Game:
         global choosed
         global start_boring_timer
 
-        arduino1_setup()
         arduino2_setup()
+        arduino1_setup()
+
 
         if color == 'white' or (255,255,255):
             self.color = (255,255,255)
@@ -970,6 +971,9 @@ class Game:
                     elif event.key == pygame.K_s:
                         self.player2_1down_y = False
 
+            print(botones1[2].read())
+            print(botones2[2].read())
+
             if botones1[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
             elif botones1[0].read() and self.player1_1y-1 > 2:
@@ -987,10 +991,10 @@ class Game:
                 self.game_field.pause(1,True)
                 self.timer_clock.tick()
 
-            if botones2[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
-                self.player1_1y += 1
-            elif botones2[0].read() and self.player1_1y-1 > 2:
-                self.player1_1y -= 1
+            if botones2[2].read() and self.player2_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
+                self.player2_1y += 1
+            elif botones2[0].read() and self.player2_1y-1 > 2:
+                self.player2_1y -= 1
             elif botones2[3].read() == 1.0:
                 self.color = white
                 self.game_field.current_color = white
@@ -1178,12 +1182,12 @@ class Game:
                 self.game_field.pause(1, True)
                 self.timer_clock.tick()
 
-            if botones2[0].read() and self.player1_1y-1 > 0:
-                self.player1_1y -= 1
-                self.player1_2y += 1
-            elif botones2[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
-                self.player1_1y += 1
-                self.player1_2y -= 1
+            if botones2[0].read() and self.player2_1y-1 > 0:
+                self.player2_1y -= 1
+                self.player2_2y += 1
+            elif botones2[2].read() and self.player2_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
+                self.player2_1y += 1
+                self.player2_2y -= 1
             elif botones2[3].read() == 1.0:
                 self.color = white
                 self.game_field.current_color = white
@@ -1782,7 +1786,7 @@ class Game:
                 quit()
             elif botones2[2].read():
                 placa1.exit()
-                placa2.exiit()
+                placa2.exit()
                 pygame.quit()
                 quit()
 
@@ -1850,7 +1854,7 @@ def arduino1_setup():
     display1_leds[4] = placa1.get_pin('d:7:o') #display E
     display1_leds[5] = placa1.get_pin('d:2:o') #display F
     display1_leds[6] = placa1.get_pin('d:3:o') #display G
-    display1_leds[7] = placa1.get_pin('d:13:o') #display decimal point
+    display1_leds[7] = placa1.get_pin('d:13:o') #displayop decimal point
 
 
 def arduino2_setup():
@@ -1858,7 +1862,7 @@ def arduino2_setup():
     placa2 = pyfirmata.Arduino('/dev/ttyUSB0')
     pyfirmata.util.Iterator(placa2).start()
 
-    botones1 = []
+    botones2 = []
 
     botones2.append(placa2.get_pin('d:10:i')) # boton arriba
     botones2.append(placa2.get_pin('d:11:i')) # boton select
@@ -1871,7 +1875,7 @@ def arduino2_setup():
     botones2.append(placa2.get_pin('a:5:i')) # boton mute
 
 
-    for i in botones1:
+    for i in botones2:
         i.enable_reporting()
 
     display2_leds = [0,1,2,3,4,5,6,7,8]

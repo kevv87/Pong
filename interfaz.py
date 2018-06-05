@@ -323,8 +323,7 @@ def root():
         boton_v.place(x=20, y=540)
 
         while True:
-            global isserver
-            global isclient
+
             if isserver:
                 server.select()
                 client1_ip.config(state=NORMAL)
@@ -576,6 +575,8 @@ def root():
 
     pygame.mixer.music.play(-1)
 
+    selected = 0
+
 
     while True:
         global stay, arriba_b1, abajo_b1, select_b1, verde_b1, blanco_b1, mute_b1, arriba_b2, abajo_b2, select_b2, verde_b2, blanco_b2, mute_b2
@@ -598,6 +599,7 @@ def root():
             select = True
         else:
             select = False
+
 
         if selected == 0:
             pvp.config(state=ACTIVE)
@@ -706,8 +708,8 @@ def root():
         root.update_idletasks()
         root.update()
         time.sleep(0.01)
-        placa1.pass_time(0.2)
-        placa2.pass_time(0.2)
+        placa1.pass_time(0.1)
+        placa2.pass_time(0.1)
 
 def arduino1_setup():
     global placa1, arriba_b1, select_b1, abajo_b1, blanco_b1, verde_b1, mute_b1
