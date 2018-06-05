@@ -18,6 +18,15 @@ try:
 except:
     arduino1 = 0
 
+try:
+    arduino2 = serial.Serial('/dev/ttyUSB0', 4800)
+    time.sleep(2)
+    if arduino1 == 0:
+        arduino1 = arduino2
+except:
+    arduino2 = 0
+
+
 # Colores importantes
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -1653,17 +1662,25 @@ class Game:
                         quit()
 
             if botones1[6].read() == 1.0:
-                placa1.exit()
-                placa2.exit()
+                if arduino1 != 0:
+                    arduino1.close()
+                if arduino2 != 0:
+                    arduino2.close()
                 pygame.quit()
                 quit()
             elif botones1[1].read():
                 self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
+                if arduino1 != 0:
+                    arduino1.close()
+                 if arduino2 != 0:
+                     arduino2.close()
                 pygame.quit()
                 quit()
             elif botones1[2].read():
-                placa1.exit()
-                placa2.exiit()
+                if arduino1 != 0:
+                   arduino1.close()
+                if arduino2 != 0:
+                    arduino2.close()
                 pygame.quit()
                 quit()
 
@@ -1716,70 +1733,7 @@ class Game:
                 self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 
 
-def arduino1_setup():
-    global placa1, botones1, display1_leds
-    placa1 = pyfirmata.Arduino('/dev/ttyACM0')
-    pyfirmata.util.Iterator(placa1).start()
 
-    botones1 = []
-
-    botones1.append(placa1.get_pin('d:10:i')) # boton arriba
-    botones1.append(placa1.get_pin('d:11:i')) # boton select
-    botones1.append(placa1.get_pin('d:12:i')) # boton abajo
-    botones1.append(placa1.get_pin('a:4:i')) # boton verde
-    botones1.append(placa1.get_pin('a:3:i')) # boton blanco
-    botones1.append(placa1.get_pin('a:2:i')) # boton pausa
-    botones1.append(placa1.get_pin('a:0:i')) # boton back
-    botones1.append(placa1.get_pin('a:1:i')) # boton inspector
-    botones1.append(placa1.get_pin('a:5:i')) # boton mute
-
-
-    for i in botones1:
-        i.enable_reporting()
-
-    display1_leds = [0,1,2,3,4,5,6,7,8]
-
-    display1_leds[0] = placa1.get_pin('d:9:o') #display A
-    display1_leds[1] = placa1.get_pin('d:8:o') #display B
-    display1_leds[2] = placa1.get_pin('d:5:o') #display C
-    display1_leds[3] = placa1.get_pin('d:6:o') #display D
-    display1_leds[4] = placa1.get_pin('d:7:o') #display E
-    display1_leds[5] = placa1.get_pin('d:2:o') #display F
-    display1_leds[6] = placa1.get_pin('d:3:o') #display G
-    display1_leds[7] = placa1.get_pin('d:13:o') #displayop decimal point
-
-
-def arduino2_setup():
-    global placa2, botones2, display2_leds
-    placa2 = pyfirmata.Arduino('/dev/ttyUSB0')
-    pyfirmata.util.Iterator(placa2).start()
-
-    botones2 = []
-
-    botones2.append(placa2.get_pin('d:10:i')) # boton arriba
-    botones2.append(placa2.get_pin('d:11:i')) # boton select
-    botones2.append(placa2.get_pin('d:12:i')) # boton abajo
-    botones2.append(placa2.get_pin('a:4:i')) # boton verde
-    botones2.append(placa2.get_pin('a:3:i')) # boton blanco
-    botones2.append(placa2.get_pin('a:2:i')) # boton pausa
-    botones2.append(placa2.get_pin('a:0:i')) # boton back
-    botones2.append(placa2.get_pin('a:1:i')) # boton inspector
-    botones2.append(placa2.get_pin('a:5:i')) # boton mute
-
-
-    for i in botones2:
-        i.enable_reporting()
-
-    display2_leds = [0,1,2,3,4,5,6,7,8]
-
-    display2_leds[0] = placa2.get_pin('d:9:o') #display A
-    display2_leds[1] = placa2.get_pin('d:8:o') #display B
-    display2_leds[2] = placa2.get_pin('d:5:o') #display C
-    display2_leds[3] = placa2.get_pin('d:6:o') #display D
-    display2_leds[4] = placa2.get_pin('d:7:o') #display E
-    display2_leds[5] = placa2.get_pin('d:2:o') #display F
-    display2_leds[6] = placa2.get_pin('d:3:o') #display G
-    display2_leds[7] = placa2.get_pin('d:13:o') #display decimal point
 
 
 Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5])
