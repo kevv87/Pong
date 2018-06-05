@@ -214,7 +214,6 @@ def root():
         hs3.pack()
         hs3.place(x=240, y=380)
 
-
         # función que muestra el root y destruye el toplevel
         def unir1():
             root.deiconify()
@@ -226,6 +225,104 @@ def root():
         boton_v.pack() #botón para la función mostrar4
         boton_v.place(x=325,y=530)
 
+
+
+    def pra_dif_ele():
+        root.withdraw()
+        toplevel_hs = Toplevel()
+        toplevel_hs.title("Dificultad de práctica")
+
+        ws = toplevel_hs.winfo_screenwidth()  # largo de la pantalla
+        hs = toplevel_hs.winfo_screenheight()  # Anchura de la pantalla
+
+        x = (ws / 2) - (450 / 2)
+        y = (hs / 2) - (600 / 2)
+
+        toplevel_hs.resizable(width=NO, height=NO)  # Que el tamaño de la ventana no cambie
+        toplevel_hs.geometry("%dx%d+%d+%d" % (450, 600, x, y))
+        toplevel_hs.configure(bg="Black")
+
+        canvas3 = Canvas(toplevel_hs, width=800, height=600, bg="#000000")  # Se crea el canvas2 y se configura
+        canvas3.place(x=0, y=0)
+        canvas3.create_rectangle(5, 5, 445, 595, fill="#000000", outline="#FFFFFF", width=9)
+        canvas3.create_rectangle(5, 5, 445, 595, fill="#000000", outline="white", width=1)
+        canvas3.create_rectangle(30, 220, 50, 380, fill="white", outline="white", width=5)
+        canvas3.create_rectangle(400, 220, 420, 380, fill="white", outline="white", width=5)
+
+        # función que muestra el root y destruye el toplevel
+        def unir1():
+            root.deiconify()
+            toplevel_hs.destroy()
+            select_sound.play()
+
+        def unir2():
+            global ver
+            global MUTE
+            global PT
+            global tramp
+            MODE = ver
+            OBS = tramp
+            pygame.mixer.music.stop()
+            root.withdraw()
+            if current_color != '#000fff000':
+                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'white', OBS))
+            else:
+                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'green', OBS))
+            pygame.mixer.music.play(-1)
+            muteI()
+            root.deiconify()
+
+        def uni3():
+            global ver
+            global MUTE
+            global PT
+            global tramp
+            MODE = ver
+            OBS = tramp
+            pygame.mixer.music.stop()
+            root.withdraw()
+            if current_color != '#000fff000':
+                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'white', OBS))
+            else:
+                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'green', OBS))
+            pygame.mixer.music.play(-1)
+            muteI()
+            root.deiconify()
+
+        def unir4():
+            global ver
+            global MUTE
+            global PT
+            global tramp
+            MODE = ver
+            OBS = tramp
+            pygame.mixer.music.stop()
+            root.withdraw()
+            if current_color != '#000fff000':
+                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'white', OBS))
+            else:
+                os.system('python3 main.py %s %r %r %r %s %r' % (MODE, '', MUTE, True, 'green', OBS))
+            pygame.mixer.music.play(-1)
+            muteI()
+            root.deiconify()
+
+        boton_e = Button(toplevel_hs, command=unir2, text="    Easy    ", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
+        boton_e.pack()  # botón para la función mostrar4
+        boton_e.place(x=130, y=100)
+
+        boton_m = Button(toplevel_hs, command=unir3, text="   Medium   ", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
+        boton_m.pack()  # botón para la función mostrar4
+        boton_m.place(x=130, y=250)
+
+        boton_h = Button(toplevel_hs, command=unir4, text="    Hard    ", bg="black", fg="white", bd=0, font="courier 18",activebackground="white", relief=FLAT)
+        boton_h.pack()  # botón para la función mostrar4
+        boton_h.place(x=130, y=400)
+
+
+        # Botón para volver a el root mediante la función unir1
+        boton_v = Button(toplevel_hs, command=unir1, text="<volver>", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
+        boton_v.pack()  # botón para la función mostrar4
+        boton_v.place(x=150, y=530)
 
 
     def lan_win():
@@ -537,24 +634,6 @@ def root():
     root.bind('b', color_w)
     root.bind('v', color_g)
 
-    def unir5():
-        global ver
-        global MUTE
-        global PT
-        global tramp
-        MODE = ver
-        OBS = tramp
-        pygame.mixer.music.stop()
-        root.withdraw()
-        if current_color != '#000fff000':
-            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, '', MUTE, True, 'white', OBS))
-        else:
-            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, '', MUTE, True, 'green', OBS))
-        pygame.mixer.music.play(-1)
-        muteI()
-
-        root.deiconify()
-
     def unir6():
         select_sound.play()
         toplevelHS()
@@ -573,7 +652,7 @@ def root():
     help1.place(x=145, y=385)
 
     # botón que ejeucta el juego en práctica
-    pract = Button(canvas, command=unir5, text="    Práctica    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)
+    pract = Button(canvas, command=pra_dif_ele, text="    Práctica    ", bg="black", fg="white", bd=0, font="courier 16",activebackground="white", relief=FLAT)
     pract.place(x=405, y=320)
 
     # bontón que ejecuta la ventana de highscores
