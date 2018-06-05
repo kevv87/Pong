@@ -64,7 +64,7 @@ class Tablero:
         self.scores()
         self.block_width = block_width
         self.block_height = block_height
-        self.level = 2
+        self.level = 1
         self.ball_velocity = 30 + 3*(self.level-1)
         self.ball_direction = (-1, 0)
         self.pc = PC
@@ -640,7 +640,7 @@ class Obstaculo:
 
 class Game:
     global mode
-    def __init__(self, MODE, PC, MUTE, PT, color):
+    def __init__(self, MODE, PC, MUTE, PT, color, OBS):
         global choosed
         global start_boring_timer
 
@@ -682,6 +682,7 @@ class Game:
         self.ball_x = 19
         self.ball_y = 12
 
+        self.obs = bool(OBS)
         self.obstaculo_list = []
         self.obstaculos()
 
@@ -697,6 +698,7 @@ class Game:
 
         self.mute = bool(MUTE)
         self.practice = bool(PT)
+
 
 
 
@@ -1497,23 +1499,23 @@ class Game:
                 self.file.write(line[0]+'%'+str(line[1])+'\n')
 
     def obstaculos(self):
-
-        matrix = self.game_field.get_matrix()
-        if self.game_field.level == 1:
-            for i in range(1):
-                self.obstaculo_list.append('')
-            for i in range(1):
-                self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
-        elif self.game_field.level == 2:
-            for i in range(2):
-                self.obstaculo_list.append('')
-            for i in range(2):
-                self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
-        else:
-            for i in range(3):
-                self.obstaculo_list.append('')
-            for i in range(3):
-                self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
+        if self.obs:
+            matrix = self.game_field.get_matrix()
+            if self.game_field.level == 1:
+                for i in range(1):
+                    self.obstaculo_list.append('')
+                for i in range(1):
+                    self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
+            elif self.game_field.level == 2:
+                for i in range(2):
+                    self.obstaculo_list.append('')
+                for i in range(2):
+                    self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
+            else:
+                for i in range(3):
+                    self.obstaculo_list.append('')
+                for i in range(3):
+                    self.obstaculo_list[i] = Obstaculo(random.randint(15,25), random.randint(1,23), 2, 2)
 
 '''
 def arduino1_setup():
@@ -1549,7 +1551,7 @@ def arduino1_setup():
     display1_leds[7] = placa1.get_pin('d:13:o')
 '''
 
-Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5])
+Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5], bool(sys.argv[6]))
 global placa
 # Finalizacion del juego
 #placa1.exit()

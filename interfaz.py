@@ -393,6 +393,19 @@ def root():
         global ver
         ver = 'doubles'
 
+    #función para definir que se va a jugar sin trampolines
+    def sinT():
+        global tramp
+        tramp = ''
+    #valor default de tramp
+    sinT()
+
+    #función para definir que se va a jugar con trampolines
+    def conT():
+        global tramp
+        tramp = True
+
+
     #Radiobutton que indica si se va a jugar en doubles o no
     doublesL2 = Label(canvas, text="Doubles", bg="black", fg="white", font="courier 14")
     doublesL2.pack()
@@ -425,7 +438,7 @@ def root():
     tOnL.pack()
     tOnL.place(x=578,y=490)
 
-    tOn = Radiobutton(canvas, bg="black", value=2, variable=2)
+    tOn = Radiobutton(canvas, command=conT, bg="black", value=2, variable=2)
     tOn.pack()
     tOn.place(x=575, y=530)
 
@@ -433,7 +446,7 @@ def root():
     tOffL.pack()
     tOffL.place(x=433, y=490)
 
-    tOff = Radiobutton(canvas, bg="black", value=1, variable=2)
+    tOff = Radiobutton(canvas, command=sinT, bg="black", value=1, variable=2)
     tOff.pack()
     tOff.place(x=435, y=530)
 
@@ -444,18 +457,20 @@ def root():
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvpc
     def unir3():
+        global tramp
         global ver
         global current_color
         global MUTE
         global placa1
         MODE = ver
+        OBS = tramp
         pygame.mixer.music.stop()
         root.withdraw()
         #placa1.exit()
         if current_color != '#000fff000':
-            os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
+            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, True, MUTE, '', 'white', OBS))
         else:
-            os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
+            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, True, MUTE, '', 'green', OBS))
       #  arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
@@ -463,6 +478,7 @@ def root():
 
     # función usada para unir otras funciones: ejecutar el sonido select, destruir el root y ejecutar la clase Game en modo pvp
     def unir4():
+        global tramp
         global ver
         global MUTE
         global PT
@@ -470,13 +486,14 @@ def root():
         global select, starting
         global current_color
         MODE = ver
+        OBS = tramp
         pygame.mixer.music.stop()
         root.withdraw()
         #placa1.exit()
         if current_color != '#000fff000':
-            os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
+            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, '', MUTE, '', 'white', OBS))
         else:
-            os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
+            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, '',MUTE, '', 'green', OBS))
        # arduino1_setup()
         pygame.mixer.music.play(-1)
         muteI()
@@ -524,13 +541,15 @@ def root():
         global ver
         global MUTE
         global PT
+        global tramp
         MODE = ver
+        OBS = tramp
         pygame.mixer.music.stop()
         root.withdraw()
         if current_color != '#000fff000':
-            os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, True, 'white'))
+            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, '', MUTE, True, 'white', OBS))
         else:
-            os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, True, 'green'))
+            os.system('python3 main.py %s %r %r %r %s %r' %(MODE, '', MUTE, True, 'green', OBS))
         pygame.mixer.music.play(-1)
         muteI()
 
