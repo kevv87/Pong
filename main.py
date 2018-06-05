@@ -4,14 +4,19 @@ import mutagen.oggvorbis
 import time
 import sys
 import os
-import pyfirmata
 from tkinter import *
+import serial
 
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
 
+try:
+    arduino1 = serial.Serial('/dev/ttyACM1', 9600)
+    time.sleep(2)
+except:
+    arduino1 = 0
 
 # Colores importantes
 white = (255, 255, 255)
@@ -160,119 +165,6 @@ class Tablero:
 
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_f(self):
-        global display1_leds
-        A = display1_leds[0]
-        B = display1_leds[1]
-        C = display1_leds[2]
-        D = display1_leds[3]
-        E = display1_leds[4]
-        F = display1_leds[5]
-        G = display1_leds[6]
-        DP = display1_leds[7]
-        num = self.friend_score
-
-        DP.write(False)
-        if num == 0:
-            A.write(False)
-            B.write(False)
-            C.write(False)
-            D.write(False)
-            E.write(False)
-            F.write(False)
-            G.write(True)
-            DP.write(True)
-        elif num == 1:
-            A.write(True)
-            B.write(False)
-            C.write(False)
-            D.write(True)
-            E.write(True)
-            F.write(True)
-            G.write(True)
-            DP.write(True)
-        elif num == 1:
-            A.write(True)
-            B.write(False)
-            C.write(False)
-            D.write(True)
-            E.write(True)
-            F.write(True)
-            G.write(True)
-            DP.write(True)
-
-        elif num == 2:
-            A.write(False)
-            B.write(False)
-            C.write(True)
-            G.write(False)
-            E.write(False)
-            D.write(False)
-            F.write(True)
-            DP.write(True)
-        elif num == 3:
-            B.write(False)
-            A.write(False)
-            G.write(False)
-            C.write(False)
-            D.write(False)
-            E.write(True)
-            F.write(True)
-            DP.write(True)
-        elif num == 4:
-            A.write(True)
-            B.write(False)
-            F.write(False)
-            G.write(False)
-            C.write(False)
-            D.write(True)
-            E.write(True)
-            DP.write(True)
-        elif num == 5:
-            A.write(False)
-            B.write(True)
-            C.write(False)
-            D.write(False)
-            E.write(True)
-            G.write(False)
-            F.write(False)
-            DP.write(True)
-        elif num == 6:
-            A.write(False)
-            B.write(True)
-            C.write(False)
-            D.write(False)
-            E.write(False)
-            G.write(False)
-            F.write(False)
-            DP.write(True)
-        elif num == 7:
-            A.write(False)
-            B.write(False)
-            C.write(False)
-            D.write(True)
-            E.write(True)
-            F.write(True)
-            G.write(True)
-            DP.write(True)
-        elif num == 8:
-            A.write(False)
-            B.write(False)
-            C.write(False)
-            D.write(False)
-            E.write(False)
-            G.write(False)
-            F.write(False)
-            DP.write(True)
-        elif num == 9:
-            A.write(False)
-            B.write(False)
-            C.write(False)
-            D.write(False)
-            E.write(True)
-            G.write(False)
-            F.write(False)
-            DP.write(True)
-
         if self.friend_score == 0:
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix)):

@@ -3,17 +3,26 @@ import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
 import random
-import pyfirmata
+import serial
 import time
-
-pygame.init()
-
 
 MUTE= ''
 #inicia pygame
 pygame.init()
 
 selected = 0
+
+
+try:
+    arduino1 = serial.Serial('/dev/ttyACM1', 9600)
+except:
+    arduino1 = 0
+
+try:
+    arduino2 = serial.Serial('/dev/ttyUSB0', 4800)
+except:
+    arduino2 = 0
+
 
 #Sonidos
 select_sound = pygame.mixer.Sound('sounds/select.ogg')
@@ -428,8 +437,6 @@ def root():
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
-        arduino1_setup()
-        arduino2_setup()
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()
@@ -451,8 +458,6 @@ def root():
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
-        arduino1_setup()
-        arduino2_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -570,32 +575,43 @@ def root():
 
     singles.select()
 
-    arduino1_setup()
-    arduino2_setup()
 
     pygame.mixer.music.play(-1)
 
-    selected = 0
+    selected = -1
 
 
     while True:
-        global stay, arriba_b1, abajo_b1, select_b1, verde_b1, blanco_b1, mute_b1, arriba_b2, abajo_b2, select_b2, verde_b2, blanco_b2, mute_b2
-        if arriba_b1.read() or arriba_b2.read():
-            print('1')
+        root.update_idletasks()
+        root.update()
+        if arduino1 != 0:
+            raw1 = arduino1.read()
+            arduino1_cmd = raw1.decode()
+        else:
+            arduino1_cmd = 'x'
+            print('noconnect')
+
+        if arduino2 != 0:
+            raw2 = arduino2.read()
+            arduino2_cmd = raw2.decode()
+        else:
+            arduino2_cmd = 'x'
+
+        print(arduino2_cmd)
+        print(arduino1_cmd)
+        if arduino1_cmd == 'u' or arduino2_cmd == 'u':
             if selected > 0:
                 selected -= 1
-        elif abajo_b1.read() or abajo_b2.read():
-            print('2')
+        elif arduino1_cmd == 'd' or arduino2_cmd == 'd':
             if selected < 8:
                 selected += 1
-        elif verde_b1.read() == 1.0 or verde_b2.read() == 1.0:
+        elif arduino1_cmd == 'v' or arduino2_cmd == 'v':
             color_g()
-        elif blanco_b1.read() == 1.0 or blanco_b2.read() == 1.0:
+        elif arduino1_cmd == 'b' or arduino2_cmd == 'b':
             color_w()
-        elif mute_b1.read() == 1.0 or mute_b2.read() == 1.0:
+        elif arduino1_cmd == 'm' or arduino2_cmd == 'm':
             muteF()
-        if select_b1.read() or select_b2.read():
-            print('3')
+        if arduino1_cmd == 's' or arduino2_cmd == 's':
             select = True
         else:
             select = False
@@ -705,55 +721,5 @@ def root():
                 global toplevel_help
                 toplevel_help.destroy()
                 root.deiconify()
-        root.update_idletasks()
-        root.update()
-        time.sleep(0.01)
-        placa1.pass_time(0.1)
-        placa2.pass_time(0.1)
 
-def arduino1_setup():
-    global placa1, arriba_b1, select_b1, abajo_b1, blanco_b1, verde_b1, mute_b1
-    placa1 = pyfirmata.Arduino('/dev/ttyACM0')
-    pyfirmata.util.Iterator(placa1).start()
-
-    arriba_b1 = placa1.get_pin('d:10:i')
-    arriba_b1.enable_reporting()
-
-    select_b1 = placa1.get_pin('d:11:i')
-    select_b1.enable_reporting()
-
-    abajo_b1= placa1.get_pin('d:12:i')
-    abajo_b1.enable_reporting()
-
-    blanco_b1= placa1.get_pin('a:3:i')
-    blanco_b1.enable_reporting()
-
-    verde_b1= placa1.get_pin('a:4:i')
-    verde_b1.enable_reporting()
-
-    mute_b1 = placa1.get_pin('a:5:i')
-    mute_b1.enable_reporting()
-
-def arduino2_setup():
-    global placa2, arriba_b2, select_b2, abajo_b2, blanco_b2, verde_b2, mute_b2
-    placa2 = pyfirmata.Arduino('/dev/ttyUSB0')
-    pyfirmata.util.Iterator(placa2).start()
-
-    arriba_b2 = placa2.get_pin('d:10:i')
-    arriba_b2.enable_reporting()
-
-    select_b2 = placa2.get_pin('d:11:i')
-    select_b2.enable_reporting()
-
-    abajo_b2= placa2.get_pin('d:12:i')
-    abajo_b2.enable_reporting()
-
-    blanco_b2= placa2.get_pin('a:3:i')
-    blanco_b2.enable_reporting()
-
-    verde_b2 = placa2.get_pin('a:4:i')
-    verde_b2.enable_reporting()
-
-    mute_b2 = placa2.get_pin('a:5:i')
-    mute_b2.enable_reporting()
 root()
