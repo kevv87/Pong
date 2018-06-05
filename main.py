@@ -1497,6 +1497,7 @@ class Game:
                 self.file.write(line[0]+'%'+str(line[1])+'\n')
 
     def obstaculos(self):
+
         matrix = self.game_field.get_matrix()
         if self.game_field.level == 1:
             for i in range(1):

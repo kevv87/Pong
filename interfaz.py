@@ -527,7 +527,10 @@ def root():
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
+        if current_color != '#000fff000':
+            os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, True, 'white'))
+        else:
+            os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, True, 'green'))
         pygame.mixer.music.play(-1)
         muteI()
 
