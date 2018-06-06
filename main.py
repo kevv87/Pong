@@ -108,7 +108,7 @@ class Tablero:
         elif self.level == 1:
             music_file = 'sounds/lvl1.ogg'
         elif self.level == 2:
-            music_file = 'sounds/Shadowblaze-ChampionBattle.ogg'
+            music_file = 'sounds/lvl2.ogg'
         elif self.level == 3:
             music_file = 'sounds/NDY.ogg'
         sample_rate = mutagen.oggvorbis.OggVorbis(music_file).info.sample_rate
@@ -707,7 +707,6 @@ class Game:
                     elif event.key == pygame.K_p:
                         self.game_field.pause(1)
                         self.timer_clock.tick()
-
                     elif event.key == pygame.K_b:
                         self.color = white
                         self.game_field.current_color = white
@@ -1237,6 +1236,7 @@ class Game:
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                         self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length_e-1
+                        self.obstaculos()
                     else:
                         self.win(1)
                 clock.tick(3)
@@ -1398,6 +1398,7 @@ class Game:
                         self.player2_1y = 1
                         self.player1_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length-1
                         self.player2_2y = len(self.game_field.get_matrix())-self.game_field.paleta_length_e-1
+                        self.obstaculos()
                     else:
                         self.win(1)
                 else:
@@ -1561,7 +1562,6 @@ def arduino1_start():
         arduino1_cmd = raw1.decode()
         print(arduino1_cmd)
     arduino1.close()
-    return
 
 def arduino2_start():
     global listen, arduino2_cmd, arduino2
