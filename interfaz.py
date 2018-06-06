@@ -415,7 +415,7 @@ def root():
         global ver
         global current_color
         global MUTE
-        global placa1, placa2
+
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
@@ -438,21 +438,23 @@ def root():
         global ver
         global MUTE
         global PT
-        global placa1
+
         global select, starting
         global current_color
+        global arduino1, arduino2
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
         if arduino1 != 0:
             arduino1.close()
-
         if arduino2 != 0:
             arduino2.close()
+        time.sleep(2)
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
+        print('fuera')
         arduinos_setup()
         pygame.mixer.music.play(-1)
         muteI()
@@ -500,11 +502,14 @@ def root():
         global ver
         global MUTE
         global PT
+        global arduino1, arduino2
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        arduino1.close()
-        arduino2.close()
+        if arduino1 != 0:
+            arduino1.close()
+        if arduino2 != 0:
+            arduino2.close()
         os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
         arduinos_setup()
         pygame.mixer.music.play(-1)
@@ -589,12 +594,12 @@ def root():
         else:
             arduino1_cmd = 'x'
             print('noconnect')
-
         if arduino2 != 0:
             raw2 = arduino2.read()
             arduino2_cmd = raw2.decode()
         else:
             arduino2_cmd = 'x'
+            print('noconnect')
 
         if arduino1_cmd == 'u' or arduino2_cmd == 'u':
             if selected > 0:
