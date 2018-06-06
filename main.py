@@ -137,6 +137,7 @@ class Tablero:
         self.enemy_score = value
 
     def set_friend_score(self, value):
+        global arduino1
         self.friend_score = value
 
     def get_enemy_score(self):
@@ -164,54 +165,75 @@ class Tablero:
 
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_f(self):
+        global arduino1
         if self.friend_score == 0:
+            if arduino1 != 0:
+                arduino1.write(b'0')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix)):
                     if (m == 15 and 2 <= n <= 6) or (n == 2 and 13 <= m <= 15) or (m == 13 and 2 <= n <= 5) or (
                             n == 6 and 13 <= m <= 15):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 1:
+            if arduino1 != 0:
+                arduino1.write(b'1')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix)):
                     if (m == 15 and 2 <= n <= 6):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 2:
+            if arduino1 != 0:
+                arduino1.write(b'2')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 3) or (m == 13 and n == 5):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 3:
+            if arduino1 != 0:
+                arduino1.write(b'3')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 5) or (m == 15 and n == 3):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 4:
+            if arduino1 != 0:
+                arduino1.write(b'4')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 5:
+            if arduino1 != 0:
+                arduino1.write(b'5')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 15 and n == 5) or (m == 13 and n == 3):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 6:
+            if arduino1 != 0:
+                arduino1.write(b'6')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or (m == 13 and n == 5) or (m == 15 and n == 5) or (
                             m == 13 and n == 3):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 7:
+            if arduino1 != 0:
+                arduino1.write(b'7')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if (m == 15 and 2 <= n <= 6) or ((m == 14 or m == 13) and n == 2):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 8:
+            if arduino1 != 0:
+                arduino1.write(b'8')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 13 <= m <= 15) or ((m == 15 or m == 13) and (n == 3 or n == 5)):
                         self.game_matrix[n][m] = True
         elif self.friend_score == 9:
+            if arduino1 != 0:
+                arduino1.write(b'9')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if (m == 15 and 2 <= n <= 6) or (m == 13 and 2 <= n <= 4) or (m == 14 and n == 4) or (
@@ -221,9 +243,9 @@ class Tablero:
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_e(self):
         global arduino2
-        if arduino2 != 0:
-            arduino2.write(bytes(self.enemy_score))
         if self.enemy_score == 0:
+            if arduino2 != 0:
+                arduino2.write(b'0')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if (m == 23 and 2 <= n <= 6) or (n == 2 and 23 <= m <= 25) or (m == 25 and 2 <= n <= 6) or (n == 6 and 23 <= m <= 25):
@@ -233,6 +255,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 1:
+            if arduino2 != 0:
+                arduino2.write(b'1')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if (m == 23 and 2 <= n <= 6):
@@ -242,6 +266,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 2:
+            if arduino2 != 0:
+                arduino2.write(b'2')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 25 and n == 3) or (m == 23 and n == 5) :
@@ -251,6 +277,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 3:
+            if arduino2 != 0:
+                arduino2.write(b'3')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 25 and n == 5) or (m == 25 and n == 3):
@@ -260,6 +288,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 4:
+            if arduino2 != 0:
+                arduino2.write(b'4')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if (m == 25 and 2 <= n <= 6) or (m == 23 and 2 <= n <= 4) or (m == 24 and n == 4):
@@ -269,6 +299,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 5:
+            if arduino2 != 0:
+                arduino2.write(b'5')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 25 and n == 5) or (m == 23 and n == 3):
@@ -278,6 +310,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 6:
+            if arduino2 != 0:
+                arduino2.write(b'6')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or (m == 23 and n == 5)or (m == 25 and n == 5) or (m == 23 and n == 3):
@@ -287,6 +321,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 7:
+            if arduino2 != 0:
+                arduino2.write(b'7')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if (m == 25 and 2 <= n <= 6) or ((m == 24 or m == 23) and n == 2):
@@ -296,6 +332,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 8:
+            if arduino2 != 0:
+                arduino2.write(b'8')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if ((n == 2 or n == 4 or n == 6) and 23 <= m <= 25) or ((m == 25 or m == 23) and (n == 3 or n == 5)):
@@ -305,6 +343,8 @@ class Tablero:
                     elif n % 2 == 0 and m == 19:
                         self.game_matrix[n][m] = True
         elif self.enemy_score == 9:
+            if arduino2 != 0:
+                arduino2.write(b'9')
             for n in range(len(self.game_matrix)):
                 for m in range(len(self.game_matrix[0])):
                     if (m == 25 and 2 <= n <= 6) or (m == 23 and 2 <= n <= 4) or (m == 24 and n == 4) or (m == 24 and n == 2):
@@ -684,6 +724,7 @@ class Game:
         global choosed
         global arduino1_cmd, arduino2_cmd
         while self.game:
+            print(arduino2_cmd)
             self.timer_clock.tick()
             # Reconocimiento de eventos
             for event in pygame.event.get():
