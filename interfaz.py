@@ -3,11 +3,8 @@ import mutagen.oggvorbis
 import os
 from tkinter import *  #Importa todo de tkinter}
 import random
-import pyfirmata
+import serial
 import time
-
-pygame.init()
-
 
 MUTE= ''
 #inicia pygame
@@ -15,13 +12,13 @@ pygame.init()
 
 selected = 0
 
+
 #Sonidos
 select_sound = pygame.mixer.Sound('sounds/select.ogg')
 pong_sound = pygame.mixer.Sound('sounds/pong.ogg')
 ping_sound = pygame.mixer.Sound('sounds/ping.ogg')
 point_sound = pygame.mixer.Sound('sounds/point.ogg')
 fail_sound = pygame.mixer.Sound('sounds/fail.ogg')
-
 
 
 green = '#000fff000'
@@ -305,7 +302,6 @@ def root():
 
         while True:
 
-
             if isserver:
                 server.select()
                 client1_ip.config(state=NORMAL)
@@ -395,16 +391,20 @@ def root():
         global ver
         global current_color
         global MUTE
-        global placa1
+
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        placa1.exit()
+        if arduino1 != 0:
+            arduino1.close()
+
+        if arduino2 != 0:
+            arduino2.close()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
-        arduino1_setup()
+        arduinos_setup()
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()
@@ -414,18 +414,22 @@ def root():
         global ver
         global MUTE
         global PT
-        global placa1
         global select, starting
         global current_color
+        global arduino1, arduino2
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        placa1.exit()
+        if arduino1 != 0:
+            arduino1.close()
+        if arduino2 != 0:
+            arduino2.close()
+        time.sleep(2)
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
-        arduino1_setup()
+        arduinos_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -472,10 +476,16 @@ def root():
         global ver
         global MUTE
         global PT
+        global arduino1, arduino2
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
+        if arduino1 != 0:
+            arduino1.close()
+        if arduino2 != 0:
+            arduino2.close()
         os.system('python3 main.py %s %r %r %r' %(MODE, '', MUTE, True))
+        arduinos_setup()
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -541,32 +551,45 @@ def root():
 
     singles.select()
 
-    arduino1_setup()
 
     pygame.mixer.music.play(-1)
+
     selected =0
 
     while True:
-        global stay, arriba_b, abajo_b, select_b, verde_b, blanco_b, mute_b
-        if arriba_b.read():
-            print('1')
+        root.update_idletasks()
+        root.update()
+        if arduino1 != 0:
+            raw1 = arduino1.read()
+            arduino1_cmd = raw1.decode()
+        else:
+            arduino1_cmd = 'x'
+            print('noconnect')
+        if arduino2 != 0:
+            raw2 = arduino2.read()
+            arduino2_cmd = raw2.decode()
+        else:
+            arduino2_cmd = 'x'
+            print('noconnect')
+
+        if arduino1_cmd == 'u' or arduino2_cmd == 'u':
             if selected > 0:
                 selected -= 1
-        elif abajo_b.read():
-            print('2')
+        elif arduino1_cmd == 'd' or arduino2_cmd == 'd':
             if selected < 8:
                 selected += 1
-        elif verde_b.read() == 1.0:
+        elif arduino1_cmd == 'v' or arduino2_cmd == 'v':
             color_g()
-        elif blanco_b.read() == 1.0:
+        elif arduino1_cmd == 'b' or arduino2_cmd == 'b':
             color_w()
-        elif mute_b == 1.0:
+        elif arduino1_cmd == 'm' or arduino2_cmd == 'm':
             muteF()
-        if select_b.read():
-            print('3')
+        if arduino1_cmd == 's' or arduino2_cmd == 's':
             select = True
         else:
             select = False
+
+
         if selected == 0:
             pvp.config(state=ACTIVE)
             pvpc.config(state=NORMAL)
@@ -671,32 +694,18 @@ def root():
                 global toplevel_help
                 toplevel_help.destroy()
                 root.deiconify()
-        root.update_idletasks()
-        root.update()
-        time.sleep(0.01)
-        placa1.pass_time(0.2)
 
-def arduino1_setup():
-    global placa1, arriba_b, select_b, abajo_b, blanco_b, verde_b, mute_b
-    placa1 = pyfirmata.Arduino('/dev/ttyUSB0')
-    pyfirmata.util.Iterator(placa1).start()
+def arduinos_setup():
+    global arduino2, arduino1
+    try:
+        arduino1 = serial.Serial('/dev/ttyACM0', 9600)
+    except:
+        arduino1 = 0
 
-    arriba_b = placa1.get_pin('d:10:i')
-    arriba_b.enable_reporting()
+    try:
+        arduino2 = serial.Serial('/dev/ttyUSB0', 4800)
+    except:
+        arduino2 = 0
 
-    select_b = placa1.get_pin('d:11:i')
-    select_b.enable_reporting()
-
-    abajo_b= placa1.get_pin('d:12:i')
-    abajo_b.enable_reporting()
-
-    blanco_b= placa1.get_pin('a:3:i')
-    blanco_b.enable_reporting()
-
-    verde_b= placa1.get_pin('a:4:i')
-    verde_b.enable_reporting()
-
-    mute_b = placa1.get_pin('a:5:i')
-    mute_b.enable_reporting()
-
+arduinos_setup()
 root()
