@@ -724,7 +724,7 @@ class Game:
         global choosed
         global arduino1_cmd, arduino2_cmd
         while self.game:
-            print(arduino2_cmd)
+
             self.timer_clock.tick()
             # Reconocimiento de eventos
             for event in pygame.event.get():
@@ -1304,8 +1304,6 @@ class Game:
             else:
                 self.win(-1)
         for i in self.obstaculo_list:
-                if i.y == ball_y and i.x == ball_x:
-                    print('here')
                 if (self.game_field.get_ball_direction()[
                 0] > 0 and ball_x + 1 == i.x and (
                     i.y <= ball_y <= i.y + i.height or (
@@ -1468,8 +1466,6 @@ class Game:
                 ball_x = 19
                 ball_y = 12
         for i in self.obstaculo_list:
-            if i.y == ball_y and i.x == ball_x:
-                print('here')
             if (self.game_field.get_ball_direction()[
                     0] > 0 and ball_x + 1 == i.x and (
                         i.y <= ball_y <= i.y + i.height or (
@@ -1601,7 +1597,7 @@ def arduino1_start():
     while listen:
         raw1 = arduino1.read()
         arduino1_cmd = raw1.decode()
-        print(arduino1_cmd)
+
     arduino1.close()
 
 def arduino2_start():
@@ -1634,14 +1630,14 @@ class myThread(threading.Thread):
             except:
                 arduino1 = 0
                 arduino1_cmd = 'x'
-                print('noconnect to 1')
+
         elif self.name == 'control2':
             try:
                 arduino2_start()
             except:
                 arduino2 = 0
                 arduino2_cmd = 'x'
-                print('noconnect to 2')
+
 
 
 hilo2 = myThread('control1')
