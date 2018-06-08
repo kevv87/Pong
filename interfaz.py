@@ -576,7 +576,7 @@ def root():
             if selected > 0:
                 selected -= 1
         elif arduino1_cmd == 'd' or arduino2_cmd == 'd':
-            if selected < 8:
+            if selected < 10:
                 selected += 1
         elif arduino1_cmd == 'v' or arduino2_cmd == 'v':
             color_g()
@@ -600,6 +600,8 @@ def root():
             hs.config(state=NORMAL)
             pract.config(state=NORMAL)
             lan.config(state=NORMAL)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=NORMAL)
             if select:
                 unir4()
         elif selected == 1:
@@ -612,6 +614,8 @@ def root():
             hs.config(state=ACTIVE)
             pract.config(state=NORMAL)
             lan.config(state=NORMAL)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=NORMAL)
             if select:
                 pass
         elif selected == 2:
@@ -624,6 +628,8 @@ def root():
             hs.config(state=NORMAL)
             pract.config(state=NORMAL)
             lan.config(state=NORMAL)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=NORMAL)
             if select:
                 unir3()
         elif selected == 3:
@@ -635,6 +641,8 @@ def root():
             doubles.config(state=NORMAL)
             hs.config(state=NORMAL)
             lan.config(state=NORMAL)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=NORMAL)
             if select:
                 pass
         elif selected == 4:
@@ -647,6 +655,8 @@ def root():
             hs.config(state=NORMAL)
             pract.config(state=NORMAL)
             lan.config(state=NORMAL)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=NORMAL)
             if select:
                 unir2()
                 selected = -1
@@ -660,23 +670,12 @@ def root():
             hs.config(state=NORMAL)
             pract.config(state=NORMAL)
             lan.config(state=ACTIVE)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=NORMAL)
             if select:
                 lan_win()
                 selected = -2
         elif selected == 6:
-            pvp.config(state=NORMAL)
-            pvpc.config(state=NORMAL)
-            help1.config(state=NORMAL)
-            pract.config(state=NORMAL)
-            singles.config(state=NORMAL)
-            doubles.config(state=ACTIVE)
-            hs.config(state=NORMAL)
-            pract.config(state=NORMAL)
-            lan.config(state=NORMAL)
-            if select:
-                doubles.select()
-                modeD()
-        elif selected == 7:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
             help1.config(state=NORMAL)
@@ -686,6 +685,53 @@ def root():
             hs.config(state=NORMAL)
             pract.config(state=NORMAL)
             lan.config(state=NORMAL)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=NORMAL)
+            if select:
+                singles.select()
+                modeD()
+        elif selected == 7:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=ACTIVE)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=NORMAL)
+            if select:
+                doubles.select()
+                modeS()
+         elif selected == 8:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            tOn.config(stat=ACTIVE)
+            tOff.config(stat=NORMAL)
+            if select:
+                singles.select()
+                modeS()
+         elif selected == 9:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            tOn.config(stat=NORMAL)
+            tOff.config(stat=ACTIVE)
             if select:
                 singles.select()
                 modeS()
