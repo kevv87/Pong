@@ -712,6 +712,7 @@ class Game:
         self.choosed = False
         start_boring_timer = time.time()
         self.timer_clock.tick()
+        self.game_field.pause(1)
         if mode == 'singles':
             self.singles()
         elif mode == 'doubles':
@@ -1654,7 +1655,6 @@ class myThread(threading.Thread):
 
 hilo2 = myThread('control1')
 hilo3 = myThread('control2')
-time.sleep(6)
 hilo1 = myThread('game')
 
 hilo2.start()

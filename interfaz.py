@@ -588,8 +588,6 @@ def root():
             select = True
         else:
             select = False
-
-
         if selected == 0:
             pvp.config(state=ACTIVE)
             pvpc.config(state=NORMAL)
@@ -705,22 +703,7 @@ def root():
             if select:
                 doubles.select()
                 modeS()
-         elif selected == 8:
-            pvp.config(state=NORMAL)
-            pvpc.config(state=NORMAL)
-            help1.config(state=NORMAL)
-            pract.config(state=NORMAL)
-            singles.config(state=NORMAL)
-            doubles.config(state=NORMAL)
-            hs.config(state=NORMAL)
-            pract.config(state=NORMAL)
-            lan.config(state=NORMAL)
-            tOn.config(stat=ACTIVE)
-            tOff.config(stat=NORMAL)
-            if select:
-                singles.select()
-                modeS()
-         elif selected == 9:
+        elif selected == 8:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
             help1.config(state=NORMAL)
@@ -732,6 +715,21 @@ def root():
             lan.config(state=NORMAL)
             tOn.config(stat=NORMAL)
             tOff.config(stat=ACTIVE)
+            if select:
+                singles.select()
+                modeS()
+        elif selected == 9:
+            pvp.config(state=NORMAL)
+            pvpc.config(state=NORMAL)
+            help1.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            singles.config(state=NORMAL)
+            doubles.config(state=NORMAL)
+            hs.config(state=NORMAL)
+            pract.config(state=NORMAL)
+            lan.config(state=NORMAL)
+            tOn.config(stat=ACTIVE)
+            tOff.config(stat=NORMAL)
             if select:
                 singles.select()
                 modeS()
