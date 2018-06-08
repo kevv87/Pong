@@ -975,6 +975,12 @@ class Game:
             elif arduino1_cmd == 'i':
                 self.game_field.pause(1, True)
                 self.timer_clock.tick()
+            elif arduino1_cmd == 'b':
+                self.color = white
+                self.game_field.current_color = white
+            elif arduino1_cmd == 'v':
+                self.color = green
+                self.game_field.current_color = green
 
             if arduino2_cmd == 'u' and self.player2_1y-1 > 0:
                 self.player2_1y -= 1
@@ -988,6 +994,12 @@ class Game:
             elif arduino2_cmd == 'i':
                 self.game_field.pause(2,True)
                 self.timer_clock.tick()
+            elif arduino2_cmd == 'b':
+                self.color = white
+                self.game_field.current_color = white
+            elif arduino2_cmd == 'v':
+                self.color = green
+                self.game_field.current_color = green
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -1602,7 +1614,7 @@ def arduino1_start():
 
 def arduino2_start():
     global listen, arduino2_cmd, arduino2
-    arduino2 = serial.Serial('/dev/ttyUSB0', 4800)
+    arduino2 = serial.Serial('/dev/ttyUSB0',4800)
     time.sleep(2)
     arduino2.write(b'e')
     listen = True
