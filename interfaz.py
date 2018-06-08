@@ -721,13 +721,13 @@ def root():
             arduino1_cmd = raw1.decode()
         else:
             arduino1_cmd = 'x'
-            print('noconnect')
+
         if arduino2 != 0:
             raw2 = arduino2.read()
             arduino2_cmd = raw2.decode()
         else:
             arduino2_cmd = 'x'
-            print('noconnect')
+
 
         if arduino1_cmd == 'u' or arduino2_cmd == 'u':
             if selected > 0 and selected-1 != 19 and selected-1 != 18:

@@ -486,28 +486,28 @@ class Tablero:
                         quit()
                     elif event.type == pygame.QUIT:
                         listen = False
+                        pygame.quit()
+                        quit()
 
+            if arduino1 != 0 :
+                if arduino1_cmd == 'p' and player==1:
+                    pygame.mixer.music.unpause()
+                    pause = False
+                elif arduino2_cmd == 'p' and player ==2:
+                    pygame.mixer.music.unpause()
+                    pause = False
+                elif arduino1_cmd == 'v' or arduino2_cmd == 'v':
+                    self.current_color = green
+                elif arduino1_cmd == 'b' or arduino2_cmd=='b':
+                    self.current_color = white
+                elif arduino1_cmd == 'a' and player==1:
+                    listen = False
                     pygame.quit()
                     quit()
-
-            if arduino1_cmd == 'p' and player==1:
-                pygame.mixer.music.unpause()
-                pause = False
-            elif arduino2_cmd == 'p' and player ==2:
-                pygame.mixer.music.unpause()
-                pause = False
-            elif arduino1_cmd == 'v' or arduino2_cmd == 'v':
-                self.current_color = green
-            elif arduino1_cmd == 'b' or arduino2_cmd=='b':
-                self.current_color = white
-            elif arduino1_cmd == 'a' and player==1:
-                listen = False
-                pygame.quit()
-                quit()
-            elif arduino2_cmd == 'a' and player==2:
-                listen = False
-                pygame.quit()
-                quit()
+                elif arduino2_cmd == 'a' and player==2:
+                    listen = False
+                    pygame.quit()
+                    quit()
 
             self.screen()
             self.message_to_screen('Juego pausado',self.current_color, size='large')
