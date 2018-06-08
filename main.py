@@ -162,6 +162,7 @@ class Tablero:
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_f(self):
         global display1_leds
+        """
         A = display1_leds[0]
         B = display1_leds[1]
         C = display1_leds[2]
@@ -273,7 +274,7 @@ class Tablero:
             G.write(False)
             F.write(False)
             DP.write(True)
-
+"""
     # funcion encargada de escribir el score del jugador 1 en la matriz de juego
     def score_e(self):
         if self.enemy_score == 0:
@@ -387,7 +388,6 @@ class Tablero:
     # Pausa el juego
     def pause(self, ins=False):
         global current_color
-        global placa1
         global botones1
 
         pause = True
@@ -418,12 +418,12 @@ class Tablero:
                         self.current_color = green
 
                     elif event.key == pygame.K_ESCAPE:
-                        placa1.exit()
+                        #placa1.exit()
                         pygame.quit()
                         quit()
 
                 elif event.type == pygame.QUIT:
-                    placa1.exit()
+                    #placa1.exit()
                     pygame.quit()
                     quit()
 
@@ -435,7 +435,7 @@ class Tablero:
             elif botones1[4].read() == 1.0:
                 self.current_color = white
             elif botones1[6].read() == 1.0:
-                placa1.exit()
+                #placa1.exit()
                 pygame.quit()
                 quit()
 
@@ -444,7 +444,7 @@ class Tablero:
             self.message_to_screen('Juego pausado',self.current_color, size='large')
             self.message_to_screen('Presione p para reanudar', self.current_color, y_displace=80)
             pygame.display.update()
-            placa1.pass_time(0.2)
+            #placa1.pass_time(0.2)
 
         for n in range(len(self.game_matrix)):
             for m in range(len(self.game_matrix)):
@@ -485,7 +485,7 @@ class Tablero:
             root.update_idletasks()
             root.update()
             time.sleep(0.01)
-            placa1.pass_time(0.2)
+            #placa1.pass_time(0.2)
 
         quit()
 
@@ -654,7 +654,7 @@ class Game:
         global choosed
         global start_boring_timer
 
-        arduino1_setup()
+        #arduino1_setup()
 
         if color == 'white' or (255,255,255):
             self.color = (255,255,255)
@@ -851,7 +851,7 @@ class Game:
                     elif keyup == 'S':
                         self.player2_1down_y = False
 
-
+            """
             if botones1[2].read() and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
             elif botones1[0].read() and self.player1_1y-1 > 2:
@@ -868,7 +868,7 @@ class Game:
             elif botones1[7].read() == 1.0:
                 self.game_field.pause(True)
                 self.timer_clock.tick()
-
+            """
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
@@ -1617,7 +1617,7 @@ class Game:
             # Reconocimiento de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    placa1.exit()
+                    #placa1.exit()
                     pygame.quit()
                     quit()
                 elif event.type == pygame.KEYDOWN:
@@ -1626,12 +1626,12 @@ class Game:
                         pygame.quit()
                         quit()
                     elif event.key == pygame.K_SPACE:
-                        placa1.exit()
+                        #placa1.exit()
                         pygame.quit()
                         quit()
 
             if botones1[6].read() == 1.0:
-                placa1.exit()
+                #placa1.exit()
                 pygame.quit()
                 quit()
             elif botones1[1].read():
@@ -1705,23 +1705,23 @@ class Game:
             lista1.append(i)
         return lista1
 
-
+"""
 def arduino1_setup():
-    global placa1, botones1, display1_leds
-    placa1 = pyfirmata.Arduino('/dev/ttyACM0')
-    pyfirmata.util.Iterator(placa1).start()
+    
+    #placa1 = pyfirmata.Arduino('/dev/ttyACM0')
+    #pyfirmata.util.Iterator(placa1).start()
 
     botones1 = []
 
-    botones1.append(placa1.get_pin('d:10:i')) # boton arriba
-    botones1.append(placa1.get_pin('d:11:i')) # boton select
-    botones1.append(placa1.get_pin('d:12:i')) # boton abajo
-    botones1.append(placa1.get_pin('a:4:i')) # boton verde
-    botones1.append(placa1.get_pin('a:3:i')) # boton blanco
-    botones1.append(placa1.get_pin('a:2:i')) # boton pausa
-    botones1.append(placa1.get_pin('a:0:i')) # boton back
-    botones1.append(placa1.get_pin('a:1:i')) # boton inspector
-    botones1.append(placa1.get_pin('a:5:i')) # boton mute
+    #botones1.append(placa1.get_pin('d:10:i')) # boton arriba
+    #botones1.append(placa1.get_pin('d:11:i')) # boton select
+    #botones1.append(placa1.get_pin('d:12:i')) # boton abajo
+    #botones1.append(placa1.get_pin('a:4:i')) # boton verde
+    #botones1.append(placa1.get_pin('a:3:i')) # boton blanco
+    #botones1.append(placa1.get_pin('a:2:i')) # boton pausa
+    #botones1.append(placa1.get_pin('a:0:i')) # boton back
+    #botones1.append(placa1.get_pin('a:1:i')) # boton inspector
+    #botones1.append(placa1.get_pin('a:5:i')) # boton mute
 
 
     for i in botones1:
@@ -1737,12 +1737,11 @@ def arduino1_setup():
     display1_leds[5] = placa1.get_pin('d:2:o')
     display1_leds[6] = placa1.get_pin('d:3:o')
     display1_leds[7] = placa1.get_pin('d:13:o')
-
+"""
 for i in sys.argv:
     print(i)
 Game(sys.argv[1], bool(sys.argv[2]), bool(sys.argv[3]), bool(sys.argv[4]), sys.argv[5], sys.argv[6])
-global placa
 # Finalizacion del juego
-placa1.exit()
+#placa1.exit()
 pygame.quit()
 quit()

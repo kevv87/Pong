@@ -369,8 +369,7 @@ def root():
 
 
         while True:
-            global isserver
-            global isclient
+
             if isserver:
                 server.select()
                 client1_ip_e.config(state=NORMAL)
@@ -466,16 +465,16 @@ def root():
         global MUTE
         global current_color
         global MUTE
-        global placa1
+        pass
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        placa1.exit()
+        #pass.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, True, MUTE, '', 'green'))
-        arduino1_setup()
+        #pass_setup()
         pygame.mixer.music.play(-1)
         muteI()
         root.deiconify()
@@ -485,18 +484,20 @@ def root():
         global ver
         global MUTE
         global PT
-        global placa1
+        pass
         global select, starting
         global current_color
         MODE = ver
         pygame.mixer.music.stop()
         root.withdraw()
-        placa1.exit()
+
+        #pass.exit()
         if current_color != '#000fff000':
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '', MUTE, '', 'white'))
         else:
             os.system('python3 main.py %s %r %r %r %s' %(MODE, '',MUTE, '', 'green'))
-        arduino1_setup()
+        #pass_setup()
+
         pygame.mixer.music.play(-1)
         muteI()
 
@@ -616,7 +617,7 @@ def root():
 
     singles.select()
 
-    arduino1_setup()
+    #pass_setup()
 
     pygame.mixer.music.play(-1)
     selected =0
@@ -624,6 +625,7 @@ def root():
 
     while True:
         global stay, arriba_b, abajo_b, select_b, verde_b, blanco_b, mute_b
+        """
         if arriba_b.read():
             print('1')
             if selected > 0:
@@ -748,32 +750,33 @@ def root():
                 global toplevel_help
                 toplevel_help.destroy()
                 root.deiconify()
+"""
         root.update_idletasks()
         root.update()
-        time.sleep(0.01)
-        placa1.pass_time(0.2)
+        #time.sleep(0.01)
+        #pass.pass_time(0.2)
+"""
+def pass_setup():
+    global pass, arriba_b, select_b, abajo_b, blanco_b, verde_b, mute_b
+    #pass = pyfirmata.Arduino('/dev/ttyACM0)
+    pyfirmata.util.Iterator(pass).start()
 
-def arduino1_setup():
-    global placa1, arriba_b, select_b, abajo_b, blanco_b, verde_b, mute_b
-    placa1 = pyfirmata.Arduino('/dev/ttyACM0')
-    pyfirmata.util.Iterator(placa1).start()
-
-    arriba_b = placa1.get_pin('d:10:i')
+    arriba_b = pass.get_pin('d:10:i')
     arriba_b.enable_reporting()
 
-    select_b = placa1.get_pin('d:11:i')
+    select_b = pass.get_pin('d:11:i')
     select_b.enable_reporting()
 
-    abajo_b= placa1.get_pin('d:12:i')
+    abajo_b= pass.get_pin('d:12:i')
     abajo_b.enable_reporting()
 
-    blanco_b= placa1.get_pin('a:3:i')
+    blanco_b= pass.get_pin('a:3:i')
     blanco_b.enable_reporting()
 
-    verde_b= placa1.get_pin('a:4:i')
+    verde_b= pass.get_pin('a:4:i')
     verde_b.enable_reporting()
 
-    mute_b = placa1.get_pin('a:5:i')
+    mute_b = pass.get_pin('a:5:i')
     mute_b.enable_reporting()
-
+"""
 root()
