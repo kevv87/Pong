@@ -81,7 +81,7 @@ def root():
 
     #Función que crea y modifica el toplevel_help
     def toplevelHelp():
-        global toplevel_help
+        global toplevel_help, unir1
         root.withdraw()
         toplevel_help= Toplevel()
         toplevel_help.title("Help")
@@ -207,6 +207,7 @@ def root():
 
 
     def pra_dif_ele():
+        global unir1, unir2, unir3, unir4, boton_v, boton_e, boton_m, boton_h
         root.withdraw()
         toplevel_de = Toplevel()
         toplevel_de.title("Dificultad de práctica")
@@ -243,6 +244,7 @@ def root():
             OBS = tramp
             pygame.mixer.music.stop()
             root.withdraw()
+            toplevel_de.destroy()
             if current_color != '#000fff000':
                 os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'white', OBS, '1'))
             else:
@@ -250,7 +252,6 @@ def root():
             pygame.mixer.music.play(-1)
             muteI()
             root.deiconify()
-            toplevel_de.destroy()
 
         def unir3():
             global ver
@@ -261,6 +262,7 @@ def root():
             OBS = tramp
             pygame.mixer.music.stop()
             root.withdraw()
+            toplevel_de.destroy()
             if current_color != '#000fff000':
                 os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'white', OBS, '2'))
             else:
@@ -268,7 +270,6 @@ def root():
             pygame.mixer.music.play(-1)
             muteI()
             root.deiconify()
-            toplevel_de.destroy()
 
 
         def unir4():
@@ -280,6 +281,7 @@ def root():
             OBS = tramp
             pygame.mixer.music.stop()
             root.withdraw()
+            toplevel_de.destroy()
             if current_color != '#000fff000':
                 os.system('python3 main.py %s %r %r %r %s %r %s' % (MODE, '', MUTE, True, 'white', OBS, '3'))
             else:
@@ -287,7 +289,6 @@ def root():
             pygame.mixer.music.play(-1)
             muteI()
             root.deiconify()
-            toplevel_de.destroy()
 
 
         boton_e = Button(toplevel_de, command=unir2, text="    Easy    ", bg="black", fg="white", bd=0, font="courier 18", activebackground="white", relief=FLAT)
@@ -313,6 +314,7 @@ def root():
         global isserver
         global isclient
         global lan
+        global back, selected
         root.withdraw()
         lan = Toplevel()
         # configuracion de la pantalla
@@ -426,15 +428,18 @@ def root():
         client_button.place(x=480, y=530)
 
         def back():
-            lan.withdraw()
+            lan.destroy()
             root.deiconify()
+            looping = False
 
         boton_v = Button(canvas, text="<volver>", bg="black", fg="white", bd=0, font="courier 18",
-                         activebackground="white", relief=FLAT, command=back)
+                         activebackground="white", relief=FLAT, command=back, state=ACTIVE)
         boton_v.pack()  # botón para la función mostrar4
         boton_v.place(x=20, y=540)
 
-        while True:
+        looping = True
+
+        while looping:
 
             if isserver:
                 server.select()
@@ -725,10 +730,10 @@ def root():
             print('noconnect')
 
         if arduino1_cmd == 'u' or arduino2_cmd == 'u':
-            if selected > 0:
+            if selected > 0 and selected-1 != 19 and selected-1 != 18:
                 selected -= 1
         elif arduino1_cmd == 'd' or arduino2_cmd == 'd':
-            if selected < 10:
+            if selected < 10 or 20 <= selected <= 23:
                 selected += 1
         elif arduino1_cmd == 'v' or arduino2_cmd == 'v':
             color_g()
@@ -797,6 +802,7 @@ def root():
             tOff.config(stat=NORMAL)
             if select:
                 pra_dif_ele()
+                selected = 20
         elif selected == 4:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -811,7 +817,7 @@ def root():
             tOff.config(stat=NORMAL)
             if select:
                 unir2()
-                selected = -1
+                selected = 10
         elif selected == 5:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -826,7 +832,7 @@ def root():
             tOff.config(stat=NORMAL)
             if select:
                 lan_win()
-                selected = -2
+                selected = 0
         elif selected == 6:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -888,6 +894,35 @@ def root():
                 tOn.select()
                 conT()
         elif selected == 10:
+            if select:
+                selected = 0
+                unir1()
+        elif selected == 20:
+            boton_e.config(state=ACTIVE)
+            boton_m.config(state=NORMAL)
+            boton_v.config(state=NORMAL)
+            boton_h.config(state=NORMAL)
+            if select:
+                unir2()
+        elif selected == 21:
+            boton_m.config(state=ACTIVE)
+            boton_e.config(state=NORMAL)
+            boton_h.config(state=NORMAL)
+            boton_v.config(state=NORMAL)
+            if select:
+                unir3()
+        elif selected == 22:
+            boton_h.config(state=ACTIVE)
+            boton_e.config(state=NORMAL)
+            boton_m.config(state=NORMAL)
+            boton_v.config(state=NORMAL)
+            if select:
+                unir4()
+        elif selected == 23:
+            boton_v.config(state=ACTIVE)
+            boton_e.config(state=NORMAL)
+            boton_m.config(state=NORMAL)
+            boton_h.config(state=NORMAL)
             if select:
                 selected = 0
                 unir1()

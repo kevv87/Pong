@@ -48,6 +48,76 @@ block_width = 24
 # Reloj
 clock = pygame.time.Clock()
 
+# Encargada de la manipulacion de texto plano
+class HOF:
+    def __init__(self):
+        self.path = 'highscores.txt'
+
+        self.file = open(self.path, 'r')
+
+        contents = []
+
+        for line in self.file:
+            contents.append(line[:len(line)-1])
+
+        self.final = []
+
+        k = 0
+
+        for i in contents:
+            self.final.append(i.split('%'))
+            self.final[k][1] = int(self.final[k][1])
+            k += 1
+
+        self.file.close()
+
+    def verify(self, valor):
+        self.file = open(self.path, 'w')
+        name = u_name()
+        cont = False
+        for line in self.final:
+            if valor < line[1] and not cont:
+                self.file.write(name+'%'+str(valor)+'\n')
+                cont = True
+            else:
+                self.file.write(line[0]+'%'+str(line[1])+'\n')
+
+    def u_name(self):
+        tmp = Tk()
+
+        width = 800
+        height = 600
+
+        ws = tmp.winfo_screenwidth()  # largo de la pantalla
+        hs = tmp.winfo_screenheight()  # Anchura de la pantalla
+
+        x = (ws / 2) - (width / 2)
+        y = (hs / 2) - (height / 2)
+
+        tmp.resizable(width=NO, height=NO)  # Que el tamaño de la ventana no cambie
+        tmp.geometry("%dx%d+%d+%d" % (width, height, x, y))
+
+        max_len = 5
+
+        var = StringVar()
+
+        def on_write(*args):
+            s = var.get()
+            if len(s) > max_len:
+                var.set(s[:max_len])
+
+        var.trace_variable("w", on_write)
+        entry = Entry(tmp, textvariable=var)
+        entry.pack()
+
+        def returning(*args):
+            return var.get()
+
+        tmp.bind('<Return>', returning)
+
+
+highscores = HOF()
+
 
 # Clase tablero, encargada de guardar algunas variables importantes para el desarrollo de cualquier modalidad del juego
 # asi como metodos que se usan en todas las modalidades del juego.
@@ -111,6 +181,8 @@ class Tablero:
             music_file = 'sounds/lvl2.ogg'
         elif self.level == 3:
             music_file = 'sounds/NDY.ogg'
+        else:
+            music_file = 'sounds/lvl1.ogg'
         sample_rate = mutagen.oggvorbis.OggVorbis(music_file).info.sample_rate
         pygame.mixer.quit()
         pygame.mixer.pre_init(sample_rate, -16, 1, 512)
@@ -791,6 +863,7 @@ class Game:
                 self.game_field.mute = not self.mute
                 self.mute = not self.mute
                 self.game_field.music_update()
+                time.sleep(0.10)
 
             if arduino2_cmd == 'd' and self.player2_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player2_1y += 1
@@ -812,6 +885,7 @@ class Game:
                 self.game_field.mute = not self.mute
                 self.mute = not self.mute
                 self.game_field.music_update()
+                time.sleep(0.1)
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -991,6 +1065,7 @@ class Game:
                 self.game_field.mute = not self.mute
                 self.mute = not self.mute
                 self.game_field.music_update()
+                time.sleep(0.1)
 
             if arduino2_cmd == 'u' and self.player2_1y-1 > 0:
                 self.player2_1y -= 1
@@ -1014,6 +1089,7 @@ class Game:
                 self.game_field.mute = not self.mute
                 self.mute = not self.mute
                 self.game_field.music_update()
+                time.sleep(0.1)
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -1555,8 +1631,9 @@ class Game:
             self.message_to_screen('lose!',self.color, size='large', x_displace=x_displace_fromcenter, y_displace=40)
             self.message_to_screen('Press enter to play again', self.color, y_displace=200)
             self.message_to_screen('or space to return to main menu', self.color, y_displace=250)
+            pygame.display.update()
             if self.pc and winner == 1 and not cont:
-                self.verify()
+                highscores.verify(self.time_playing)
                 cont = True
 
             # Reconocimiento de eventos
@@ -1580,24 +1657,13 @@ class Game:
                 pygame.quit()
                 quit()
             elif arduino1_cmd == 's' or arduino2_cmd == 's':
-                self.__init__(self.mode, self.pc, self.mute, self.practice, self.color)
+                self.__init__(self.mode, self.pc, self.mute, self.practice, self.color, self.obs, 0)
                 listen = False
                 pygame.quit()
                 quit()
 
             pygame.display.update()
 
-
-    def verify(self):
-        self.file = open(self.path, 'w')
-        name = 'alv'
-        cont = False
-        for line in self.final:
-            if int(self.time_playing/1000) < int(line[1]) and not cont:
-                self.file.write(name+'%'+str(self.time_playing/1000)+'\n')
-                cont = True
-            else:
-                self.file.write(line[0]+'%'+str(line[1])+'\n')
 
     def obstaculos(self):
         if self.obs:
