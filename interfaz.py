@@ -141,6 +141,7 @@ def root():
         s_d.place(x=80, y=220)
 
     def toplevelHS():
+        global unir1, boton_v
         root.withdraw()
         toplevel_hs = Toplevel()
         toplevel_hs.title("Highscores")
@@ -766,7 +767,9 @@ def root():
             tOn.config(stat=NORMAL)
             tOff.config(stat=NORMAL)
             if select:
-                pass
+                unir6()
+                boton_v.config(state=ACTIVE)
+                selected = 10
         elif selected == 2:
             pvp.config(state=NORMAL)
             pvpc.config(state=ACTIVE)
@@ -793,7 +796,7 @@ def root():
             tOn.config(stat=NORMAL)
             tOff.config(stat=NORMAL)
             if select:
-                pass
+                pra_dif_ele()
         elif selected == 4:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -838,7 +841,7 @@ def root():
             tOff.config(stat=NORMAL)
             if select:
                 singles.select()
-                modeD()
+                modeS()
         elif selected == 7:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -853,7 +856,7 @@ def root():
             tOff.config(stat=NORMAL)
             if select:
                 doubles.select()
-                modeS()
+                modeD()
         elif selected == 8:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -867,8 +870,8 @@ def root():
             tOn.config(stat=NORMAL)
             tOff.config(stat=ACTIVE)
             if select:
-                singles.select()
-                modeS()
+                tOff.select()
+                sinT()
         elif selected == 9:
             pvp.config(state=NORMAL)
             pvpc.config(state=NORMAL)
@@ -882,13 +885,13 @@ def root():
             tOn.config(stat=ACTIVE)
             tOff.config(stat=NORMAL)
             if select:
-                singles.select()
-                modeS()
-        elif selected == -1:
+                tOn.select()
+                conT()
+        elif selected == 10:
             if select:
-                global toplevel_help
-                toplevel_help.destroy()
-                root.deiconify()
+                selected = 0
+                unir1()
+
 
 def arduinos_setup():
     global arduino2, arduino1

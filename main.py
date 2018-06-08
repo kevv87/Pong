@@ -773,7 +773,7 @@ class Game:
 
             if arduino1_cmd == 'd' and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player1_1y += 1
-            elif arduino1_cmd == 'u' and self.player1_1y-1 > 2:
+            elif arduino1_cmd == 'u' and self.player1_1y-1 > 0:
                 self.player1_1y -= 1
             elif arduino1_cmd == 'b':
                 self.color = white
@@ -787,6 +787,10 @@ class Game:
             elif arduino1_cmd == 'i':
                 self.game_field.pause(1,True)
                 self.timer_clock.tick()
+            elif arduino1_cmd == 'm':
+                self.game_field.mute = not self.mute
+                self.mute = not self.mute
+                self.game_field.music_update()
 
             if arduino2_cmd == 'd' and self.player2_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
                 self.player2_1y += 1
@@ -804,6 +808,10 @@ class Game:
             elif arduino2_cmd == 'i':
                 self.game_field.pause(2,True)
                 self.timer_clock.tick()
+            elif arduino2_cmd == 'm':
+                self.game_field.mute = not self.mute
+                self.mute = not self.mute
+                self.game_field.music_update()
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -968,7 +976,7 @@ class Game:
                 self.player1_1y += 1
                 self.player1_2y -= 1
             elif arduino1_cmd == 'p':
-                self.game_field.pause(2)
+                self.game_field.pause(1)
                 self.timer_clock.tick()
             elif arduino1_cmd == 'i':
                 self.game_field.pause(1, True)
@@ -979,6 +987,10 @@ class Game:
             elif arduino1_cmd == 'v':
                 self.color = green
                 self.game_field.current_color = green
+            elif arduino1_cmd == 'm':
+                self.game_field.mute = not self.mute
+                self.mute = not self.mute
+                self.game_field.music_update()
 
             if arduino2_cmd == 'u' and self.player2_1y-1 > 0:
                 self.player2_1y -= 1
@@ -998,6 +1010,10 @@ class Game:
             elif arduino2_cmd == 'v':
                 self.color = green
                 self.game_field.current_color = green
+            elif arduino2_cmd == 'm':
+                self.game_field.mute = not self.mute
+                self.mute = not self.mute
+                self.game_field.music_update()
 
             # Movimiento de las paletas del primer jugador
             if self.player1_1down_y and self.player1_1y + self.game_field.paleta_length + 1 < len(self.game_field.get_matrix()):
@@ -1429,7 +1445,7 @@ class Game:
                 ping_sound.play()
 
         elif self.game_field.get_ball_direction()[0] > 0 and ball_x + 1 == len(self.game_field.get_matrix()[0]) + 1:
-            if self.game_field.get_friend_score() < 10:
+            if self.game_field.get_friend_score() < 9:
                 self.game_field.set_friend_score(self.game_field.get_friend_score() + 1)
                 point_sound.play()
                 start_boring_timer = time.time()
